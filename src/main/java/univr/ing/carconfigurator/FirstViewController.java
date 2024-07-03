@@ -21,6 +21,13 @@ public class FirstViewController {
 
     private final String carsPath = "database/car.csv";
     private final String enginePath = "database/engine.csv";
+    public Label acceleration;
+    public Label engineFuel;
+    public Label engineName;
+    public Label engineEmission;
+    public Label engineConsumption;
+    public Label engineDisplacement;
+    public GridPane engineDesc;
 
     private Auto configCar;
     private double carPrice;
@@ -116,6 +123,8 @@ public class FirstViewController {
         AnchorPane.setTopAnchor(pannelloRiepilogo, (height - pannelloRiepilogo.getHeight()) / 2);
         // Centering orizzontale freccie di navigazione
         AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getHeight()) / 2);
+        // Posizionamento descrizione motore
+        AnchorPane.setTopAnchor(engineDesc, ((height - engineDesc.getHeight()) / 2) - (descGrid.getHeight() * 1.5));
 
     }
 
@@ -216,7 +225,6 @@ public class FirstViewController {
     @FXML
     protected void setCarImg(String path) {
         Image img = new Image(new File(path).toURI().toString());
-        System.out.println(new File(path).toURI().toString());
         carImg.setImage(img);
     }
 
@@ -227,6 +235,13 @@ public class FirstViewController {
         Engine engine = new Engine(carEngineChoice.getValue());
         configCar.setEngine(engine);
         enginePrice = engine.getPrice();
+
+        engineName.setText(engine.getName());
+        engineFuel.setText(engine.getFuelType());
+        acceleration.setText(engine.getAccelerationTime());
+        engineEmission.setText(engine.getGramsCO2perKm());
+        engineConsumption.setText(engine.getConsumption());
+        engineDisplacement.setText(engine.getDisplacement());
 
         updateRiepilogo();
     }
@@ -285,7 +300,6 @@ public class FirstViewController {
 
     @FXML
     protected void onGoForwardAction() {
-        SessionManager.getInstance().setBackFlag(false);
         if (configCar != null) {
             SessionManager.getInstance().setConfiguredAuto(configCar);
         }

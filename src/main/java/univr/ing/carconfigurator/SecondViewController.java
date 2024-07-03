@@ -21,6 +21,12 @@ public class SecondViewController {
 
     public Label partialPrice;
     public TextArea riepilogo;
+    public ImageView fourth;
+    public ImageView fifth;
+    public ImageView sixth;
+    public ImageView seventh;
+    public ImageView eighth;
+    public ImageView ninth;
     private MainController mainController;
     private Utente user;
     private Auto configCar;
@@ -51,14 +57,23 @@ public class SecondViewController {
         }
     }
 
+    private void setFit(ImageView img, double width, double height) {
+        img.setFitWidth(width);
+        img.setFitHeight(height);
+
+    }
+
     @FXML
     public void initialize() {
-        first.setFitWidth(150);
-        first.setFitHeight(150);
-        second.setFitWidth(150);
-        second.setFitHeight(150);
-        third.setFitWidth(150);
-        third.setFitHeight(150);
+        setFit(first, 150,150);
+        setFit(second, 150,150);
+        setFit(third, 150,150);
+        setFit(fourth, 150,150);
+        setFit(fifth, 150,150);
+        setFit(sixth, 150,150);
+        setFit(seventh, 150,150);
+        setFit(eighth, 150,150);
+        setFit(ninth, 150,150);
 
         if (first != null) {
             first.setImage(new Image(new File("img/Audi/tires/tire1.jpg").toURI().toString()));

@@ -12,3 +12,13 @@
 .backButton {
     -fx-display: none;
 }
+
+.gridSelection {
+    -fx-border-color: #808080;
+    -fx-border-width: 3px;
+}
+
+.gridSelection:selected {
+    -fx-border-color: #009900;
+    -fx-border-width: 3px;
+}
