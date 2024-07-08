@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -19,6 +20,7 @@ import java.util.Scanner;
 
 public class SecondViewController {
 
+
     public Label partialPrice;
     public TextArea riepilogo;
     public ImageView fourth;
@@ -27,14 +29,21 @@ public class SecondViewController {
     public ImageView seventh;
     public ImageView eighth;
     public ImageView ninth;
+    public Button exitButton;
     private MainController mainController;
     private Utente user;
     private Auto configCar;
 
     @FXML private Label userLogged;
     @FXML private Label userLabel;
-    @FXML private AnchorPane rootPane;
+    @FXML private Label titleText;
+    @FXML private GridPane descGrid;
+    @FXML private GridPane engineDesc;
     @FXML private GridPane tireChoice;
+    @FXML private GridPane navigationControls;
+    @FXML private AnchorPane rootPane;
+    @FXML private AnchorPane imageAnchor;
+    @FXML private AnchorPane pannelloRiepilogo;
     @FXML private ImageView first;
     @FXML private ImageView second;
     @FXML private ImageView third;
@@ -79,15 +88,35 @@ public class SecondViewController {
             first.setImage(new Image(new File("img/Audi/tires/tire1.jpg").toURI().toString()));
         }
         if (second != null) {
-            second.setImage(new Image(new File("img/Audi/tires/tire2.jpeg").toURI().toString()));
+            second.setImage(new Image(new File("img/Audi/tires/tire2.jpg").toURI().toString()));
         }
         if (third != null) {
             third.setImage(new Image(new File("img/Audi/tires/tire3.jpg").toURI().toString()));
         }
 
         Platform.runLater(this::updateUserAccessStatus);
-        //Platform.runLater(this::centerContent);
+        Platform.runLater(this::centerContent);
         Platform.runLater(this::updateRiepilogo);
+    }
+
+    private void centerContent() {
+        double width = rootPane.getWidth();
+        double height = rootPane.getHeight();
+
+        // Centering del titolo
+        AnchorPane.setLeftAnchor(titleText, (width - titleText.getWidth()) / 2);
+        // Centering solo verticale della descrizione dimensioni macchina
+        AnchorPane.setTopAnchor(descGrid, (height - descGrid.getHeight()) / 2);
+        // Centering verticale dell'ImageViewer
+        AnchorPane.setTopAnchor(imageAnchor, (height - imageAnchor.getHeight()) / 2);
+        // Centering pannello riepilogo
+        AnchorPane.setLeftAnchor(pannelloRiepilogo, (width - pannelloRiepilogo.getWidth()) / 2);
+        AnchorPane.setTopAnchor(pannelloRiepilogo, (height - pannelloRiepilogo.getHeight()) / 2);
+        // Centering orizzontale freccie di navigazione
+        AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getHeight()) / 2);
+        // Posizionamento descrizione motore
+        AnchorPane.setTopAnchor(engineDesc, ((height - engineDesc.getHeight()) / 2) - (descGrid.getHeight() * 1.5));
+
     }
 
     private void updateRiepilogo() {

@@ -1,6 +1,7 @@
 package univr.ing.carconfigurator;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +11,7 @@ import javafx.scene.text.Text;
 
 public class HomeController {
 
+    public Button registerButton;
     @FXML private Button configuratorStartButton;
     @FXML private Button loginButton;
     @FXML private AnchorPane rootPane;
@@ -89,4 +91,7 @@ public class HomeController {
     }
 
 
+    public void onRegisterButton() {
+        mainController.loadRegistrationView();
+    }
 }

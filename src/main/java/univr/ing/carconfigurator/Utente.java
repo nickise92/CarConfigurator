@@ -35,9 +35,6 @@ public class Utente {
             /* Aggiunge il nuovo utente solo nel caso in cui non
             sia gia' registrato */
             this.addUserToDB();
-        } else {
-            System.out.println("Non e' stato possibile aggiungere l'utente");
-            //TODO: aggiungere gestione fallimento registrazione
         }
     }
 

@@ -105,6 +105,24 @@ public class MainController {
         }
     }
 
+    public void loadRegistrationView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("registration.fxml"));
+            Parent registrationPage = loader.load();
+            RegistrationController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(registrationPage, 0.0);
+            AnchorPane.setRightAnchor(registrationPage, 0.0);
+            AnchorPane.setBottomAnchor(registrationPage, 0.0);
+            AnchorPane.setLeftAnchor(registrationPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(registrationPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

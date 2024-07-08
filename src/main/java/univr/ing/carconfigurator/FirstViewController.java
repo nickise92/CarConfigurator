@@ -205,8 +205,6 @@ public class FirstViewController {
         enginePrice = configCar.getDefaultEngine().getPrice();
         colorPrice = 0;
 
-
-
         setCarImg(configCar.getImgPath(0));
 
         carHeight.setText(String.valueOf(configCar.getHeight()));
