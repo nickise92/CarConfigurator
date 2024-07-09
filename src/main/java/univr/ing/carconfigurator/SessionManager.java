@@ -8,6 +8,7 @@ public class SessionManager {
     private Utente authenticatedUser;
     private Auto configuredAuto;
     private boolean backFlag;
+    private String riepilogo;
 
 
 
@@ -55,5 +56,13 @@ public class SessionManager {
 
     public boolean getBackFlag() {
         return backFlag;
+    }
+
+    public void setRiepilogo(String riepilogo) {
+        this.riepilogo = riepilogo;
+    }
+
+    public String getRiepilogo() {
+        return riepilogo;
     }
 }

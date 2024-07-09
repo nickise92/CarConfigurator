@@ -21,33 +21,34 @@ import java.util.Scanner;
 public class SecondViewController {
 
 
-    public Label partialPrice;
-    public TextArea riepilogo;
-    public ImageView fourth;
-    public ImageView fifth;
-    public ImageView sixth;
-    public ImageView seventh;
-    public ImageView eighth;
-    public ImageView ninth;
-    public Button exitButton;
+    private final String tirePath = "database/tire.csv";
+    private final String interiorPath = "database/interior.csv";
+
+
+    private ObservableList<String> tireList = FXCollections.observableArrayList();
+    private ObservableList<String> interiorList = FXCollections.observableArrayList();
+
+
     private MainController mainController;
     private Utente user;
     private Auto configCar;
+    private Optional cerchi;
+    private Optional interior;
 
     @FXML private Label userLogged;
     @FXML private Label userLabel;
     @FXML private Label titleText;
-    @FXML private GridPane descGrid;
-    @FXML private GridPane engineDesc;
-    @FXML private GridPane tireChoice;
     @FXML private GridPane navigationControls;
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane imageAnchor;
     @FXML private AnchorPane pannelloRiepilogo;
-    @FXML private ImageView first;
-    @FXML private ImageView second;
-    @FXML private ImageView third;
     @FXML private ImageView carImg;
+    @FXML private Label partialPrice;
+    @FXML private TextArea riepilogo;
+    @FXML private Button exitButton;
+    @FXML private ChoiceBox carTireChoice;
+    @FXML private ChoiceBox carInteriorChoice;
+    @FXML private ChoiceBox carSensorChoice;
 
     public SecondViewController() {
 
@@ -66,33 +67,39 @@ public class SecondViewController {
         }
     }
 
-    private void setFit(ImageView img, double width, double height) {
-        img.setFitWidth(width);
-        img.setFitHeight(height);
-
-    }
 
     @FXML
     public void initialize() {
-        setFit(first, 150,150);
-        setFit(second, 150,150);
-        setFit(third, 150,150);
-        setFit(fourth, 150,150);
-        setFit(fifth, 150,150);
-        setFit(sixth, 150,150);
-        setFit(seventh, 150,150);
-        setFit(eighth, 150,150);
-        setFit(ninth, 150,150);
+        setAuto(SessionManager.getInstance().getConfiguredAuto());
+        /* Inserimento delle scelte di cerchi per l'auto corrente */
+        try {
+            Scanner sc = new Scanner(new File(tirePath));
+            tireList.clear();
+            while (sc.hasNextLine()) {
+                String[] line = sc.nextLine().split(",");
+                if (line[0].equals(configCar.getBrand())) {
+                    tireList.add(line[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        carTireChoice.setItems(tireList);
 
-        if (first != null) {
-            first.setImage(new Image(new File("img/Audi/tires/tire1.jpg").toURI().toString()));
+        /* Inserimento interni per l'auto corrente */
+        try {
+            Scanner sc = new Scanner(new File(interiorPath));
+            interiorList.clear();
+            while(sc.hasNextLine()) {
+                String[] line = sc.nextLine().split(",");
+                if (line[0].equals(configCar.getBrand()) && !line[1].equals("")) {
+                    interiorList.add(line[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        if (second != null) {
-            second.setImage(new Image(new File("img/Audi/tires/tire2.jpg").toURI().toString()));
-        }
-        if (third != null) {
-            third.setImage(new Image(new File("img/Audi/tires/tire3.jpg").toURI().toString()));
-        }
+        carInteriorChoice.setItems(interiorList);
 
         Platform.runLater(this::updateUserAccessStatus);
         Platform.runLater(this::centerContent);
@@ -105,38 +112,44 @@ public class SecondViewController {
 
         // Centering del titolo
         AnchorPane.setLeftAnchor(titleText, (width - titleText.getWidth()) / 2);
-        // Centering solo verticale della descrizione dimensioni macchina
-        AnchorPane.setTopAnchor(descGrid, (height - descGrid.getHeight()) / 2);
         // Centering verticale dell'ImageViewer
         AnchorPane.setTopAnchor(imageAnchor, (height - imageAnchor.getHeight()) / 2);
         // Centering pannello riepilogo
         AnchorPane.setLeftAnchor(pannelloRiepilogo, (width - pannelloRiepilogo.getWidth()) / 2);
         AnchorPane.setTopAnchor(pannelloRiepilogo, (height - pannelloRiepilogo.getHeight()) / 2);
-        // Centering orizzontale freccie di navigazione
+        // Centering orizzontale frecce di navigazione
         AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getHeight()) / 2);
-        // Posizionamento descrizione motore
-        AnchorPane.setTopAnchor(engineDesc, ((height - engineDesc.getHeight()) / 2) - (descGrid.getHeight() * 1.5));
 
     }
 
     private void updateRiepilogo() {
-        if (!SessionManager.getInstance().getBackFlag()) {
-            double carPrice = configCar.getPrice();
-            partialPrice.setText(String.valueOf(carPrice));
-            String riep = "";
-            riep += "Colore: " + configCar.getColor() + " " + configCar.getColorPrice() + "0€\n";
-            riep += "Motore: " + configCar.getEngine() + " " + configCar.getEngine().getPrice() + "0€\n";
 
-            riepilogo.setText(riep);
+        double carPrice = configCar.getPrice();
 
-            setCarImg(configCar.getImgPath(0));
+        String riep = "";
+        riep += "Colore: " + configCar.getColor() + " " + configCar.getColorPrice() + "0€\n";
+        riep += "Motore: " + configCar.getEngine() + " " + configCar.getEngine().getPrice() + "0€\n";
+        if (cerchi != null) {
+            riep += "Cerchi: " + cerchi.getName() + " " + cerchi.getPrice() + "0€\n";
+            carPrice += cerchi.getPrice();
         }
+        if (interior != null) {
+            riep += "Interni: " + interior.getName() + " " + interior.getPrice() + "0€\n";
+            carPrice += interior.getPrice();
+        }
+
+
+        partialPrice.setText(String.valueOf(carPrice));
+        riepilogo.setText(riep);
+
+        setCarImg(configCar.getImgPath(0));
+
     }
 
     @FXML
     protected void setCarImg(String path) {
         Image img = new Image(new File(path).toURI().toString());
-        System.out.println(new File(path).toURI().toString());
+        //System.out.println(new File(path).toURI().toString());
         carImg.setImage(img);
     }
 
@@ -153,6 +166,18 @@ public class SecondViewController {
     }
 
     @FXML
+    public void onTireSelection() {
+        cerchi = new Optional((String) carTireChoice.getValue(), OptTypes.CERCHI);
+
+        updateRiepilogo();
+    }
+
+    public void onAllestSelection() {
+        interior = new Optional((String) carInteriorChoice.getValue(), OptTypes.INTERNI);
+        updateRiepilogo();
+    }
+
+    @FXML
     protected void onExitButtonClick() {
         Platform.exit();
     }
@@ -162,11 +187,18 @@ public class SecondViewController {
         SessionManager.getInstance().setBackFlag(true);
         if (configCar != null) {
             SessionManager.getInstance().setConfiguredAuto(configCar);
+            mainController.showAlert("Attenzione!", "Abbandonando la pagina annullerai tutte le modifiche fatte.");
         }
         mainController.loadFirstView();
     }
 
     public void onGoForwardAction() {
-
+        if (configCar != null) {
+            SessionManager.getInstance().setConfiguredAuto(configCar);
+        }
+        // TODO:
+        // mainController.loadThirdView();
     }
+
+
 }

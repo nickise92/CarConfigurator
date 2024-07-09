@@ -3,6 +3,7 @@ package univr.ing.carconfigurator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -21,6 +22,7 @@ public class FirstViewController {
 
     private final String carsPath = "database/car.csv";
     private final String enginePath = "database/engine.csv";
+
     public Label acceleration;
     public Label engineFuel;
     public Label engineName;
@@ -28,6 +30,8 @@ public class FirstViewController {
     public Label engineConsumption;
     public Label engineDisplacement;
     public GridPane engineDesc;
+    public ChoiceBox carIntern;
+    public ChoiceBox carTireChoice;
 
     private Auto configCar;
     private double carPrice;
@@ -115,17 +119,16 @@ public class FirstViewController {
         // Centering del titolo
         AnchorPane.setLeftAnchor(titleText, (width - titleText.getWidth()) / 2);
         // Centering solo verticale della descrizione dimensioni macchina
-        AnchorPane.setTopAnchor(descGrid, (height - descGrid.getHeight()) / 2);
+        AnchorPane.setTopAnchor(descGrid, 230.0);
         // Centering verticale dell'ImageViewer
         AnchorPane.setTopAnchor(imageAnchor, (height - imageAnchor.getHeight()) / 2);
         // Centering pannello riepilogo
         AnchorPane.setLeftAnchor(pannelloRiepilogo, (width - pannelloRiepilogo.getWidth()) / 2);
-        AnchorPane.setTopAnchor(pannelloRiepilogo, (height - pannelloRiepilogo.getHeight()) / 2);
+        AnchorPane.setTopAnchor(pannelloRiepilogo, (200.0));
         // Centering orizzontale freccie di navigazione
         AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getHeight()) / 2);
         // Posizionamento descrizione motore
-        AnchorPane.setTopAnchor(engineDesc, ((height - engineDesc.getHeight()) / 2) - (descGrid.getHeight() * 1.5));
-
+        AnchorPane.setBottomAnchor(engineDesc, ((height - engineDesc.getHeight() - 75.0) / 3));
     }
 
     @FXML
@@ -179,13 +182,11 @@ public class FirstViewController {
         ObservableList<String> engineList = FXCollections.observableArrayList();
         try {
             Scanner sc = new Scanner(new File(enginePath));
+            engineList.clear();
             while (sc.hasNextLine()) {
                 String[] line = sc.nextLine().split(",");
-                if (line.length == 9) {
-                    String tmpEng = line[1];
-                    if (!tmpEng.equals("")) {
-                        engineList.add(tmpEng);
-                    }
+                if (line[0].equals(carBrandChoice.getValue()) && !line[1].equals("")) {
+                    engineList.add(line[1]);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -199,7 +200,6 @@ public class FirstViewController {
         if (!SessionManager.getInstance().getBackFlag()) {
             configCar = new Auto(carBrandChoice.getValue(), carModelChoice.getValue());
         }
-        //System.out.println(configCar);
 
         carPrice = configCar.getPrice();
         enginePrice = configCar.getDefaultEngine().getPrice();
@@ -309,4 +309,11 @@ public class FirstViewController {
         Platform.exit();
     }
 
+    public void onTireSelection(ActionEvent actionEvent) {
+        System.out.println("Selezionati i cerchi: " + carTireChoice.getValue());
+    }
+
+    public void onAllestSelection(ActionEvent actionEvent) {
+        System.out.println("Selezionati gli interni: " + carIntern.getValue());
+    }
 }

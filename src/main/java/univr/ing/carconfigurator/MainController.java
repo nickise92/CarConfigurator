@@ -120,7 +120,6 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void showAlert(String title, String message) {
