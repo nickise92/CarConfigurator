@@ -49,4 +49,9 @@ public class Optional {
     public double getPrice() {
         return this.price;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

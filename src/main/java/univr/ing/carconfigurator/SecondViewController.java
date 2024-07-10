@@ -23,10 +23,12 @@ public class SecondViewController {
 
     private final String tirePath = "database/tire.csv";
     private final String interiorPath = "database/interior.csv";
+    private final String sensorPath = "database/sensor.csv";
 
 
     private ObservableList<String> tireList = FXCollections.observableArrayList();
     private ObservableList<String> interiorList = FXCollections.observableArrayList();
+    private ObservableList<String> sensorList = FXCollections.observableArrayList();
 
 
     private MainController mainController;
@@ -34,6 +36,7 @@ public class SecondViewController {
     private Auto configCar;
     private Optional cerchi;
     private Optional interior;
+    private Optional sensor;
 
     @FXML private Label userLogged;
     @FXML private Label userLabel;
@@ -101,6 +104,21 @@ public class SecondViewController {
         }
         carInteriorChoice.setItems(interiorList);
 
+        /* Popolamento lista sensori */
+        try {
+            Scanner sc = new Scanner(new File(sensorPath));
+            sensorList.clear();
+            while(sc.hasNextLine()) {
+                String[] line = sc.nextLine().split(",");
+                if (line[0].equals(configCar.getBrand()) && !line[1].equals("")) {
+                    sensorList.add(line[1]);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        carSensorChoice.setItems(sensorList);
+
         Platform.runLater(this::updateUserAccessStatus);
         Platform.runLater(this::centerContent);
         Platform.runLater(this::updateRiepilogo);
@@ -118,11 +136,12 @@ public class SecondViewController {
         AnchorPane.setLeftAnchor(pannelloRiepilogo, (width - pannelloRiepilogo.getWidth()) / 2);
         AnchorPane.setTopAnchor(pannelloRiepilogo, (height - pannelloRiepilogo.getHeight()) / 2);
         // Centering orizzontale frecce di navigazione
-        AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getHeight()) / 2);
+        AnchorPane.setLeftAnchor(navigationControls, (width - navigationControls.getWidth()) / 2);
 
     }
 
     private void updateRiepilogo() {
+        //TODO: popolare i campi delle choicebox con la configurazione selezionata se presente
 
         double carPrice = configCar.getPrice();
 
@@ -132,14 +151,21 @@ public class SecondViewController {
         if (cerchi != null) {
             riep += "Cerchi: " + cerchi.getName() + " " + cerchi.getPrice() + "0€\n";
             carPrice += cerchi.getPrice();
+            configCar.setCircle(cerchi);
         }
         if (interior != null) {
             riep += "Interni: " + interior.getName() + " " + interior.getPrice() + "0€\n";
             carPrice += interior.getPrice();
+            configCar.setInterior(interior);
+        }
+        if (sensor != null) {
+            riep += "Sensori: " + sensor.getName() + " " + sensor.getPrice() + "0€\n";
+            carPrice += sensor.getPrice();
+            configCar.setSensor(sensor);
         }
 
-
         partialPrice.setText(String.valueOf(carPrice));
+        configCar.setPrice(carPrice);
         riepilogo.setText(riep);
 
         setCarImg(configCar.getImgPath(0));
@@ -149,7 +175,6 @@ public class SecondViewController {
     @FXML
     protected void setCarImg(String path) {
         Image img = new Image(new File(path).toURI().toString());
-        //System.out.println(new File(path).toURI().toString());
         carImg.setImage(img);
     }
 
@@ -166,15 +191,22 @@ public class SecondViewController {
     }
 
     @FXML
-    public void onTireSelection() {
+    protected void onTireSelection() {
         cerchi = new Optional((String) carTireChoice.getValue(), OptTypes.CERCHI);
-
         updateRiepilogo();
     }
 
-    public void onAllestSelection() {
+    @FXML
+    protected void onAllestSelection() {
         interior = new Optional((String) carInteriorChoice.getValue(), OptTypes.INTERNI);
         updateRiepilogo();
+    }
+
+    @FXML
+    protected void onSensorSelection() {
+        sensor = new Optional((String) carSensorChoice.getValue(), OptTypes.SENSORI);
+        updateRiepilogo();
+
     }
 
     @FXML
@@ -187,17 +219,17 @@ public class SecondViewController {
         SessionManager.getInstance().setBackFlag(true);
         if (configCar != null) {
             SessionManager.getInstance().setConfiguredAuto(configCar);
-            mainController.showAlert("Attenzione!", "Abbandonando la pagina annullerai tutte le modifiche fatte.");
         }
-        mainController.loadFirstView();
+        if (mainController.showBackAlert()) {
+            mainController.loadFirstView();
+        }
     }
 
     public void onGoForwardAction() {
         if (configCar != null) {
             SessionManager.getInstance().setConfiguredAuto(configCar);
         }
-        // TODO:
-        // mainController.loadThirdView();
+        mainController.loadThirdView();
     }
 
 

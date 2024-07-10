@@ -6,6 +6,7 @@ public class SessionManager {
 
 
     private Utente authenticatedUser;
+    private Venditore authenticatedVendor;
     private Auto configuredAuto;
     private boolean backFlag;
     private String riepilogo;
@@ -64,5 +65,12 @@ public class SessionManager {
 
     public String getRiepilogo() {
         return riepilogo;
+    }
+
+    public void setAuthenticatedVendor(Venditore vendor) {
+        this.authenticatedVendor = vendor;
+    }
+    public Venditore getAuthenticatedVendor() {
+        return this.authenticatedVendor;
     }
 }

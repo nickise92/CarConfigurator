@@ -24,6 +24,10 @@ public class Auto {
     private Engine engine;
     private Engine defaultEngine;
 
+    private Optional circle;
+    private Optional interior;
+    private Optional sensor;
+
     public List<String> getAuto() {
         return auto;
     }
@@ -184,6 +188,30 @@ public class Auto {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void setCircle(Optional circle) {
+        this.circle = circle;
+    }
+
+    public Optional getCircle() {
+        return circle;
+    }
+
+    public void setInterior(Optional interior) {
+        this.interior = interior;
+    }
+
+    public Optional getInterior() {
+        return interior;
+    }
+
+    public void setSensor(Optional sensor) {
+        this.sensor = sensor;
+    }
+
+    public Optional getSensor() {
+        return sensor;
     }
 
     // Modifica del contenuto dell'auto

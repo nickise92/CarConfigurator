@@ -2,23 +2,20 @@
     -fx-background-color: #accbe3;
 }
 
-.homeVBox {
-    -fx-border-radius: 30px;
-    -fx-border-color: #3d6171;
-    -fx-background-color: #7baac6;
-    -fx-background-radius: 30px;
+.button {
+    -fx-background-radius: 3px;
 }
 
-.backButton {
-    -fx-display: none;
+.registrationForm {
+    -fx-background-color: #378aad;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: green;
 }
 
-.gridSelection {
-    -fx-border-color: #808080;
-    -fx-border-width: 3px;
-}
-
-.gridSelection:selected {
-    -fx-border-color: #009900;
-    -fx-border-width: 3px;
+.loginForm {
+    -fx-background-color: #378aad;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-border-color: blue;
 }

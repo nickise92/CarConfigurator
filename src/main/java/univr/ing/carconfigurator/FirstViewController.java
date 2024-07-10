@@ -23,16 +23,6 @@ public class FirstViewController {
     private final String carsPath = "database/car.csv";
     private final String enginePath = "database/engine.csv";
 
-    public Label acceleration;
-    public Label engineFuel;
-    public Label engineName;
-    public Label engineEmission;
-    public Label engineConsumption;
-    public Label engineDisplacement;
-    public GridPane engineDesc;
-    public ChoiceBox carIntern;
-    public ChoiceBox carTireChoice;
-
     private Auto configCar;
     private double carPrice;
     private double enginePrice;
@@ -65,6 +55,16 @@ public class FirstViewController {
     @FXML private ImageView carImg = new ImageView();
     @FXML private ChoiceBox<String> carBrandChoice;
     @FXML private ChoiceBox<String> carModelChoice;
+
+    @FXML public Label acceleration;
+    @FXML public Label engineFuel;
+    @FXML public Label engineName;
+    @FXML public Label engineEmission;
+    @FXML public Label engineConsumption;
+    @FXML public Label engineDisplacement;
+    @FXML public GridPane engineDesc;
+    @FXML public ChoiceBox carIntern;
+    @FXML public ChoiceBox carTireChoice;
 
 
     @FXML private Label carHeight;

@@ -56,7 +56,7 @@ public class LoginController {
             } else if (utente instanceof Impiegato) {
                 //TODO: vista impiegato e logica conseguente
             } else if (utente instanceof Venditore) {
-                //TODO: vista venditore e logica conseguente
+                mainController.loadGestioneOrdini();
             }
 
         } else {

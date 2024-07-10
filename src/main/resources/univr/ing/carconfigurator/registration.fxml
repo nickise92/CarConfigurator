@@ -8,7 +8,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="621.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.RegistrationController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity"
+            minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0"
+            prefWidth="621.0" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" styleClass="root-pane"
+            fx:controller="univr.ing.carconfigurator.RegistrationController">
     <children>
         <AnchorPane fx:id="registrationForm" layoutX="136.0" layoutY="75.0" prefHeight="350.0" prefWidth="350.0">
             <Label layoutX="14.0" layoutY="87.0" text="Username">

@@ -12,7 +12,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1421.0" styleClass="anchor-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.SecondViewController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="700.0" prefWidth="1421.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.SecondViewController">
    <children>
       <Label fx:id="titleText" layoutX="448.0" layoutY="31.0" prefHeight="52.0" prefWidth="400.0" text="Configuratore auto" AnchorPane.topAnchor="15.0">
          <font>
@@ -83,7 +85,8 @@
       <ChoiceBox fx:id="carTireChoice" layoutX="85.0" layoutY="133.0" onAction="#onTireSelection" prefHeight="25.0" prefWidth="150.0" AnchorPane.leftAnchor="90.0" />
       <ChoiceBox fx:id="carInteriorChoice" layoutX="85.0" layoutY="190.0" onAction="#onAllestSelection" prefHeight="25.0" prefWidth="150.0" AnchorPane.leftAnchor="90.0" />
       <Label layoutX="40.0" layoutY="258.0" text="Sensori" AnchorPane.leftAnchor="25.0" />
-      <ChoiceBox fx:id="carSensorChoice" layoutX="89.0" layoutY="254.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.leftAnchor="90.0" />
+      <ChoiceBox fx:id="carSensorChoice" layoutX="89.0" layoutY="254.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.leftAnchor="90.0"
+                 onAction="#onSensorSelection"/>
    </children>
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />

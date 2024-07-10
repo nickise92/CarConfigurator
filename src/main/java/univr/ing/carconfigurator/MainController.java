@@ -4,9 +4,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class MainController {
 
@@ -61,6 +63,29 @@ public class MainController {
         }
     }
 
+    public void loadGestioneOrdini() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("gestioneOrdiniView.fxml"));
+            Parent orderPage = loader.load();
+            GestioneOrdiniController controller = loader.getController();
+            if (SessionManager.getInstance().isAuthenticated()) {
+                controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
+            } else {
+                System.out.println("Accesso come ospite");
+            }
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(orderPage, 0.0);
+            AnchorPane.setRightAnchor(orderPage, 0.0);
+            AnchorPane.setBottomAnchor(orderPage, 0.0);
+            AnchorPane.setLeftAnchor(orderPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(orderPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     public void loadFirstView() {
         try {
@@ -105,6 +130,28 @@ public class MainController {
         }
     }
 
+    public void loadThirdView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorThirdView.fxml"));
+            Parent configPage = loader.load();
+            ThirdViewController controller = loader.getController();
+            if (SessionManager.getInstance().isAuthenticated()) {
+                controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
+            }
+            controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(configPage, 0.0);
+            AnchorPane.setRightAnchor(configPage, 0.0);
+            AnchorPane.setBottomAnchor(configPage, 0.0);
+            AnchorPane.setLeftAnchor(configPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().setAll(configPage);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void loadRegistrationView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("registration.fxml"));
@@ -122,12 +169,43 @@ public class MainController {
         }
     }
 
+    public void loadSignInView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
+            Parent signInPage = loader.load();
+            SignInController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(signInPage, 0.0);
+            AnchorPane.setRightAnchor(signInPage, 0.0);
+            AnchorPane.setBottomAnchor(signInPage, 0.0);
+            AnchorPane.setLeftAnchor(signInPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(signInPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public boolean showBackAlert() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Attenzione!");
+        alert.setHeaderText("Tornando indietro annullerai le personalizzazioni effettuate.");
+        alert.setContentText("Vuoi continuare?");
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if (option.get() == ButtonType.OK) {
+            return true;
+        }
+        return false;
     }
 
 }
