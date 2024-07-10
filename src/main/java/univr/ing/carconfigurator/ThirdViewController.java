@@ -101,13 +101,14 @@ public class ThirdViewController {
         // Centering contentPane
         AnchorPane.setTopAnchor(contentPane, (height - contentPane.getHeight()) / 2);
         AnchorPane.setLeftAnchor(contentPane, (width - contentPane.getWidth()) / 2);
-        // Centering confirmation button gridpane
-        AnchorPane.setBottomAnchor(requestButton, (height - requestButton.getHeight()) / 4);
+        // Centering confirmation button gridPane
+        AnchorPane.setBottomAnchor(requestButton, (height - requestButton.getHeight()) / 6);
         AnchorPane.setLeftAnchor(requestButton, (width - requestButton.getWidth()) / 2);
         // Centering shopPane
-        AnchorPane.setLeftAnchor(shopGrid, (width - shopGrid.getWidth()) /2);
+        AnchorPane.setRightAnchor(shopGrid, (width/2 - shopGrid.getWidth()) /2);
+        AnchorPane.setBottomAnchor(shopGrid, (height - shopGrid.getHeight()) / 2);
         // Centering del prezzo
-        AnchorPane.setTopAnchor(priceGrid, (height/2 - priceGrid.getHeight()) / 2);
+        AnchorPane.setTopAnchor(priceGrid, (height/2 - priceGrid.getHeight() * 2) / 2);
         AnchorPane.setLeftAnchor(priceGrid, (width - priceGrid.getWidth()) / 2);
     }
 
@@ -161,7 +162,6 @@ public class ThirdViewController {
 
     @FXML
     protected void onConfirmButton() {
-        System.out.println(SessionManager.getInstance().isAuthenticated());
         // Se l'utente non e' autenticato viene aperta la schermata
         // apposita, che invita l'utente ad effettuare l'accesso oppure
         // a registrarsi, se non ancora registrato.

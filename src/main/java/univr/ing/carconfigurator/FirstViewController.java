@@ -29,6 +29,7 @@ public class FirstViewController {
     private double colorPrice;
     private double optionalPrice;
     private Utente user;
+    private int imgIndex;
 
 
     private ObservableList<String> brandList = FXCollections.observableArrayList();
@@ -153,6 +154,8 @@ public class FirstViewController {
             System.out.println("Impossibile inizializzare le marche di auto.");
         }
 
+        leftImgArrow.setDisable(true);
+        rightImgArrow.setDisable(true);
         carBrandChoice.setItems(brandList);
         carColorChoice.setItems(colorsList);
         Platform.runLater(this::updateUserAccessStatus);
@@ -205,7 +208,10 @@ public class FirstViewController {
         enginePrice = configCar.getDefaultEngine().getPrice();
         colorPrice = 0;
 
-        setCarImg(configCar.getImgPath(0));
+        imgIndex = 0;
+        setCarImg(configCar.getImgPath(imgIndex));
+        rightImgArrow.setDisable(false);
+        leftImgArrow.setDisable(false);
 
         carHeight.setText(String.valueOf(configCar.getHeight()));
         carWidth.setText(String.valueOf(configCar.getWidth()));
@@ -224,6 +230,21 @@ public class FirstViewController {
     protected void setCarImg(String path) {
         Image img = new Image(new File(path).toURI().toString());
         carImg.setImage(img);
+    }
+
+    @FXML
+    protected void onLeftArrow() {
+        imgIndex = (imgIndex - 1) % 5;
+        if (imgIndex < 0) {
+            imgIndex += 5;
+        }
+        setCarImg(configCar.getImgPath(imgIndex));
+    }
+
+    @FXML
+    protected void onRightArrow() {
+        imgIndex = (imgIndex + 1) % 5;
+        setCarImg(configCar.getImgPath(imgIndex));
     }
 
     @FXML
@@ -307,13 +328,5 @@ public class FirstViewController {
     @FXML
     protected void onExitButtonClick() {
         Platform.exit();
-    }
-
-    public void onTireSelection(ActionEvent actionEvent) {
-        System.out.println("Selezionati i cerchi: " + carTireChoice.getValue());
-    }
-
-    public void onAllestSelection(ActionEvent actionEvent) {
-        System.out.println("Selezionati gli interni: " + carIntern.getValue());
     }
 }

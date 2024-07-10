@@ -17,11 +17,12 @@ public class HomeController {
     @FXML private AnchorPane rootPane;
     @FXML private VBox welcomeVBox;
     @FXML private Label userLabel;
+    @FXML private AnchorPane vboxTop;
+    @FXML private AnchorPane vboxMid;
+    @FXML private AnchorPane vboxBottom;
 
     @FXML private Label titleLabel;
     @FXML private Text descriptionText;
-
-
 
     private Utente user;
     private MainController mainController;
@@ -67,12 +68,20 @@ public class HomeController {
 
         // VBox centering
         AnchorPane.setLeftAnchor(welcomeVBox, (width - vboxWidth) / 2);
-        AnchorPane.setTopAnchor(welcomeVBox, (height - vboxHeight) / 2);
+        AnchorPane.setTopAnchor(welcomeVBox, (height - vboxHeight + userLabel.getHeight()) / 2);
+        // Centering buttons in the vbox
+        AnchorPane.setLeftAnchor(configuratorStartButton, (vboxTop.getWidth() - configuratorStartButton.getWidth()) /2);
+        AnchorPane.setTopAnchor(configuratorStartButton, (vboxTop.getHeight() - configuratorStartButton.getHeight()) /2);
+        AnchorPane.setLeftAnchor(loginButton, (vboxMid.getWidth() - loginButton.getWidth()) / 2);
+        AnchorPane.setTopAnchor(loginButton, (vboxMid.getHeight() - loginButton.getHeight()) /2);
+        AnchorPane.setLeftAnchor(registerButton, (vboxBottom.getWidth() - registerButton.getWidth()) /2);
+        AnchorPane.setTopAnchor(registerButton, (vboxBottom.getHeight() - registerButton.getHeight()) /2);
         // Title and description Label centering
-        AnchorPane.setLeftAnchor(titleLabel, (width - titleLabel.getWidth()) / 2);
-        AnchorPane.setLeftAnchor(descriptionText, (width - descriptionText.getWrappingWidth()) / 2);
+        AnchorPane.setLeftAnchor(titleLabel, (width - titleLabel.getWidth()) /2);
+        AnchorPane.setLeftAnchor(descriptionText, (width - descriptionText.getWrappingWidth()) /2);
         // User Label centering
         AnchorPane.setLeftAnchor(userLabel, (width - userLabel.getWidth()) / 2);
+        AnchorPane.setTopAnchor(userLabel, (height/2 - userLabel.getHeight())/ 2);
     }
 
     @FXML

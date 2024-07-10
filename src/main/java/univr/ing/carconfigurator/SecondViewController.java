@@ -37,6 +37,7 @@ public class SecondViewController {
     private Optional cerchi;
     private Optional interior;
     private Optional sensor;
+    private int imgIndex;
 
     @FXML private Label userLogged;
     @FXML private Label userLabel;
@@ -206,7 +207,6 @@ public class SecondViewController {
     protected void onSensorSelection() {
         sensor = new Optional((String) carSensorChoice.getValue(), OptTypes.SENSORI);
         updateRiepilogo();
-
     }
 
     @FXML
@@ -230,6 +230,21 @@ public class SecondViewController {
             SessionManager.getInstance().setConfiguredAuto(configCar);
         }
         mainController.loadThirdView();
+    }
+
+    @FXML
+    protected void onLeftArrow() {
+        imgIndex = (imgIndex - 1) % 5;
+        if (imgIndex < 0) {
+            imgIndex += 5;
+        }
+        setCarImg(configCar.getImgPath(imgIndex));
+    }
+
+    @FXML
+    protected void onRightArrow() {
+        imgIndex = (imgIndex + 1) % 5;
+        setCarImg(configCar.getImgPath(imgIndex));
     }
 
 
