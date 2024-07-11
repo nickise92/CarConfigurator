@@ -110,7 +110,7 @@ public class GestioneOrdiniController {
     }
 
     @FXML
-    protected void LOClick() throws IOException {
+    protected void LOClick() {
         mainController.loadHomePage();
         SessionManager.getInstance().setAuthenticatedVendor(null);
     }

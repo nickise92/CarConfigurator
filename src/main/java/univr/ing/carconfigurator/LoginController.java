@@ -52,7 +52,7 @@ public class LoginController {
             SessionManager.getInstance().setAuthenticatedUser(username);
 
             if (utente instanceof Cliente) {
-                mainController.loadHomePage();
+                mainController.loadUserView();
             } else if (utente instanceof Impiegato) {
                 //TODO: vista impiegato e logica conseguente
             } else if (utente instanceof Venditore) {

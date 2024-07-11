@@ -56,7 +56,6 @@ public class Utente {
         return userPsw;
     }
 
-
     // Verifica se l'utente che si sta registrando e' gia' registrato
     private boolean alreadyRegistered(String id) {
         try {
@@ -82,9 +81,14 @@ public class Utente {
             fwr.append(tmp);
             fwr.close();
 
+            String path = "database/" + userID + ".csv";
+            File orderList = new File(path);
+            orderList.createNewFile();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
     }
 

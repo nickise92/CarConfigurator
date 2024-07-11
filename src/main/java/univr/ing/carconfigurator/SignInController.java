@@ -32,6 +32,7 @@ public class SignInController {
     @FXML private Button registrationButton;
 
     @FXML private Button exitButton;
+    @FXML private Label tips;
 
 
     public SignInController() {
@@ -50,6 +51,10 @@ public class SignInController {
         double width = rootPane.getWidth();
         double height = rootPane.getHeight();
 
+
+        // Centering tips label
+        AnchorPane.setTopAnchor(tips, 25.0);
+        AnchorPane.setLeftAnchor(tips, (width - tips.getWidth()) / 2);
         // Form di login, allineato a sinistra
         AnchorPane.setLeftAnchor(loginPane, (width/2 - loginPane.getWidth()) / 2);
         AnchorPane.setTopAnchor(loginPane, (height - loginPane.getHeight()) / 2);

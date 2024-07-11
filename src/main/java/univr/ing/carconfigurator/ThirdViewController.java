@@ -8,10 +8,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 public class ThirdViewController {
 
+    private String orderPath = "database/";
     private Utente user;
     private MainController mainController;
     private Auto configCar;
@@ -82,7 +90,6 @@ public class ThirdViewController {
             userLogged.setText("Connesso");
             userLogged.setStyle("-fx-text-fill: #009900");
             userLabel.setText(user.getUserName() + " " + user.getUserLastName());
-
         } else {
             userLogged.setText("Non connesso");
             userLogged.setStyle("-fx-text-fill: #FF0000");
@@ -155,9 +162,7 @@ public class ThirdViewController {
             carInterior.setText("Interni di serie");
         }
 
-        finalPrice.setText(String.valueOf(configCar.getPrice()) + "0€");
-
-
+        finalPrice.setText(configCar.getPrice() + "0€");
     }
 
     @FXML
@@ -170,9 +175,52 @@ public class ThirdViewController {
         } else {
             if (shopChoice.getValue() == null) {
                 showAlert("Attenzione!", "Seleziona una sede di ritiro per la tua auto configurata prima di proseguire!");
+            } else {
+                saveOrderToDB(user, configCar, (String) shopChoice.getValue());
+                String message = "Complimenti, " + user.getUserName() + " " + user.getUserLastName() + ", " +
+                        "la tua auto è stata configurata con successo. Puoi trovare il riepilogo nella tua area utente.";
+                showAlert("Configurazione salvata.", message);
+                mainController.loadUserView();
             }
-            //TODO: Sede di ritiro veicolo obbligatoria!
-            //TODO: Genera un preventivo in un file csv
+        }
+    }
+
+    private void saveOrderToDB(Utente user, Auto auto, String shop) {
+        String pattern = "yyyy-MM-dd=HH:mm:ss";
+        DateFormat df = new SimpleDateFormat(pattern);
+        Date currentDate = Calendar.getInstance().getTime();
+        String dateString = df.format(currentDate);
+        System.out.println(dateString);
+
+        String data = shop + ",";
+        data += auto.getBrand() + ",";
+        data += auto.getModel() + ",";
+        data += auto.getColor() + ",";
+        data += auto.getEngine() + ",";
+        data += auto.getCircle() + ",";
+        data += auto.getInterior() + ",";
+        data += auto.getSensor() + ",";
+
+        // DB degli amministratori
+        try {
+            FileWriter fwr = new FileWriter(orderPath + user.getUserID() + ".csv",
+                    true);
+            data += "\n";
+            fwr.append(dateString + "," +data);
+            fwr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            FileWriter fwr = new FileWriter(orderPath + "preventivi.csv",
+                    true);
+            data += "\n";
+            fwr.append(dateString + "," + user.getUserID()+","+data);
+            fwr.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -186,7 +234,6 @@ public class ThirdViewController {
     protected void onGoBackButton() {
 
         if (mainController.showBackAlert()) {
-
             mainController.loadSecondView();
         }
     }
@@ -202,7 +249,6 @@ public class ThirdViewController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-
     }
 
 }

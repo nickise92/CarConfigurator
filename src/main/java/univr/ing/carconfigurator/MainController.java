@@ -86,7 +86,6 @@ public class MainController {
 
     }
 
-
     public void loadFirstView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorFirstView.fxml"));
@@ -167,6 +166,27 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadUserView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("userView.fxml"));
+            Parent userViewForm = loader.load();
+            UserViewController controller = loader.getController();
+            if (SessionManager.getInstance().isAuthenticated()) {
+                controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
+            }
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(userViewForm, 0.0);
+            AnchorPane.setRightAnchor(userViewForm, 0.0);
+            AnchorPane.setBottomAnchor(userViewForm, 0.0);
+            AnchorPane.setLeftAnchor(userViewForm, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(userViewForm);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void loadSignInView() {
