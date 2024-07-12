@@ -195,12 +195,34 @@ public class MainController {
             Parent signInPage = loader.load();
             SignInController controller = loader.getController();
             controller.setMainController(this);
+            controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
             AnchorPane.setTopAnchor(signInPage, 0.0);
             AnchorPane.setRightAnchor(signInPage, 0.0);
             AnchorPane.setBottomAnchor(signInPage, 0.0);
             AnchorPane.setLeftAnchor(signInPage, 0.0);
             mainPane.getChildren().clear();
             mainPane.getChildren().add(signInPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadUsedCarView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("usedCarProposition.fxml"));
+            Parent usedPage = loader.load();
+            UsedCarController controller = loader.getController();
+            controller.setMainController(this);
+            if (SessionManager.getInstance().isAuthenticated()) {
+                controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
+            }
+            controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
+            AnchorPane.setTopAnchor(usedPage, 0.0);
+            AnchorPane.setRightAnchor(usedPage, 0.0);
+            AnchorPane.setBottomAnchor(usedPage, 0.0);
+            AnchorPane.setLeftAnchor(usedPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(usedPage);
         } catch (IOException e) {
             e.printStackTrace();
         }

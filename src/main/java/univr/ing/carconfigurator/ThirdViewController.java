@@ -227,7 +227,11 @@ public class ThirdViewController {
 
     @FXML
     protected void onEvaluationButton() {
-
+        if (SessionManager.getInstance().isAuthenticated()) {
+            mainController.loadUsedCarView();
+        } else {
+            mainController.loadSignInView();
+        }
     }
 
     @FXML

@@ -12,6 +12,7 @@ public class SignInController {
 
     MainController mainController;
     Utente user;
+    Auto auto;
 
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane loginPane;
@@ -68,18 +69,21 @@ public class SignInController {
         this.mainController = mainController;
     }
 
-    public void setUser(Utente user) {
-        this.user = user;
-    }
-
-    @FXML
-    public void onCancelButton() {
-
+    public void setAuto(Auto auto) {
+        this.auto = auto;
     }
 
     @FXML
     public void onConfirmButton() {
-
+        if (userPsw1.getText().equals(userPsw2.getText())) {
+            user = new Utente(userID.getText(), userName.getText(), userLastName.getText(), userPsw1.getText());
+            showAlert("Registrazione confermata!", "Il cliente " + user.getUserName() + " " + user.getUserLastName() + " è stato registrato " +
+                    "con successo.", 1);
+            SessionManager.getInstance().setAuthenticatedUser(user.getUserID());
+            mainController.loadThirdView();
+        } else {
+            showAlert("Attenzione!", "Le password non corrispondono, si prega di reinserirle.", 2);
+        }
     }
 
     @FXML
@@ -98,13 +102,8 @@ public class SignInController {
             }
 
         } else {
-            showAlert("Autenticazione fallita", "Username o password errati.");
+            showAlert("Autenticazione fallita", "Username o password errati.", 1);
         }
-
-    }
-
-    @FXML
-    public void cancelLoginAction() {
 
     }
 
@@ -114,11 +113,21 @@ public class SignInController {
 
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    public void showAlert(String title, String message, int type) {
+        if (type == 1) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        } else if (type == 2) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        }
+
+
     }
 }

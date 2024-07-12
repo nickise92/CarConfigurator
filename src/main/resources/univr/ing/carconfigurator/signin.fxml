@@ -26,7 +26,6 @@
                 <AnchorPane prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
                         <Button onAction="#onLoginButton" text="Login" AnchorPane.leftAnchor="0.0" />
-                        <Button layoutX="143.0" onAction="#cancelLoginAction" text="Annulla" AnchorPane.rightAnchor="0.0" />
                     </children>
                 </AnchorPane>
                 <columnConstraints>
@@ -79,7 +78,6 @@
         <PasswordField fx:id="userPsw1" layoutX="80.0" layoutY="217.0" prefHeight="25.0" prefWidth="219.0" />
         <PasswordField fx:id="userPsw2" layoutX="80.0" layoutY="252.0" prefHeight="25.0" prefWidth="219.0" />
         <Button fx:id="registrationButton" layoutX="113.0" layoutY="309.0" mnemonicParsing="false" onAction="#onConfirmButton" prefHeight="25.0" prefWidth="70.0" text="Conferma" />
-        <Button layoutX="196.0" layoutY="309.0" mnemonicParsing="false" onAction="#onCancelButton" prefHeight="25.0" prefWidth="70.0" text="Annulla" />
         <Label layoutX="25.0" layoutY="14.0" prefHeight="35.0" prefWidth="300.0" text="Registrazione nuovo cliente" AnchorPane.topAnchor="15.0">
             <font>
                 <Font size="24.0" />
