@@ -194,6 +194,7 @@
             <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" /> <!-- Emissioni -->
             <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" /> <!-- Consumi -->
             <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" /> <!-- Cilindrata -->
+            <RowConstraints minHeight="20.0" prefHeight="20.0" vgrow="SOMETIMES" /> <!-- Potenza -->
          </rowConstraints>
          <children>
             <Label text="Motore:">
@@ -252,6 +253,16 @@
                </font>
             </Label>
             <Label fx:id="engineDisplacement" text="-" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="20.0" prefWidth="73.0" text="Potenza:" GridPane.rowIndex="6">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="enginePower" text="-" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

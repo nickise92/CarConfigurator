@@ -57,15 +57,16 @@ public class FirstViewController {
     @FXML private ChoiceBox<String> carBrandChoice;
     @FXML private ChoiceBox<String> carModelChoice;
 
-    @FXML public Label acceleration;
-    @FXML public Label engineFuel;
-    @FXML public Label engineName;
-    @FXML public Label engineEmission;
-    @FXML public Label engineConsumption;
-    @FXML public Label engineDisplacement;
-    @FXML public GridPane engineDesc;
-    @FXML public ChoiceBox carIntern;
-    @FXML public ChoiceBox carTireChoice;
+    @FXML private Label acceleration;
+    @FXML private Label engineFuel;
+    @FXML private Label engineName;
+    @FXML private Label engineEmission;
+    @FXML private Label engineConsumption;
+    @FXML private Label engineDisplacement;
+    @FXML private Label enginePower;
+    @FXML private GridPane engineDesc;
+    @FXML private ChoiceBox carIntern;
+    @FXML private ChoiceBox carTireChoice;
 
 
     @FXML private Label carHeight;
@@ -261,6 +262,7 @@ public class FirstViewController {
         engineEmission.setText(engine.getGramsCO2perKm());
         engineConsumption.setText(engine.getConsumption());
         engineDisplacement.setText(engine.getDisplacement());
+        enginePower.setText(engine.getPower());
 
         updateRiepilogo();
     }

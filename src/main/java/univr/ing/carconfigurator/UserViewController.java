@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * Vista utente registrato. In questa sezione viene descritta la logica di controllo
+ * dell'interfaccia utente dopo l'accesso. Da qui e' possibile recuperare i preventivi
+ * pendenti da confermare, visualizzarne il riepilogo, confermarli o annullarli. Inoltre,
+ * e' possibile trovare la notifica di ritiro veicolo quando pronto nella concessionaria di
+ * riferimento.
+ */
 public class UserViewController {
 
     private MainController mainController;

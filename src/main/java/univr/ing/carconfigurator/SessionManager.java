@@ -6,7 +6,7 @@ public class SessionManager {
 
 
     private Utente authenticatedUser;
-    private Venditore authenticatedVendor;
+    private Utente authenticatedVendor;
     private Auto configuredAuto;
     private boolean backFlag;
     private String riepilogo;
@@ -35,12 +35,21 @@ public class SessionManager {
         this.authenticatedUser = Utente.checkID(userID);
     }
 
-    public void clearSession() {
-        authenticatedUser = null;
+    public void setAuthenticatedVendor(String userID) {
+        this.authenticatedVendor = Utente.checkID(userID);
     }
 
-    public boolean isAuthenticated() {
+    public void clearSession() {
+        authenticatedUser = null;
+        authenticatedVendor = null;
+    }
+
+    public boolean isUserAuthenticated() {
         return authenticatedUser != null;
+    }
+
+    public boolean isVendorAuthenticated() {
+        return authenticatedVendor != null;
     }
 
     public Auto getConfiguredAuto() {
@@ -71,6 +80,6 @@ public class SessionManager {
         this.authenticatedVendor = vendor;
     }
     public Venditore getAuthenticatedVendor() {
-        return this.authenticatedVendor;
+        return (Venditore) this.authenticatedVendor;
     }
 }

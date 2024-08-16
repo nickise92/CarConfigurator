@@ -8,14 +8,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Optional;
 
 public class ThirdViewController {
 
@@ -170,7 +168,7 @@ public class ThirdViewController {
         // Se l'utente non e' autenticato viene aperta la schermata
         // apposita, che invita l'utente ad effettuare l'accesso oppure
         // a registrarsi, se non ancora registrato.
-        if (!SessionManager.getInstance().isAuthenticated()) {
+        if (!SessionManager.getInstance().isUserAuthenticated()) {
             mainController.loadSignInView();
         } else {
             if (shopChoice.getValue() == null) {
@@ -227,7 +225,7 @@ public class ThirdViewController {
 
     @FXML
     protected void onEvaluationButton() {
-        if (SessionManager.getInstance().isAuthenticated()) {
+        if (SessionManager.getInstance().isUserAuthenticated()) {
             mainController.loadUsedCarView();
         } else {
             mainController.loadSignInView();

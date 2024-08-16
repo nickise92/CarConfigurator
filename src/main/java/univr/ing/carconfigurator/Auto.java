@@ -36,6 +36,10 @@ public class Auto {
 
     }
 
+    public Auto(String brand, String model, String... optional) {
+        // TODO: generazione dell'auto con gli optional gia' impostati dal preventivo.
+    }
+
     public String getImgPath(int index) {
         return imgPath + auto.get(0) + "/" + auto.get(1) + "/"
                 + index +".jpg";

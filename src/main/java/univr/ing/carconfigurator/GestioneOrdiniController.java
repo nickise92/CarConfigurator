@@ -112,7 +112,7 @@ public class GestioneOrdiniController {
     @FXML
     protected void LOClick() {
         mainController.loadHomePage();
-        SessionManager.getInstance().setAuthenticatedVendor(null);
+        //SessionManager.getInstance().setAuthenticatedVendor(null);
     }
 
 }

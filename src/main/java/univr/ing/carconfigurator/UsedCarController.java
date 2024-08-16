@@ -6,6 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.*;
 
 public class UsedCarController {
 
@@ -19,6 +23,7 @@ public class UsedCarController {
     @FXML private Label title;
     @FXML private Button cancelButton;
     @FXML private TextArea imgPaths;
+    @FXML private Button deleteSelected;
 
     public UsedCarController() {
 
@@ -57,6 +62,8 @@ public class UsedCarController {
         AnchorPane.setRightAnchor(imagePane, (width/2 - imagePane.getWidth()) / 2);
         // Centering Cancel button
         AnchorPane.setLeftAnchor(cancelButton, (width - cancelButton.getWidth()) / 2);
+        // Pulsanti caricamento immagini
+        AnchorPane.setLeftAnchor(deleteSelected, (imgPaths.getWidth() - deleteSelected.getWidth()) / 2);
 
     }
 
@@ -70,10 +77,28 @@ public class UsedCarController {
 
     }
 
+    @FXML
+    protected void onOpenNewImage() {
+        Stage stage = new Stage();
+        File selectedFile = new FileChooser().showOpenDialog(stage);
+        String imgPath = selectedFile.getPath();
+        String text = imgPaths.getText();
+        if (text != null) {
+            text += imgPath;
+        } else {
+            text = imgPath;
+        }
 
+        imgPaths.setText(text + "\n");
+    }
 
     @FXML
-    protected void clearAllPaths() {
+    protected void onDeleteSelected() {
+
+    }
+
+    @FXML
+    protected void onDeleteAll() {
 
     }
 

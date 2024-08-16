@@ -48,15 +48,19 @@ public class LoginController {
         // Se l'utente esiste, e le credenziali sono corrette il sistema verifica a quale
         // categoria di utente appartiene.
         if (utente != null && utente.authenticator(username, password)) {
-            // Imposto l'utente autenticato nella sessione corrente
-            SessionManager.getInstance().setAuthenticatedUser(username);
-
+            // Se l'utente e' un cliente
             if (utente instanceof Cliente) {
+                // Imposto l'utente autenticato nella sessione corrente
+                // e carico la pagina utente
+                SessionManager.getInstance().setAuthenticatedUser(username);
                 mainController.loadUserView();
             } else if (utente instanceof Impiegato) {
                 //TODO: vista impiegato e logica conseguente
             } else if (utente instanceof Venditore) {
-                mainController.loadGestioneOrdini();
+                // Se l'utente e' un venditore, imposto il venditore autenticato nella
+                // sessione corrente e carico la pagina venditore
+                SessionManager.getInstance().setAuthenticatedVendor(username);
+                mainController.loadVendorView();
             }
 
         } else {

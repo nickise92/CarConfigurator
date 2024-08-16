@@ -22,7 +22,7 @@ public class MainController {
 
 
     public void loadLoginPage() {
-        if (SessionManager.getInstance().isAuthenticated()) {
+        if (SessionManager.getInstance().isUserAuthenticated()) {
             showAlert("Autenticazione invalida", "L'utente " + SessionManager.getInstance().getAuthenticatedUser() +
                     " è già autenticato.");
         } else {
@@ -63,12 +63,32 @@ public class MainController {
         }
     }
 
+    public void loadVendorView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("vendorView.fxml"));
+            Parent vendorPage = loader.load();
+            VendorViewController controller = loader.getController();
+            if (SessionManager.getInstance().isVendorAuthenticated()) {
+                controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
+            }
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(vendorPage, 0.0);
+            AnchorPane.setRightAnchor(vendorPage, 0.0);
+            AnchorPane.setBottomAnchor(vendorPage, 0.0);
+            AnchorPane.setLeftAnchor(vendorPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(vendorPage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void loadGestioneOrdini() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gestioneOrdiniView.fxml"));
             Parent orderPage = loader.load();
             GestioneOrdiniController controller = loader.getController();
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
             } else {
                 System.out.println("Accesso come ospite");
@@ -91,7 +111,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorFirstView.fxml"));
             Parent configPage = loader.load();
             FirstViewController controller = loader.getController();
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             } else {
                 System.out.println("Accesso come ospite");
@@ -113,7 +133,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorSecondView.fxml"));
             Parent configPage = loader.load();
             SecondViewController controller = loader.getController();
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
@@ -134,7 +154,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorThirdView.fxml"));
             Parent configPage = loader.load();
             ThirdViewController controller = loader.getController();
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
@@ -173,7 +193,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("userView.fxml"));
             Parent userViewForm = loader.load();
             UserViewController controller = loader.getController();
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setMainController(this);
@@ -213,7 +233,7 @@ public class MainController {
             Parent usedPage = loader.load();
             UsedCarController controller = loader.getController();
             controller.setMainController(this);
-            if (SessionManager.getInstance().isAuthenticated()) {
+            if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setAuto(SessionManager.getInstance().getConfiguredAuto());

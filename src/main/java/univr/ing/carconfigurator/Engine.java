@@ -15,7 +15,7 @@ public class Engine {
     private String gramsCO2perKm;   // grammi di CO2 prodotta per km
     private String consumption;     // consumi
     private String displacement;    // cilindrata
-    private String power;
+    private String power;           // potenza
     private double price;
 
     // Costruttore che genera un oggetto motore gia' caricato
@@ -48,7 +48,7 @@ public class Engine {
     // Costruttore che permette di aggiungere un nuovo motore alla lista di motori
     public Engine(String brand, String name, String fuelType, String accelerationTime, String consumption, String displacement,
                   String power, double price) {
-        // TODO
+        // TODO: aggiunta di un motore alla lista dei motori
     }
 
     // Getter dei parametri della classe Engine.
