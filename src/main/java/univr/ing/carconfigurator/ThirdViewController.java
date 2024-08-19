@@ -43,12 +43,13 @@ public class ThirdViewController {
 
     @FXML private ChoiceBox shopChoice;
 
-    @FXML public Label acceleration;
-    @FXML public Label engineFuel;
-    @FXML public Label engineName;
-    @FXML public Label engineEmission;
-    @FXML public Label engineConsumption;
-    @FXML public Label engineDisplacement;
+    @FXML private Label acceleration;
+    @FXML private Label engineFuel;
+    @FXML private Label engineName;
+    @FXML private Label engineEmission;
+    @FXML private Label engineConsumption;
+    @FXML private Label engineDisplacement;
+    @FXML private Label enginePower;
 
 
     @FXML private Label carHeight;
@@ -110,8 +111,8 @@ public class ThirdViewController {
         AnchorPane.setBottomAnchor(requestButton, (height - requestButton.getHeight()) / 6);
         AnchorPane.setLeftAnchor(requestButton, (width - requestButton.getWidth()) / 2);
         // Centering shopPane
-        AnchorPane.setRightAnchor(shopGrid, (width/2 - shopGrid.getWidth()) /2);
-        AnchorPane.setBottomAnchor(shopGrid, (height - shopGrid.getHeight()) / 2);
+        AnchorPane.setRightAnchor(shopGrid, (contentPane.getWidth()/2 - shopGrid.getWidth()) / 2);
+        AnchorPane.setBottomAnchor(shopGrid, (contentPane.getHeight()/2 - shopGrid.getHeight()) / 2);
         // Centering del prezzo
         AnchorPane.setTopAnchor(priceGrid, (height/2 - priceGrid.getHeight() * 2) / 2);
         AnchorPane.setLeftAnchor(priceGrid, (width - priceGrid.getWidth()) / 2);
@@ -140,6 +141,7 @@ public class ThirdViewController {
         engineConsumption.setText(String.valueOf(configCar.getEngine().getConsumption()));
         engineEmission.setText(String.valueOf(configCar.getEngine().getGramsCO2perKm()));
         engineDisplacement.setText(String.valueOf(configCar.getEngine().getDisplacement()));
+        enginePower.setText(configCar.getEngine().getPower());
 
         if (configCar.getColor() == null) {
             carColor.setText("Bianco");
@@ -159,7 +161,6 @@ public class ThirdViewController {
         } else {
             carInterior.setText("Interni di serie");
         }
-
         finalPrice.setText(configCar.getPrice() + "0€");
     }
 
@@ -210,7 +211,6 @@ public class ThirdViewController {
             e.printStackTrace();
         }
 
-
         try {
             FileWriter fwr = new FileWriter(orderPath + "preventivi.csv",
                     true);
@@ -220,7 +220,6 @@ public class ThirdViewController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
@@ -252,5 +251,4 @@ public class ThirdViewController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 }

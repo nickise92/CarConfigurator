@@ -8,13 +8,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="616.0" prefWidth="893.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.VendorViewController">
+<AnchorPane fx:id="rootPane" prefHeight="616.0" prefWidth="893.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.VendorViewController">
    <children>
-      <Button fx:id="logoutButton" layoutX="421.0" layoutY="577.0" mnemonicParsing="false" onAction="#onLogoutButton"
-              text="Logout" AnchorPane.bottomAnchor="30.0" />
-      <Button fx:id="exitButton" layoutX="827.0" layoutY="574.0" mnemonicParsing="false" onAction="#onExitButton"
-              styleClass="exitButton" text="ESCI" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Button fx:id="logoutButton" layoutX="421.0" layoutY="577.0" mnemonicParsing="false" onAction="#onLogoutButton" text="Logout" AnchorPane.bottomAnchor="30.0" />
+      <Button fx:id="exitButton" layoutX="827.0" layoutY="574.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="exitButton" text="ESCI" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
       <Label layoutX="30.0" layoutY="30.0" text="Venditore:" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="50.0" />
       <Label fx:id="vendorLogged" layoutX="100.0" layoutY="50.0" text="-" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="50.0">
          <font>
@@ -34,24 +31,20 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="orderChoiceBox" layoutX="86.0" layoutY="2.0" onAction="#onOrderSelection" prefHeight="25.0"
-                       prefWidth="200.0">
+            <ChoiceBox fx:id="orderChoiceBox" layoutX="86.0" layoutY="2.0" onAction="#onOrderSelection" prefHeight="25.0" prefWidth="200.0">
             </ChoiceBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="descriptionPane" layoutX="131.0" layoutY="145.0" prefHeight="600.0" prefWidth="650.0"
-                  AnchorPane.rightAnchor="112.0">
+      <AnchorPane fx:id="descriptionPane" layoutX="131.0" layoutY="145.0" prefHeight="600.0" prefWidth="650.0">
          <children>
             <Label fx:id="panelTitle" layoutX="212.0" layoutY="14.0" text="Riepilogo:" AnchorPane.topAnchor="10.0">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <AnchorPane fx:id="dimensionPane" layoutX="20.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0"
-                        AnchorPane.leftAnchor="20.0">
+            <AnchorPane fx:id="dimensionPane" layoutX="20.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="20.0">
                <children>
-                  <Label fx:id="dimensionTitle" layoutX="2.0" layoutY="4.0" text="Dimensioni:" AnchorPane.leftAnchor="0.0"
-                         AnchorPane.topAnchor="0.0">
+                  <Label fx:id="dimensionTitle" layoutX="2.0" layoutY="4.0" text="Dimensioni:" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
@@ -124,14 +117,14 @@
             </AnchorPane>
             <AnchorPane fx:id="portraitPane" layoutX="424.0" layoutY="240.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <ImageView fx:id="portraitCar" fitHeight="200.0" fitWidth="200.0" layoutX="15.0" layoutY="-2.0"
-                             pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ImageView fx:id="portraitCar" fitHeight="200.0" fitWidth="200.0" layoutX="15.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <viewport>
                         <Rectangle2D />
                      </viewport></ImageView>
                </children>
             </AnchorPane>
+            <Button layoutX="37.0" layoutY="545.0" mnemonicParsing="false" text="Conferma ritiro" />
+            <Button layoutX="482.0" layoutY="545.0" mnemonicParsing="false" text="Valutazione usato" />
 
          </children>
       </AnchorPane>

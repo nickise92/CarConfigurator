@@ -96,7 +96,6 @@ public class UserViewController {
         AnchorPane.setRightAnchor(orderBox, (width/2 - orderBox.getWidth()) / 2);
         // Logout button
         AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);
-
     }
 
     @FXML
@@ -110,7 +109,7 @@ public class UserViewController {
 
                 if (content[0].equals(orderListChoice.getValue().split(" - ")[1])) {
                     if (showConfirmationDialog( line)) {
-                        // TODO: aprire preventivo selezionato
+                        // TODO: aprire preventivo selezionato e aggiungere il pulsante PAGA
                     } else {
                         // restare sulla view
                     }
@@ -119,7 +118,6 @@ public class UserViewController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML

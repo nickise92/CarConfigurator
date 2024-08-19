@@ -1,8 +1,12 @@
 package univr.ing.carconfigurator;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -10,17 +14,22 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class UsedCarController {
 
     private Utente user;
     private MainController mainController;
     private Auto auto;
+    private int counter = 0;
 
     @FXML private AnchorPane rootPane;
-    @FXML private AnchorPane textPane;
-    @FXML private AnchorPane imagePane;
+    @FXML private AnchorPane imgPane;
     @FXML private Label title;
+    @FXML private Label loadedLabel;
     @FXML private Button cancelButton;
     @FXML private TextArea imgPaths;
     @FXML private Button deleteSelected;
@@ -43,7 +52,6 @@ public class UsedCarController {
 
     @FXML
     public void initialize() {
-
         Platform.runLater(this::centerContent);
     }
 
@@ -54,17 +62,13 @@ public class UsedCarController {
         // centering title
         AnchorPane.setTopAnchor(title, 50.0);
         AnchorPane.setLeftAnchor(title, (width - title.getWidth()) / 2);
-        // Positioning text area
-        AnchorPane.setTopAnchor(textPane, (height - textPane.getHeight()) /  2);
-        AnchorPane.setLeftAnchor(textPane, (width/2 - textPane.getWidth()) / 2);
-        // Positioning image area
-        AnchorPane.setTopAnchor(imagePane, (height - imagePane.getHeight()) / 2);
-        AnchorPane.setRightAnchor(imagePane, (width/2 - imagePane.getWidth()) / 2);
+        // Positioning img area - Gridbox contenente gli image viewer
+        AnchorPane.setTopAnchor(imgPane, (height - imgPane.getHeight()) /  2);
+        AnchorPane.setLeftAnchor(imgPane, (width/2 - imgPane.getWidth()) / 2);
         // Centering Cancel button
         AnchorPane.setLeftAnchor(cancelButton, (width - cancelButton.getWidth()) / 2);
         // Pulsanti caricamento immagini
-        AnchorPane.setLeftAnchor(deleteSelected, (imgPaths.getWidth() - deleteSelected.getWidth()) / 2);
-
+        AnchorPane.setLeftAnchor(deleteSelected, (imgPane.getWidth() - deleteSelected.getWidth()) / 2);
     }
 
     @FXML
@@ -77,28 +81,34 @@ public class UsedCarController {
 
     }
 
+    /**
+     * Apre la finestra di dialogo per inserire le immagini dell'auto usata
+     * che si vuol far valutare. L'utente può inserire fino a 6 immagini.
+     * Il programma crea una cartella con nome = IDUtente+DDHHmmss e all'interno
+     * salva (copia) le immagini inserite dall'utente.
+     */
     @FXML
     protected void onOpenNewImage() {
+        double separator = 10.0;
         Stage stage = new Stage();
         File selectedFile = new FileChooser().showOpenDialog(stage);
         String imgPath = selectedFile.getPath();
-        String text = imgPaths.getText();
-        if (text != null) {
-            text += imgPath;
-        } else {
-            text = imgPath;
+        Path inputPath = Paths.get(imgPath);
+        Path outputDirectory = Paths.get("img/Usato/"+user.getUserID()+"/");
+        Path outputPath = Paths.get(outputDirectory+"/"+user.getUserName()+counter+".jpg");
+        counter++;
+        try {
+            if (!Files.exists(outputDirectory)) {
+                Files.createDirectories(outputDirectory);
+            }
+
+            Files.copy(inputPath, outputPath, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        imgPaths.setText(text + "\n");
-    }
-
-    @FXML
-    protected void onDeleteSelected() {
-
-    }
-
-    @FXML
-    protected void onDeleteAll() {
+        // Get img name
 
     }
 
