@@ -127,8 +127,6 @@ public class VendorViewController {
         AnchorPane.setBottomAnchor(optionalPane, (descriptionPane.getHeight()/2 - optionalPane.getHeight()) / 3);
         // Posizionamento dell'immagine nel riepilogo
         AnchorPane.setBottomAnchor(portraitPane, (descriptionPane.getHeight()/2 - optionalPane.getHeight()) / 3);
-
-
     }
 
     private void getOrderList() {
@@ -203,12 +201,9 @@ public class VendorViewController {
 
                 }
             }
-
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML

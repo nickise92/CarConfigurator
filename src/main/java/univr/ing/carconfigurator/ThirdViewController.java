@@ -177,8 +177,13 @@ public class ThirdViewController {
             } else {
                 saveOrderToDB(user, configCar, (String) shopChoice.getValue());
                 String message = "Complimenti, " + user.getUserName() + " " + user.getUserLastName() + ", " +
-                        "la tua auto è stata configurata con successo. Puoi trovare il riepilogo nella tua area utente.";
+                        "la Sua auto è stata configurata con successo. Può trovare il riepilogo nell'area utente.";
                 showAlert("Configurazione salvata.", message);
+                //TODO: Se la flag "usedEvaluationRequested" e' TRUE, si deve associare al
+                // preventivo in salvataggio alla richiesta di valutazione usato, in modo che
+                // venga visto dal venditore come preventivo separato da visionare.
+
+                System.out.println(SessionManager.getInstance().getUsedEvaluationRequested());
                 mainController.loadUserView();
             }
         }

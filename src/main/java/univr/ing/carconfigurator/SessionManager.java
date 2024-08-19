@@ -10,6 +10,7 @@ public class SessionManager {
     private Auto configuredAuto;
     private boolean backFlag;
     private String riepilogo;
+    private boolean usedEvaluationRequested = false;
 
 
 
@@ -76,9 +77,18 @@ public class SessionManager {
         return riepilogo;
     }
 
+    public void setUsedEvaluationRequested(boolean flag) {
+        this.usedEvaluationRequested = flag;
+    }
+
+    public boolean getUsedEvaluationRequested() {
+        return this.usedEvaluationRequested;
+    }
+
     public void setAuthenticatedVendor(Venditore vendor) {
         this.authenticatedVendor = vendor;
     }
+
     public Venditore getAuthenticatedVendor() {
         return (Venditore) this.authenticatedVendor;
     }

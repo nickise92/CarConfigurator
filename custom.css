@@ -9,7 +9,6 @@
 .exitButton {
     -fx-text-fill: red;
     -fx-text-alignment: center;
-    -fx-font-style: bold;
     -fx-content-display: center;
 
 }

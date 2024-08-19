@@ -9,30 +9,27 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" prefHeight="581.0" prefWidth="846.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.UsedCarController">
+<AnchorPane fx:id="rootPane" prefHeight="581.0" prefWidth="846.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.UsedCarController">
    <children>
-      <AnchorPane fx:id="imgPane" layoutX="172.0" layoutY="76.0" prefHeight="389.0" prefWidth="505.0"
-                  AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="80.0">
+      <AnchorPane fx:id="imgPane" layoutX="88.0" layoutY="76.0" prefHeight="400.0" prefWidth="310.0" AnchorPane.leftAnchor="30.0">
          <children>
-            <GridPane layoutX="14.0" layoutY="14.0" prefHeight="369.0" prefWidth="591.0" AnchorPane.bottomAnchor="0.0"
-                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <GridPane prefHeight="400.0" prefWidth="310.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="155.0"/>
+                <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="155.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="150.0" vgrow="NEVER" />
+                <RowConstraints minHeight="10.0" prefHeight="150.0" vgrow="NEVER" />
+                <RowConstraints minHeight="10.0" prefHeight="150.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ImageView fx:id="topLeft" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                   <ImageView fx:id="topRight" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+                   <ImageView fx:id="centerLeft" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1" />
+                   <ImageView fx:id="centerRight" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ImageView fx:id="bottomLeft" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+                  <ImageView fx:id="bottomRight" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </children>
@@ -46,6 +43,6 @@
       <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancelButton" text="Annulla" AnchorPane.bottomAnchor="15.0" />
       <Label fx:id="loadedLabel" layoutX="18.0" layoutY="41.0" text="Immagini caricate" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="41.0" />
       <Button fx:id="openImage" layoutX="281.0" layoutY="501.0" mnemonicParsing="false" onAction="#onOpenNewImage" text="Aggiungi immagine" AnchorPane.bottomAnchor="50.0" />
-      <Button layoutX="597.0" layoutY="262.0" mnemonicParsing="false" text="Conferma" />
+       <Button fx:id="confirmImg" layoutX="522.0" layoutY="263.0" mnemonicParsing="false" onAction="#submitLoadedImg" text="Conferma" />
    </children>
 </AnchorPane>
