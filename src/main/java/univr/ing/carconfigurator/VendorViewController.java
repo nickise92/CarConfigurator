@@ -11,9 +11,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class VendorViewController {
@@ -130,12 +137,24 @@ public class VendorViewController {
     }
 
     private void getOrderList() {
+
         try {
             Scanner sc = new Scanner(new File(orderPath));
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] words = line.split(",");
+                // Aggiungiamo alla lista solo i preventivi fatti entro 20 giorni dal giorno corrente.
+                String date = words[0].split("=")[0]; // Escludiamo l'ora dalla data
+                int year = Integer.valueOf(date.split("-")[0]);
+                int month = Integer.valueOf(date.split("-")[1]);
+                int day = Integer.valueOf(date.split("-")[2]);
+                LocalDate orderDate = LocalDate.of(year, month, day);
+                if (orderValidityCheck(orderDate)) {
+                    // Se la data e' di piu' di 20 giorni prima del
+                    // giorno corrente, ignoro la linea
+                } else
+
                 if (words.length > 2 && words[2].equals(vendor.getShop())) {
                     // Nella choice box mostriamo la data alla fine, serve per recuperare il corretto
                     // preventivo dal database
@@ -152,11 +171,23 @@ public class VendorViewController {
         }
     }
 
+    /**
+     * Quando viene selezionato un preventivo dal venditore vengono caricati tutti i
+     * dati relativi alla configurazione e quelli dell'utente.
+     * Se il preventivo e' stato presentato con una valutazione dell'usato per uno sconto
+     * il tasto "Valuta usato" sara' attivo, altrimenti no.
+     *
+     * Inoltre, viene visualizzata la data di invio del preventivo.
+     *
+     * Tutti i preventivi non confermati e che hanno superato i 20 giorni non vengono
+     * visualizzati
+     */
     @FXML
     protected void onOrderSelection() {
 
         String time = orderChoiceBox.getValue().split(" \\(" )[1].split("\\)")[0];
         String date = orderChoiceBox.getValue().split(" ")[2];
+        String dateString = date+"="+time;
         String client = orderChoiceBox.getValue().split(" ")[0];
 
         try {
@@ -164,7 +195,8 @@ public class VendorViewController {
 
             while (sc.hasNextLine()) {
                 String[] line = sc.nextLine().split(",");
-                if (line[0].equals(date+"="+time) && line[1].equals(client)) {
+
+                if (line[0].equals(dateString) && line[1].equals(client)) {
                     // Estrapola il nome del cliente
                     Cliente user = new Cliente(line[1]);
                     clientName.setText(user.getUserName() + " " + user.getUserLastName());
@@ -204,6 +236,18 @@ public class VendorViewController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    // Funzione di verifica se sono trascorsi 20 giorni dalla generazione del
+    // preventivo
+    private boolean orderValidityCheck(LocalDate orderDate){
+        LocalDate currentDate = LocalDate.now();
+        long daysPassed =  ChronoUnit.DAYS.between(orderDate, currentDate);
+        if (daysPassed == 20) {
+
+        }
+
+        return daysPassed > 20;
     }
 
     @FXML

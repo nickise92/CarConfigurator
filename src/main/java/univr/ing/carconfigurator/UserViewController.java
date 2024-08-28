@@ -8,10 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -25,13 +26,15 @@ public class UserViewController {
 
     private MainController mainController;
     private Utente user;
-    private ObservableList<String> orderList = FXCollections.observableArrayList();
+    //private ObservableList<String> orderList = FXCollections.observableArrayList(); // -- Deprecated --
+    private ObservableList<Preventivo> listaPreventivi = FXCollections.observableArrayList();
     private final String orderPath = "database/";
+    private Preventivo preventivo;
 
     @FXML private AnchorPane rootPane;
     @FXML private Button configureCar;
     @FXML private Button logoutButton;
-    @FXML private ChoiceBox<String> orderListChoice;
+    @FXML private ChoiceBox<Preventivo> orderListChoice;
     @FXML private GridPane orderBox;
     @FXML private Label userLogged;
     @FXML private Label title;
@@ -63,25 +66,45 @@ public class UserViewController {
     }
 
     private void getOrderList() {
+        // Vogliamo inserire nella lista dei preventivi confermabili solo
+        // quelli fatti negli ultimi 20 giorni.
+
         try {
-            Scanner sc = new Scanner(new File(orderPath + user.getUserID() +".csv"));
+
+            Scanner sc = new Scanner(new File("database/preventivi.csv"));
 
             while (sc.hasNextLine()) {
                 String[] line = sc.nextLine().split(",");
-                String tmp = line[3] + " " + line[4] + " - " + line[0];
-                    orderList.add(tmp);
+                Auto tmp = new Auto(line[3], line[4]); // Creo l'auto di serie passando brand e modello
+                tmp.setColor(line[5]);
+                tmp.setEngine(new Engine(line[6]));
+                tmp.setCircle(new Optional(line[7], OptTypes.CERCHI));
+                tmp.setSensor(new Optional(line[8], OptTypes.SENSORI));
+                tmp.setInterior(new Optional(line[9], OptTypes.INTERNI));
+                tmp.setPrice(Double.parseDouble(line[10]));
+                preventivo = new Preventivo(line[0], line[1], LocalDate.parse(line[2]), tmp, line[12]);
+                if (Preventivo.checkOrderValidity(preventivo)) {
+                    listaPreventivi.add(preventivo);
+                }
+                // Altrimenti lo ignoro
             }
-            orderListChoice.setItems(orderList);
+            orderListChoice.setItems(listaPreventivi);
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    // Verifica della data
+    private boolean orderValidityCheck(LocalDate orderDate){
+        LocalDate currentDate = LocalDate.now();
+        return ChronoUnit.DAYS.between(orderDate, currentDate) <= 20;
+    }
+
     private void centerContent() {
         double width = rootPane.getWidth();
         double height = rootPane.getHeight();
-
 
         // Centering title and user
         AnchorPane.setLeftAnchor(title, (width - title.getWidth()) / 2);
@@ -101,17 +124,18 @@ public class UserViewController {
     @FXML
     protected void openSelectedOrder() {
         try {
-            Scanner sc = new Scanner (new File(orderPath + user.getUserID() + ".csv"));
+            Scanner sc = new Scanner (new File("database/preventivi.csv"));
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String[] content = line.split(",");
 
-                if (content[0].equals(orderListChoice.getValue().split(" - ")[1])) {
-                    if (showConfirmationDialog( line)) {
-                        // TODO: aprire preventivo selezionato e aggiungere il pulsante PAGA
-                    } else {
-                        // restare sulla view
+                if (content[0].equals(orderListChoice.getValue().getOrderID())) {
+                    if (mainController.showConfirmationAlert("Apertura ordine",
+                            "Stai aprendo l'ordine #" + preventivo.getOrderID(),
+                            "Continuare?")) {
+                        SessionManager.getInstance().setOpenOrder(orderListChoice.getValue());
+                        mainController.loadUserOrderConfirmationView();
                     }
                 }
             }
@@ -128,8 +152,12 @@ public class UserViewController {
 
     @FXML
     protected void onLogout() {
-        SessionManager.getInstance().clearSession();
-        mainController.loadHomePage();
+        if (mainController.showConfirmationAlert("Attenzione",
+                "Stai uscendo dalla tua area riservata, le configurazioni non completate verranno perse",
+                "Sei sicuro di voler uscire?")) {
+            SessionManager.getInstance().clearSession();
+            mainController.loadHomePage();
+        }
     }
 
     @FXML
@@ -137,17 +165,4 @@ public class UserViewController {
         Platform.exit();
     }
 
-    public boolean showConfirmationDialog(String header) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Apertura ordine");
-        alert.setHeaderText(header);
-        alert.setContentText("Vuoi proseguire?");
-
-        Optional<ButtonType> option = alert.showAndWait();
-
-        if (option.get() == ButtonType.OK) {
-            return true;
-        }
-        return false;
-    }
 }

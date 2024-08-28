@@ -11,9 +11,7 @@ public class SessionManager {
     private boolean backFlag;
     private String riepilogo;
     private boolean usedEvaluationRequested = false;
-
-
-
+    private Preventivo openOrder;
 
     private SessionManager() {
         // Costruttore della classe privato per prevenire l'istanziazione
@@ -91,5 +89,13 @@ public class SessionManager {
 
     public Venditore getAuthenticatedVendor() {
         return (Venditore) this.authenticatedVendor;
+    }
+
+    public void setOpenOrder(Preventivo prv) {
+        this.openOrder = prv;
+    }
+
+    public Preventivo getOpenOrder() {
+        return this.openOrder;
     }
 }

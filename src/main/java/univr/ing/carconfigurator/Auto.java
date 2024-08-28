@@ -36,8 +36,16 @@ public class Auto {
 
     }
 
-    public Auto(String brand, String model, String... optional) {
+    public Auto(String brand, String model, Engine engine, String color, Optional tyre, Optional sensor, Optional interior, double price) {
         // TODO: generazione dell'auto con gli optional gia' impostati dal preventivo.
+        this.brand = brand;
+        this.model = model;
+        this.color = color;
+        this.engine = engine;
+        this.circle = tyre;
+        this.sensor = sensor;
+        this.interior = interior;
+        this.price = price;
     }
 
     public String getImgPath(int index) {
@@ -128,6 +136,10 @@ public class Auto {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public String getName() {
+        return this.brand + " " + this.model;
     }
 
     public double getHeight() {
@@ -227,6 +239,12 @@ public class Auto {
 
     public String toString() {
         return "" + this.brand + " " + this.model + " " + this.price;
+    }
+
+    public String toCSV() {
+        return this.brand + "," + this.model + "," + this.color + "," +
+                this.engine.getName() + "," + this.circle + "," + this.sensor + "," +
+                this.interior + "," + this.price;
     }
 
 

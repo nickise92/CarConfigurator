@@ -81,9 +81,9 @@ public class Utente {
             fwr.append(tmp);
             fwr.close();
 
-            String path = "database/" + userID + ".csv";
+            /*String path = "database/" + userID + ".csv";
             File orderList = new File(path);
-            orderList.createNewFile();
+            orderList.createNewFile();*/
 
         } catch (IOException e) {
             e.printStackTrace();

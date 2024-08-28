@@ -20,12 +20,11 @@ public class MainApplication extends Application {
         URL stylesheetUrl = stylesheetFile.toURI().toURL();
         root.getStylesheets().add(stylesheetUrl.toExternalForm());
 
-        primaryStage.setTitle("Test");
+        primaryStage.setTitle("Configuratore Auto");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMaximized(true);
         primaryStage.show();
-
-
+        
     }
 
     public static void main(String[] args) {

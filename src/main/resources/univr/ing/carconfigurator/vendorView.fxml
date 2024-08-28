@@ -123,7 +123,7 @@
                      </viewport></ImageView>
                </children>
             </AnchorPane>
-            <Button layoutX="37.0" layoutY="545.0" mnemonicParsing="false" text="Conferma ritiro" />
+            <Button fx:id="notifyReadyCar" layoutX="37.0" layoutY="545.0" mnemonicParsing="false" text="Conferma ritiro" />
             <Button layoutX="482.0" layoutY="545.0" mnemonicParsing="false" text="Valutazione usato" />
 
          </children>

@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,6 +26,8 @@ public class ThirdViewController {
     private ObservableList<String> shopList = FXCollections.observableArrayList(
             "Bari", "Cagliari", "Milano", "Napoli", "Palermo", "Roma", "Torino", "Verona"
     );
+
+    private Preventivo preventivo;
 
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane contentPane;
@@ -41,7 +45,7 @@ public class ThirdViewController {
     @FXML private GridPane shopGrid;
     @FXML private GridPane priceGrid;
 
-    @FXML private ChoiceBox shopChoice;
+    @FXML private ChoiceBox<String> shopChoice;
 
     @FXML private Label acceleration;
     @FXML private Label engineFuel;
@@ -121,7 +125,9 @@ public class ThirdViewController {
     @FXML
     public void initialize() {
         setAuto(SessionManager.getInstance().getConfiguredAuto());
+        setUser(SessionManager.getInstance().getAuthenticatedUser());
         shopChoice.setItems(shopList);
+
 
         Platform.runLater(this::centerContent);
         Platform.runLater(this::updateUserAccessStatus);
@@ -175,7 +181,16 @@ public class ThirdViewController {
             if (shopChoice.getValue() == null) {
                 showAlert("Attenzione!", "Seleziona una sede di ritiro per la tua auto configurata prima di proseguire!");
             } else {
-                saveOrderToDB(user, configCar, (String) shopChoice.getValue());
+                // Creo l'ID del preventivo: giorno, ora, minuti, secondi
+                String orderID = LocalDate.now().getDayOfMonth() + "" + LocalTime.now().getHour() + "" +
+                                    LocalTime.now().getMinute() + "" + LocalTime.now().getSecond();
+                preventivo = new Preventivo(orderID, user.getUserID(), LocalDate.now(), configCar, shopChoice.getValue());
+                try {
+                    preventivo.saveToDb();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                SessionManager.getInstance().setOpenOrder(preventivo);
                 String message = "Complimenti, " + user.getUserName() + " " + user.getUserLastName() + ", " +
                         "la Sua auto è stata configurata con successo. Può trovare il riepilogo nell'area utente.";
                 showAlert("Configurazione salvata.", message);
@@ -183,18 +198,18 @@ public class ThirdViewController {
                 // preventivo in salvataggio alla richiesta di valutazione usato, in modo che
                 // venga visto dal venditore come preventivo separato da visionare.
 
-                System.out.println(SessionManager.getInstance().getUsedEvaluationRequested());
                 mainController.loadUserView();
             }
         }
     }
 
+    // DEPRECATED
     private void saveOrderToDB(Utente user, Auto auto, String shop) {
         String pattern = "yyyy-MM-dd=HH:mm:ss";
         DateFormat df = new SimpleDateFormat(pattern);
         Date currentDate = Calendar.getInstance().getTime();
         String dateString = df.format(currentDate);
-        System.out.println(dateString);
+        //System.out.println(dateString);
 
         String data = shop + ",";
         data += auto.getBrand() + ",";
@@ -219,6 +234,7 @@ public class ThirdViewController {
         try {
             FileWriter fwr = new FileWriter(orderPath + "preventivi.csv",
                     true);
+            data += SessionManager.getInstance().getUsedEvaluationRequested();
             data += "\n";
             fwr.append(dateString + "," + user.getUserID()+","+data);
             fwr.close();

@@ -209,6 +209,26 @@ public class MainController {
 
     }
 
+    public void loadUserOrderConfirmationView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("userOrderConfirmationView.fxml"));
+            Parent userOrderConfirmation = loader.load();
+            UserOrderController controller = loader.getController();
+            if (SessionManager.getInstance().isUserAuthenticated()) {
+                controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
+            }
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(userOrderConfirmation, 0.0);
+            AnchorPane.setRightAnchor(userOrderConfirmation, 0.0);
+            AnchorPane.setBottomAnchor(userOrderConfirmation, 0.0);
+            AnchorPane.setLeftAnchor(userOrderConfirmation, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(userOrderConfirmation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
     public void loadSignInView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("signin.fxml"));
@@ -261,6 +281,20 @@ public class MainController {
         alert.setTitle("Attenzione!");
         alert.setHeaderText("Tornando indietro annullerai le personalizzazioni effettuate.");
         alert.setContentText("Vuoi continuare?");
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if (option.get() == ButtonType.OK) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showConfirmationAlert(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
 
         Optional<ButtonType> option = alert.showAndWait();
 
