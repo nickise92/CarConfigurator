@@ -8,6 +8,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class UserOrderController {
@@ -197,6 +199,18 @@ public class UserOrderController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Calcolo della data di consegna dell'auto
+        // 30gg + 10 per ogni optional
+        LocalDate current = LocalDate.now();
+        int dayToAdd = 30;
+        Auto orderedCar = SessionManager.getInstance().getOpenOrder().getConfiguredCar();
+        dayToAdd += orderedCar.getOptionalCount();
+        LocalDate deliveryDate = current.plusDays(dayToAdd);
+        String message = "La sua auto sara' disponibile per il ritiro dal " + deliveryDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                + "\nPresso la sede di " + SessionManager.getInstance().getOpenOrder().getShopLocation();
+
+        mainController.showAlert("Consegna veicolo", message);
     }
 
     private void quotationUpdate(String quotation) throws IOException {

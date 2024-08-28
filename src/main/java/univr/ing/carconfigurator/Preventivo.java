@@ -71,11 +71,11 @@ public class Preventivo {
     public void saveToDb() throws IOException {
 
         FileWriter wr = new FileWriter("database/preventivi.csv", true);
-        String data = "\n" + this.orderID + "," + this.userID + "," +
+        String data = this.orderID + "," + this.userID + "," +
                 this.orderDate + "," +
                 this.configuredCar.toCSV() + "," +
                 SessionManager.getInstance().getUsedEvaluationRequested() + "," +
-                this.shopLocation + ",";
+                this.shopLocation + ",\n";
 
         System.out.println(data);
         wr.append(data);

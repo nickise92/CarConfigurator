@@ -248,7 +248,31 @@ public class Auto {
     }
 
 
+    public int getOptionalCount() {
+        int count = 0;
 
+        if (!engine.getName().equals(defaultEngine.getName())) {
+            count++;
+        }
+
+        if (!color.toString().equals(defaultColor.toString())) {
+            count++;
+        }
+
+        if (circle != null) {
+            count++;
+        }
+
+        if (sensor != null) {
+            count++;
+        }
+
+        if (interior != null) {
+            count++;
+        }
+
+        return count;
+    }
 
 
 }
