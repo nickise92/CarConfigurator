@@ -156,6 +156,12 @@ public class UserOrderController {
         engineConsumption.setText("Consumi: " + preventivo.getConfiguredCar().getEngine().getConsumption());
         engineDisplacement.setText("Cilindrata: " + preventivo.getConfiguredCar().getEngine().getDisplacement());
         enginePower.setText("Potenza: " + preventivo.getConfiguredCar().getEngine().getPower());
+
+
+        // Se il preventivo ha una richiesta di valutazione correlata
+        // il tasto conferma e paga e' disabilitato, in quanto e' necessario
+        // l'intervento di un impiegato del negozio per la valutazione.
+        confirmAndPay.setDisable(preventivo.isOldCarDiscount());
     }
 
 

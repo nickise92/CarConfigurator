@@ -15,18 +15,15 @@ import javafx.scene.layout.AnchorPane;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 public class VendorViewController {
 
-    private final String orderPath = "database/preventivi.csv";
-    private ObservableList<String> orderList = FXCollections.observableArrayList();
+    private final String quotationPath = "database/preventivi.csv";
+    private ObservableList<Preventivo> quotationList = FXCollections.observableArrayList();
+    private ObservableList<Ordine> orderList = FXCollections.observableArrayList();
+    private final String orderPath = "database/ordini.csv";
+
 
 
     private MainController mainController;
@@ -39,42 +36,35 @@ public class VendorViewController {
     @FXML private AnchorPane enginePane;
     @FXML private AnchorPane optionalPane;
     @FXML private AnchorPane portraitPane;
-    @FXML private ChoiceBox<String> orderChoiceBox;
+
+    @FXML private ChoiceBox<Preventivo> quotationChoiceBox;
+    @FXML private ChoiceBox<Ordine> orderChoiceBox;
+
     @FXML private Button logoutButton;
+    @FXML private Button exitButton;
+    @FXML private Button notifyReadyCar;
+    @FXML private Button oldCarEvaluation;
+
     @FXML private Label vendorLogged;
     @FXML private Label shopLocation;
-    @FXML private Label shortDesc;
+    @FXML private Label carName;
     @FXML private Label clientName;
+
     @FXML private Label dimensionTitle;
     @FXML private Label orderLabel;
     @FXML private Label panelTitle;
-    @FXML private Label lungLabel;
-    @FXML private Label largLabel;
-    @FXML private Label altLabel;
-    @FXML private Label trunkLabel;
-    @FXML private Label pesoLabel;
     @FXML private Label carLength;
     @FXML private Label carWidth;
     @FXML private Label carHeight;
     @FXML private Label carTrunkVolume;
     @FXML private Label carWeight;
-    @FXML private Label engineTitle;
     @FXML private Label engineName;
-    @FXML private Label fuelLabel;
-    @FXML private Label speedLabel;
-    @FXML private Label emissionLabel;
-    @FXML private Label consumptionLabel;
-    @FXML private Label displacementLabel;
     @FXML private Label engineFuel;
     @FXML private Label engineSpeed;
     @FXML private Label engineEmission;
     @FXML private Label engineConsumption;
     @FXML private Label engineDisplacement;
-    @FXML private Label optionalTitle;
-    @FXML private Label colorLabel;
-    @FXML private Label tireLabel;
-    @FXML private Label sensorLabel;
-    @FXML private Label interiorLabel;
+    @FXML private Label enginePower;
     @FXML private Label carColor;
     @FXML private Label carTire;
     @FXML private Label carSensor;
@@ -96,8 +86,11 @@ public class VendorViewController {
 
     public void initialize() {
 
+        notifyReadyCar.setDisable(true);
+        oldCarEvaluation.setDisable(true);
         Platform.runLater(this::updateVendorAccessStatus);
         Platform.runLater(this::centerContent);
+        Platform.runLater(this::getQuotationList);
         Platform.runLater(this::getOrderList);
     }
 
@@ -112,8 +105,6 @@ public class VendorViewController {
         double width = rootPane.getWidth();
         double height = rootPane.getHeight();
 
-        // Centering logout button
-        AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);
         // Posizionamento del pannello di selezione preventivi
         AnchorPane.setTopAnchor(orderPane, (height - orderPane.getHeight()) / 6);
         // Posizionamento del pannello di riepilogo
@@ -121,7 +112,7 @@ public class VendorViewController {
         AnchorPane.setRightAnchor(descriptionPane, (width - descriptionPane.getWidth()) / 2);
         // Titolo e sottotitolo del pannello di riepilogo
         AnchorPane.setLeftAnchor(panelTitle, (descriptionPane.getWidth() - panelTitle.getWidth()) / 2);
-        AnchorPane.setLeftAnchor(shortDesc, (descriptionPane.getWidth() - shortDesc.getWidth()) / 4);
+        AnchorPane.setLeftAnchor(carName, (descriptionPane.getWidth() - carName.getWidth()) / 4);
         AnchorPane.setLeftAnchor(clientName, (descriptionPane.getWidth() - clientName.getWidth()) / 4);
         // Posizionamento del pannello dimensioni all'interno del riepilogo
         //AnchorPane.setLeftAnchor(dimensionPane, (descriptionPane.getWidth() - dimensionPane.getWidth()) / 4);
@@ -134,41 +125,55 @@ public class VendorViewController {
         AnchorPane.setBottomAnchor(optionalPane, (descriptionPane.getHeight()/2 - optionalPane.getHeight()) / 3);
         // Posizionamento dell'immagine nel riepilogo
         AnchorPane.setBottomAnchor(portraitPane, (descriptionPane.getHeight()/2 - optionalPane.getHeight()) / 3);
+        // Posizionamento dei bottoni
+        AnchorPane.setLeftAnchor(notifyReadyCar, (descriptionPane.getWidth() - notifyReadyCar.getWidth() - oldCarEvaluation.getWidth() - 15) / 2);
+        AnchorPane.setRightAnchor(oldCarEvaluation, (descriptionPane.getWidth() - oldCarEvaluation.getWidth() - notifyReadyCar.getWidth() - 15) / 2);
+
     }
 
+
+    // Crea la lista di preventivi utente con una richiesta di valutazione dell'usato
+    // assegnata
+    private void getQuotationList() {
+
+        try {
+            Scanner sc = new Scanner(new File(quotationPath));
+            while (sc.hasNextLine()) {
+                Preventivo quotation = new Preventivo(sc.nextLine());
+                // Aggiungiamo alla lista solo i preventivi fatti entro 20 giorni dal giorno corrente e
+                // appartenenti al negozio del venditore loggato
+                if (Preventivo.checkOrderValidity(quotation) &&
+                        quotation.getShopLocation().equals(vendor.getShop()) &&
+                        quotation.isOldCarDiscount()) {
+                    quotationList.add(quotation);
+                }
+            }
+            quotationChoiceBox.setItems(quotationList);
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Crea la lista degli ordini in attesa di notifica al cliente
     private void getOrderList() {
 
         try {
             Scanner sc = new Scanner(new File(orderPath));
-
             while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                String[] words = line.split(",");
-                // Aggiungiamo alla lista solo i preventivi fatti entro 20 giorni dal giorno corrente.
-                String date = words[0].split("=")[0]; // Escludiamo l'ora dalla data
-                int year = Integer.valueOf(date.split("-")[0]);
-                int month = Integer.valueOf(date.split("-")[1]);
-                int day = Integer.valueOf(date.split("-")[2]);
-                LocalDate orderDate = LocalDate.of(year, month, day);
-                if (orderValidityCheck(orderDate)) {
-                    // Se la data e' di piu' di 20 giorni prima del
-                    // giorno corrente, ignoro la linea
-                } else
+                Ordine order = new Ordine(sc.nextLine());
 
-                if (words.length > 2 && words[2].equals(vendor.getShop())) {
-                    // Nella choice box mostriamo la data alla fine, serve per recuperare il corretto
-                    // preventivo dal database
-                    // Cliente marca ora
-                    orderList.add(words[1] + " " + words[3] + " " + words[0].split("=")[0] + " (" +
-                            words[0].split("=")[1] + ")"
-                    );
+                // Se l'ordine aperto e' del negozio corrente, viene aggiunto alla lista
+                if (order.getShopLocation().equals(vendor.getShop())) {
+                    orderList.add(order);
                 }
             }
             orderChoiceBox.setItems(orderList);
-
-        } catch (FileNotFoundException e) {
+            sc.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -183,71 +188,110 @@ public class VendorViewController {
      * visualizzati
      */
     @FXML
-    protected void onOrderSelection() {
+    protected void onQuotationSelection() {
 
-        String time = orderChoiceBox.getValue().split(" \\(" )[1].split("\\)")[0];
-        String date = orderChoiceBox.getValue().split(" ")[2];
-        String dateString = date+"="+time;
-        String client = orderChoiceBox.getValue().split(" ")[0];
+        Preventivo quotation = quotationChoiceBox.getValue();
 
-        try {
-            Scanner sc = new Scanner(new File(orderPath));
+        // Estrapola il nome del cliente
+        Cliente user = new Cliente(quotation.getUserID());
+        clientName.setText("Cliente: " + user.getUserName() + " " + user.getUserLastName());
 
-            while (sc.hasNextLine()) {
-                String[] line = sc.nextLine().split(",");
+        // popola i campi del riepilogo
 
-                if (line[0].equals(dateString) && line[1].equals(client)) {
-                    // Estrapola il nome del cliente
-                    Cliente user = new Cliente(line[1]);
-                    clientName.setText(user.getUserName() + " " + user.getUserLastName());
+        // DETTAGLI TECNICI AUTO
+        carLength.setText("Lunghezza: " + String.valueOf(quotation.getConfiguredCar().getLength()));
+        carWidth.setText("Larghezza: " + String.valueOf(quotation.getConfiguredCar().getWidth()));
+        carHeight.setText("Altezza: " + String.valueOf(quotation.getConfiguredCar().getHeight()));
+        carTrunkVolume.setText("Volume bagagliaio: " + String.valueOf(quotation.getConfiguredCar().getTrunkVol()));
+        carWeight.setText("Peso: " + String.valueOf(quotation.getConfiguredCar().getWeight()));
+        carName.setText("Automobile: " + quotation.getConfiguredCar().getBrand() + " " + quotation.getConfiguredCar().getModel());
 
-                    // popola i campi del riepilogo
-                    Auto tmp = new Auto(line[3], line[4]);
-                    tmp.setEngine(new Engine(line[6]));
-                    tmp.setColor(line[5]);
-                    tmp.setCircle(new Optional(line[7], OptTypes.CERCHI));
-                    tmp.setInterior(new Optional(line[8], OptTypes.INTERNI));
-                    tmp.setSensor(new Optional(line[9], OptTypes.SENSORI));
+        // DETTAGLI TECNICI MOTORE
+        engineName.setText("Motore: " + quotation.getConfiguredCar().getEngine().getName());
+        engineFuel.setText("Alimentazione: " + quotation.getConfiguredCar().getEngine().getFuelType());
+        engineSpeed.setText("0-100km/h: " + quotation.getConfiguredCar().getEngine().getAccelerationTime());
+        engineEmission.setText("Emissioni: " + quotation.getConfiguredCar().getEngine().getGramsCO2perKm());
+        engineConsumption.setText("Consumi: " + quotation.getConfiguredCar().getEngine().getConsumption());
+        engineDisplacement.setText("Cilindrata: " + quotation.getConfiguredCar().getEngine().getDisplacement());
+        enginePower.setText("Potenza: " + quotation.getConfiguredCar().getEngine().getPower());
 
-                    carLength.setText(String.valueOf(tmp.getLength()));
-                    carWidth.setText(String.valueOf(tmp.getWidth()));
-                    carHeight.setText(String.valueOf(tmp.getHeight()));
-                    carTrunkVolume.setText(String.valueOf(tmp.getTrunkVol()));
-                    carWeight.setText(String.valueOf(tmp.getWeight()));
-                    shortDesc.setText(tmp.getBrand() + " " + tmp.getModel());
+        // DETTAGLI OPTIONAL
+        carColor.setText("Colore: " + quotation.getConfiguredCar().getColor());
+        carTire.setText("Cerchi: " + quotation.getConfiguredCar().getCircle().toString());
+        carSensor.setText("Sensori: " + quotation.getConfiguredCar().getSensor().toString());
+        carInterior.setText("Interni: "+ quotation.getConfiguredCar().getInterior().toString());
 
-                    engineName.setText(tmp.getEngine().getName());
-                    engineFuel.setText(tmp.getEngine().getFuelType());
-                    engineSpeed.setText(tmp.getEngine().getAccelerationTime());
-                    engineEmission.setText(tmp.getEngine().getGramsCO2perKm());
-                    engineConsumption.setText(tmp.getEngine().getConsumption());
-                    engineDisplacement.setText(tmp.getEngine().getDisplacement());
+        // Setting the car image
+        portraitCar.setImage(new Image( new File(quotation.getConfiguredCar().getImgPath(0)).toURI().toString()));
 
-                    carColor.setText(tmp.getColor());
-                    carTire.setText(tmp.getCircle().toString());
-                    carSensor.setText(tmp.getSensor().toString());
-                    carInterior.setText(tmp.getSensor().toString());
+        // disabilita il tasto conferma ordine, in quanto si tratta di un preventivo
+        notifyReadyCar.setDisable(quotation.isOldCarDiscount());
+        // e abilita il tasto di valutazione dell'usato.
+        oldCarEvaluation.setDisable(!quotation.isOldCarDiscount());
 
-                    // Setting the car image
-                    portraitCar.setImage(new Image( new File(tmp.getImgPath(0)).toURI().toString()));
-
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
-    // Funzione di verifica se sono trascorsi 20 giorni dalla generazione del
-    // preventivo
-    private boolean orderValidityCheck(LocalDate orderDate){
-        LocalDate currentDate = LocalDate.now();
-        long daysPassed =  ChronoUnit.DAYS.between(orderDate, currentDate);
-        if (daysPassed == 20) {
 
-        }
+    /**
+     * Quando viene selezionato un ordine dal venditore vengono caricati tutti i
+     * dati relativi alla configurazione e quelli dell'utente corrispondente.
+     * Se l'ordine e' pronto viene visualizzata la data IN VERDE e il pulsante
+     * "Conferma ritiro" sara' attivo.
+     */
+    @FXML
+    protected void onOrderSelection() {
 
-        return daysPassed > 20;
+        Ordine order = orderChoiceBox.getValue();
+
+        // Estrapola il nome del cliente
+        Cliente user = new Cliente(order.getUserID());
+        clientName.setText("Cliente: " + user.getUserName() + " " + user.getUserLastName());
+
+        // popola i campi del riepilogo
+
+        // DETTAGLI TECNICI AUTO
+        carLength.setText("Lunghezza: " + String.valueOf(order.getConfiguredCar().getLength()));
+        carWidth.setText("Larghezza: " + String.valueOf(order.getConfiguredCar().getWidth()));
+        carHeight.setText("Altezza: " + String.valueOf(order.getConfiguredCar().getHeight()));
+        carTrunkVolume.setText("Volume bagagliaio: " + String.valueOf(order.getConfiguredCar().getTrunkVol()));
+        carWeight.setText("Peso: " + String.valueOf(order.getConfiguredCar().getWeight()));
+        carName.setText("Automobile: " + order.getConfiguredCar().getBrand() + " " + order.getConfiguredCar().getModel());
+
+        // DETTAGLI TECNICI MOTORE
+        engineName.setText("Motore: " + order.getConfiguredCar().getEngine().getName());
+        engineFuel.setText("Alimentazione: " + order.getConfiguredCar().getEngine().getFuelType());
+        engineSpeed.setText("0-100km/h: " + order.getConfiguredCar().getEngine().getAccelerationTime());
+        engineEmission.setText("Emissioni: " + order.getConfiguredCar().getEngine().getGramsCO2perKm());
+        engineConsumption.setText("Consumi: " + order.getConfiguredCar().getEngine().getConsumption());
+        engineDisplacement.setText("Cilindrata: " + order.getConfiguredCar().getEngine().getDisplacement());
+        enginePower.setText("Potenza: " + order.getConfiguredCar().getEngine().getPower());
+
+        // DETTAGLI OPTIONAL
+        carColor.setText("Colore: " + order.getConfiguredCar().getColor());
+        carTire.setText("Cerchi: " + order.getConfiguredCar().getCircle().toString());
+        carSensor.setText("Sensori: " + order.getConfiguredCar().getSensor().toString());
+        carInterior.setText("Interni: "+ order.getConfiguredCar().getInterior().toString());
+
+        // Setting the car image
+        portraitCar.setImage(new Image( new File(order.getConfiguredCar().getImgPath(0)).toURI().toString()));
+
+        // disabilita il tasto conferma ordine, in quanto si tratta di un preventivo
+        notifyReadyCar.setDisable(order.isOldCarDiscount());
+        // e abilita il tasto di valutazione dell'usato.
+        oldCarEvaluation.setDisable(!order.isOldCarDiscount());
+        
+    }
+
+    // TODO: On order confirmation
+    @FXML protected void onOrderConfirmation() {
+        // TODO: Notify customer his car is ready and move the order
+        //  to new database entry "ritiri.csv"
+    }
+
+    // TODO: On old car evaluation
+    @FXML protected void onOldCarEvaluation() {
+        // TODO: open evaluation view, insert price discount and confirm
+        //  then return to previous view
     }
 
     @FXML
