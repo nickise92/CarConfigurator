@@ -50,8 +50,8 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
             Parent homePage = loader.load();
             HomeController controller = loader.getController();
-            controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             controller.setMainController(this);
+            controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             AnchorPane.setTopAnchor(homePage, 0.0);
             AnchorPane.setRightAnchor(homePage, 0.0);
             AnchorPane.setBottomAnchor(homePage, 0.0);
@@ -68,10 +68,10 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("vendorView.fxml"));
             Parent vendorPage = loader.load();
             VendorViewController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isVendorAuthenticated()) {
                 controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
             }
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(vendorPage, 0.0);
             AnchorPane.setRightAnchor(vendorPage, 0.0);
             AnchorPane.setBottomAnchor(vendorPage, 0.0);
@@ -88,12 +88,10 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("gestioneOrdiniView.fxml"));
             Parent orderPage = loader.load();
             GestioneOrdiniController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
-            } else {
-                System.out.println("Accesso come ospite");
             }
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(orderPage, 0.0);
             AnchorPane.setRightAnchor(orderPage, 0.0);
             AnchorPane.setBottomAnchor(orderPage, 0.0);
@@ -111,12 +109,10 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorFirstView.fxml"));
             Parent configPage = loader.load();
             FirstViewController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
-            } else {
-                System.out.println("Accesso come ospite");
             }
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(configPage, 0.0);
             AnchorPane.setRightAnchor(configPage, 0.0);
             AnchorPane.setBottomAnchor(configPage, 0.0);
@@ -133,11 +129,11 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorSecondView.fxml"));
             Parent configPage = loader.load();
             SecondViewController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(configPage, 0.0);
             AnchorPane.setRightAnchor(configPage, 0.0);
             AnchorPane.setBottomAnchor(configPage, 0.0);
@@ -154,11 +150,11 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorThirdView.fxml"));
             Parent configPage = loader.load();
             ThirdViewController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
             controller.setAuto(SessionManager.getInstance().getConfiguredAuto());
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(configPage, 0.0);
             AnchorPane.setRightAnchor(configPage, 0.0);
             AnchorPane.setBottomAnchor(configPage, 0.0);
@@ -193,10 +189,10 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("userView.fxml"));
             Parent userViewForm = loader.load();
             UserViewController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(userViewForm, 0.0);
             AnchorPane.setRightAnchor(userViewForm, 0.0);
             AnchorPane.setBottomAnchor(userViewForm, 0.0);
@@ -214,10 +210,10 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("userOrderConfirmationView.fxml"));
             Parent userOrderConfirmation = loader.load();
             UserOrderController controller = loader.getController();
+            controller.setMainController(this);
             if (SessionManager.getInstance().isUserAuthenticated()) {
                 controller.setUser(SessionManager.getInstance().getAuthenticatedUser());
             }
-            controller.setMainController(this);
             AnchorPane.setTopAnchor(userOrderConfirmation, 0.0);
             AnchorPane.setRightAnchor(userOrderConfirmation, 0.0);
             AnchorPane.setBottomAnchor(userOrderConfirmation, 0.0);
@@ -268,6 +264,28 @@ public class MainController {
         }
     }
 
+    public void loadCarEvaluationView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("carEvaluationView.fxml"));
+            Parent carEval = loader.load();
+            CarEvaluationView controller = loader.getController();
+            controller.setMainController(this);
+            controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
+
+            AnchorPane.setTopAnchor(carEval, 0.0);
+            AnchorPane.setLeftAnchor(carEval, 0.0);
+            AnchorPane.setRightAnchor(carEval, 0.0);
+            AnchorPane.setBottomAnchor(carEval, 0.0);
+
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(carEval);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /** ========================== ALERT ========================== **/
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

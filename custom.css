@@ -6,11 +6,35 @@
     -fx-background-radius: 3px;
 }
 
+.leftButton {
+    -fx-background-image: url("img/assets/left.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-style: none;
+}
+
+.rightButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: url("img/assets/right.png");
+    -fx-background-size: 30px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-style: none;
+}
+
+.rightButton:hover {
+    -fx-background-color: #7baac6;
+}
+.leftButton:hover {
+    -fx-background-color: #7baac6;
+}
+
 .exitButton {
     -fx-text-fill: red;
     -fx-text-alignment: center;
     -fx-content-display: center;
-
 }
 
 .registrationForm {

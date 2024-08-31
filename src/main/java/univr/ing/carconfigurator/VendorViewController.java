@@ -51,6 +51,7 @@ public class VendorViewController {
     @FXML private Label clientName;
 
     @FXML private Label dimensionTitle;
+    @FXML private Label quotationLabel;
     @FXML private Label orderLabel;
     @FXML private Label panelTitle;
     @FXML private Label carLength;
@@ -290,8 +291,9 @@ public class VendorViewController {
 
     // TODO: On old car evaluation
     @FXML protected void onOldCarEvaluation() {
-        // TODO: open evaluation view, insert price discount and confirm
-        //  then return to previous view
+        SessionManager.getInstance().setAuthenticatedVendor(vendor);
+        SessionManager.getInstance().setOpenOrder(quotationChoiceBox.getValue());
+        mainController.loadCarEvaluationView();
     }
 
     @FXML
