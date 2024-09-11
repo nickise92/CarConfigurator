@@ -66,3 +66,14 @@
     -fx-border-width: 2px;
     -fx-border-color: black;
 }
+
+.readyCarRecap {
+    -fx-border-radius: 5px;
+    -fx-border-width: 2px;
+    -fx-border-color: #378aad;
+    -fx-background-color: #accbe3;
+}
+
+.tabRecap {
+    -fx-background-color: #378aad;
+}

@@ -320,10 +320,6 @@ public class VendorViewController {
         // Setting the car image
         portraitCar.setImage(new Image( new File(order.getConfiguredCar().getImgPath(0)).toURI().toString()));
 
-        // disabilita il tasto conferma ordine, in quanto si tratta di un preventivo
-        notifyReadyCar.setDisable(order.isOldCarDiscount());
-        // e abilita il tasto di valutazione dell'usato.
-        oldCarEvaluation.setDisable(!order.isOldCarDiscount());
     }
 
     // Conferma & Notifica
@@ -336,7 +332,6 @@ public class VendorViewController {
                 "Proseguendo, l'ordine selezionato verrà notificato come pronto per il ritiro al cliente.",
                 "Proseguire?");
         order.moveToReady();
-
     }
 
     // Visualizza l'auto usata da valutare e aggiorna il prezzo con lo sconto
@@ -350,7 +345,6 @@ public class VendorViewController {
     @FXML
     protected void onConfirmEvaluated() {
         valutazione.save();
-
     }
 
 

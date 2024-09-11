@@ -4,12 +4,14 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -29,6 +31,8 @@ public class UserViewController {
     private Preventivo preventivo;
 
     @FXML private AnchorPane rootPane;
+    @FXML private AnchorPane readyBox;
+    @FXML private TabPane readyRecap;
     @FXML private Button configureCar;
     @FXML private Button logoutButton;
     @FXML private ChoiceBox<Preventivo> orderListChoice;
@@ -54,6 +58,7 @@ public class UserViewController {
         Platform.runLater(this::updateUserAccessStatus);
         Platform.runLater(this::centerContent);
         Platform.runLater(this::getOrderList);
+        Platform.runLater(this::getReadyList);
     }
 
     private void updateUserAccessStatus() {
@@ -68,11 +73,9 @@ public class UserViewController {
         // una richiesta di valutazione usato.
         try {
             Scanner quotationSc = new Scanner(new File("database/preventivi.csv"));
-
             while (quotationSc.hasNextLine()) {
                 String line = quotationSc.nextLine();
                 preventivo = new Preventivo(line);
-
                 if (!preventivo.getOldCarDiscount() && Preventivo.checkQuotationValidity(preventivo)) {
                     String message = preventivo.checkEvaluation();
                     if (message != null) {
@@ -84,10 +87,59 @@ public class UserViewController {
             }
             orderListChoice.setItems(listaPreventivi);
 
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void getReadyList() {
+        // Apro il database degli ordini pronti per il ritiro
+        // e creo la tab corrispondente.
+        List<String> readyCarList = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("database/ritiri.csv"));
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                readyCarList.add(currentLine);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Ora creo una tab per ogni riga della lista di automobili pronte per il ritiro
+        for (String item : readyCarList) {
+            Ordine order = new Ordine(item);
+
+            Tab tab = new Tab(order.getConfiguredCar().getName());
+            tab.setContent(readyCarInfo(order));
+
+            readyRecap.getTabs().add(tab);
+        }
+    }
+
+    private Node readyCarInfo(Ordine order) {
+
+        AnchorPane tmp = new AnchorPane();
+        tmp.getStyleClass().add("readyCarRecap");
+        tmp.setMinSize(500.0, 200.0);
+        Label engine = new Label("Motore: " + order.getConfiguredCar().getEngine().getName());
+        Label colour = new Label("Colore: " + order.getConfiguredCar().getColor());
+        Label tyre = new Label("Cerchi: " + (order.getConfiguredCar().getCircle().equals("null") ? order.getConfiguredCar().getCircle() : "di serie" ));
+        Label sensor = new Label("Sensori: " + (order.getConfiguredCar().getSensor().equals("null") ? order.getConfiguredCar().getSensor() : "nessun optional"));
+        Label interior = new Label("Interni: " + (order.getConfiguredCar().getInterior().equals("null") ? order.getConfiguredCar().getInterior() : "di serie"));
+        Label price = new Label("Prezzo: " + order.getConfiguredCar().getPrice());
+
+        tmp.getChildren().clear();
+        tmp.getChildren().setAll(engine, colour, tyre, sensor, interior, price);
+
+        AnchorPane.setTopAnchor(engine, 10.0);
+        AnchorPane.setTopAnchor(colour, 30.0);
+        AnchorPane.setTopAnchor(tyre, 50.0);
+        AnchorPane.setTopAnchor(sensor, 70.0);
+        AnchorPane.setTopAnchor(interior, 90.0);
+        AnchorPane.setTopAnchor(price, 110.0 );
+        return tmp;
     }
 
     private void centerContent() {
@@ -100,13 +152,18 @@ public class UserViewController {
         AnchorPane.setLeftAnchor(userLogged, (width - userLogged.getWidth()) / 2);
         AnchorPane.setTopAnchor(userLogged, 90.0);
         // Configure Car button pos
-        AnchorPane.setTopAnchor(configureCar, (height - configureCar.getHeight()) / 2);
+        AnchorPane.setTopAnchor(configureCar, (height - configureCar.getHeight()) / 3);
         AnchorPane.setLeftAnchor(configureCar, (width/2 - configureCar.getWidth()) / 2);
         // Order grid position
-        AnchorPane.setTopAnchor(orderBox, (height - orderBox.getHeight()) / 2);
+        AnchorPane.setTopAnchor(orderBox, (height - orderBox.getHeight()) / 3);
         AnchorPane.setRightAnchor(orderBox, (width/2 - orderBox.getWidth()) / 2);
+        // Ready box position
+        AnchorPane.setBottomAnchor(readyBox, (height - readyBox.getHeight()) / 3);
+        AnchorPane.setLeftAnchor(readyBox, (width - readyBox.getWidth()) / 2);
         // Logout button
         AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);
+
+
     }
 
     @FXML
