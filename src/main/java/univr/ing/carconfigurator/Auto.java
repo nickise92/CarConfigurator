@@ -37,7 +37,7 @@ public class Auto {
     }
 
     public Auto(String brand, String model, Engine engine, String color, Optional tyre, Optional sensor, Optional interior, double price) {
-        // TODO: generazione dell'auto con gli optional gia' impostati dal preventivo.
+        // generazione dell'auto con gli optional gia' impostati dal preventivo.
         this.brand = brand;
         this.model = model;
         this.color = color;
@@ -90,37 +90,12 @@ public class Auto {
                     this.trunkVolume = Double.parseDouble(car[7]);
                     this.defaultEngine = new Engine(car[8]);
                     this.defaultColor = "Bianco";
-
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        /*System.out.println("Popolo i campi...");*/
-        /* L'auto generata e' una lista di stringhe, con la chiamata al metodo
-         * successivo si ottiene la popolazione dei campi tipizzati della classe
-         * necessari per successive operazioni aritmetiche.
-         */
-        //populateAutoFields();
     }
-
-    /* Trasforma le stringhe nei vari valori di default dell'auto
-     * generata.
-     */
-    private void populateAutoFields() {
-        this.brand = auto.get(0);
-        this.model = auto.get(1);
-        this.price = Double.parseDouble(auto.get(2));
-        this.weight = Double.parseDouble(auto.get(3));
-        this.height = Double.parseDouble(auto.get(4));
-        this.width = Double.parseDouble(auto.get(5));
-        this.length = Double.parseDouble(auto.get(6));
-        this.trunkVolume = Double.parseDouble(auto.get(7));
-        this.defaultEngine = new Engine(auto.get(8));
-        this.defaultColor = "Bianco";
-
-    }
-
 
     public String getBrand() {
         return this.brand;

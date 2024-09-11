@@ -8,11 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -67,23 +64,16 @@ public class UserViewController {
 
     private void getOrderList() {
         // Vogliamo inserire nella lista dei preventivi confermabili solo
-        // quelli fatti negli ultimi 20 giorni.
-
+        // quelli fatti negli ultimi 20 giorni, e che non presentano
+        // una richiesta di valutazione usato.
         try {
 
             Scanner sc = new Scanner(new File("database/preventivi.csv"));
 
             while (sc.hasNextLine()) {
-                String[] line = sc.nextLine().split(",");
-                Auto tmp = new Auto(line[3], line[4]); // Creo l'auto di serie passando brand e modello
-                tmp.setColor(line[5]);
-                tmp.setEngine(new Engine(line[6]));
-                tmp.setCircle(new Optional(line[7], OptTypes.CERCHI));
-                tmp.setSensor(new Optional(line[8], OptTypes.SENSORI));
-                tmp.setInterior(new Optional(line[9], OptTypes.INTERNI));
-                tmp.setPrice(Double.parseDouble(line[10]));
-                preventivo = new Preventivo(line[0], line[1], LocalDate.parse(line[2]), tmp, line[12]);
-                if (Preventivo.checkOrderValidity(preventivo)) {
+                String line = sc.nextLine();
+                preventivo = new Preventivo(line);
+                if (!preventivo.getOldCarDiscount() && Preventivo.checkQuotationValidity(preventivo)) {
                     listaPreventivi.add(preventivo);
                 }
                 // Altrimenti lo ignoro
@@ -94,12 +84,6 @@ public class UserViewController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    // Verifica della data
-    private boolean orderValidityCheck(LocalDate orderDate){
-        LocalDate currentDate = LocalDate.now();
-        return ChronoUnit.DAYS.between(orderDate, currentDate) <= 20;
     }
 
     private void centerContent() {
@@ -134,7 +118,7 @@ public class UserViewController {
                     if (mainController.showConfirmationAlert("Apertura ordine",
                             "Stai aprendo l'ordine #" + preventivo.getOrderID(),
                             "Continuare?")) {
-                        SessionManager.getInstance().setOpenOrder(orderListChoice.getValue());
+                        SessionManager.getInstance().setOpenQuotation(orderListChoice.getValue());
                         mainController.loadUserOrderConfirmationView();
                     }
                 }
@@ -148,6 +132,11 @@ public class UserViewController {
     protected void startCarConfiguration() {
         SessionManager.getInstance().setAuthenticatedUser(user.getUserID());
         mainController.loadFirstView();
+    }
+
+    @FXML
+    protected void onSaveToPDF() {
+        // TODO: Metodo che salva il preventivo in un file pdf.
     }
 
     @FXML

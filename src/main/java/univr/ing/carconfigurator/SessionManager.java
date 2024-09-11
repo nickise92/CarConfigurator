@@ -12,6 +12,8 @@ public class SessionManager {
     private String riepilogo;
     private boolean usedEvaluationRequested = false;
     private Preventivo openOrder;
+    private double discountAmount;
+    private boolean oldCarEvaluated = false;
 
     private SessionManager() {
         // Costruttore della classe privato per prevenire l'istanziazione
@@ -41,6 +43,12 @@ public class SessionManager {
     public void clearSession() {
         authenticatedUser = null;
         authenticatedVendor = null;
+        configuredAuto = null;
+        riepilogo = null;
+        openOrder = null;
+        oldCarEvaluated = false;
+        usedEvaluationRequested = false;
+        discountAmount = 0;
     }
 
     public boolean isUserAuthenticated() {
@@ -91,11 +99,27 @@ public class SessionManager {
         return (Venditore) this.authenticatedVendor;
     }
 
-    public void setOpenOrder(Preventivo prv) {
+    public void setOpenQuotation(Preventivo prv) {
         this.openOrder = prv;
     }
 
-    public Preventivo getOpenOrder() {
+    public Preventivo getOpenQuotation() {
         return this.openOrder;
+    }
+
+    public void setDiscountAmount(double amount) {
+        this.discountAmount = amount;
+    }
+
+    public double getDiscountAmount() {
+        return this.discountAmount;
+    }
+
+    public void setOldCarEvaluated(boolean flag) {
+        this.oldCarEvaluated = flag;
+    }
+
+    public boolean getOldCarEvaluated() {
+        return this.oldCarEvaluated;
     }
 }

@@ -7,6 +7,8 @@
 }
 
 .leftButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-background-image: url("img/assets/left.png");
     -fx-background-size: 30px;
     -fx-background-repeat: no-repeat;
@@ -35,6 +37,13 @@
     -fx-text-fill: red;
     -fx-text-alignment: center;
     -fx-content-display: center;
+}
+
+.exitButton:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: red;
 }
 
 .registrationForm {

@@ -14,7 +14,7 @@ public class Preventivo {
     private Auto configuredCar; // contiene prezzo, motore, optional...private String optionals; // Formato: "optional1,optional2,optional3,...
     private LocalDate orderDate; // data di creazione
     private boolean oldCarDiscount; // Se il preventivo allega un auto da valutare
-
+    private double oldCarValue; // valore della valutazione dell'auto usata
     public Preventivo() {
 
     }
@@ -24,7 +24,6 @@ public class Preventivo {
         this.orderID = content[0];
         this.userID = content[1];
         this.orderDate = LocalDate.parse(content[2]);
-        this.shopLocation = content[12];
         this.configuredCar = new Auto(content[3], content[4]);
         this.configuredCar.setColor(content[5]);
         this.configuredCar.setEngine(new Engine(content[6]));
@@ -33,7 +32,8 @@ public class Preventivo {
         this.configuredCar.setInterior(new Optional(content[9], OptTypes.INTERNI));
         this.configuredCar.setPrice(Double.parseDouble(content[10]));
         this.oldCarDiscount = Boolean.parseBoolean(content[11]);
-
+        this.oldCarValue = Double.parseDouble(content[12]);
+        this.shopLocation = content[13];
     }
 
     public Preventivo(String orderID, String userID, LocalDate date, Auto configuredCar, String shopLocation) {
@@ -82,7 +82,7 @@ public class Preventivo {
         this.orderDate = orderDate;
     }
 
-    public boolean isOldCarDiscount() {
+    public boolean getOldCarDiscount() {
         return oldCarDiscount;
     }
 
@@ -90,19 +90,25 @@ public class Preventivo {
         this.oldCarDiscount = oldCarDiscount;
     }
 
-    public static boolean checkOrderValidity(Preventivo preventivo) {
+    public double getOldCarValue() {
+        return oldCarValue;
+    }
+
+    public void setOldCarValue(double oldCarValue) {
+        this.oldCarValue = oldCarValue;
+    }
+
+    public static boolean checkQuotationValidity(Preventivo preventivo) {
         LocalDate currentDay = LocalDate.now();
         return ChronoUnit.DAYS.between(preventivo.orderDate, LocalDate.now()) < 20;
     }
 
     public void saveToDb() throws IOException {
-
         FileWriter wr = new FileWriter("database/preventivi.csv", true);
         String data = this.orderID + "," + this.userID + "," +
-                this.orderDate + "," +
-                this.configuredCar.toCSV() + "," +
+                this.orderDate + "," + this.configuredCar.toCSV() + "," +
                 SessionManager.getInstance().getUsedEvaluationRequested() + "," +
-                this.shopLocation + ",\n";
+                this.oldCarValue + "," + this.shopLocation + ",\n";
 
         System.out.println(data);
         wr.append(data);

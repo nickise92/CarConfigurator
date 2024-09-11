@@ -27,9 +27,14 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" text="Apri" GridPane.rowIndex="2" onAction="#openSelectedOrder"/>
             <Label text="Preventivi in attesa" />
-            <ChoiceBox fx:id="orderListChoice" prefHeight="25.0" prefWidth="132.0" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="orderListChoice" prefHeight="25.0" prefWidth="150.0" GridPane.rowIndex="1" />
+            <AnchorPane prefHeight="25.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openSelectedOrder" text="Apri" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <Button layoutX="98.0" mnemonicParsing="false" onAction="#onSaveToPDF" text="Salva PDF" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
          </children>
       </GridPane>
       <Label fx:id="userLogged" layoutX="268.0" layoutY="59.0" text="Benvenuto ">

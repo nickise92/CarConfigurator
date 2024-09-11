@@ -183,63 +183,19 @@ public class ThirdViewController {
             } else {
                 // Creo l'ID del preventivo: giorno, ora, minuti, secondi
                 String orderID = LocalDate.now().getDayOfMonth() + "" + LocalTime.now().getHour() + "" +
-                                    LocalTime.now().getMinute() + "" + LocalTime.now().getSecond();
+                        LocalTime.now().getMinute() + "" + LocalTime.now().getSecond();
                 preventivo = new Preventivo(orderID, user.getUserID(), LocalDate.now(), configCar, shopChoice.getValue());
                 try {
                     preventivo.saveToDb();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                SessionManager.getInstance().setOpenOrder(preventivo);
+                SessionManager.getInstance().setOpenQuotation(preventivo);
                 String message = "Complimenti, " + user.getUserName() + " " + user.getUserLastName() + ", " +
                         "la Sua auto è stata configurata con successo. Può trovare il riepilogo nell'area utente.";
                 showAlert("Configurazione salvata.", message);
-                //TODO: Se la flag "usedEvaluationRequested" e' TRUE, si deve associare al
-                // preventivo in salvataggio alla richiesta di valutazione usato, in modo che
-                // venga visto dal venditore come preventivo separato da visionare.
-
                 mainController.loadUserView();
             }
-        }
-    }
-
-    // DEPRECATED
-    private void saveOrderToDB(Utente user, Auto auto, String shop) {
-        String pattern = "yyyy-MM-dd=HH:mm:ss";
-        DateFormat df = new SimpleDateFormat(pattern);
-        Date currentDate = Calendar.getInstance().getTime();
-        String dateString = df.format(currentDate);
-        //System.out.println(dateString);
-
-        String data = shop + ",";
-        data += auto.getBrand() + ",";
-        data += auto.getModel() + ",";
-        data += auto.getColor() + ",";
-        data += auto.getEngine() + ",";
-        data += auto.getCircle() + ",";
-        data += auto.getInterior() + ",";
-        data += auto.getSensor() + ",";
-
-        // DB degli amministratori
-        try {
-            FileWriter fwr = new FileWriter(orderPath + user.getUserID() + ".csv",
-                    true);
-            data += "\n";
-            fwr.append(dateString + "," +data);
-            fwr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            FileWriter fwr = new FileWriter(orderPath + "preventivi.csv",
-                    true);
-            data += SessionManager.getInstance().getUsedEvaluationRequested();
-            data += "\n";
-            fwr.append(dateString + "," + user.getUserID()+","+data);
-            fwr.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
