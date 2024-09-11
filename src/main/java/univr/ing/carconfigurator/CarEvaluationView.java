@@ -22,6 +22,7 @@ public class CarEvaluationView {
     private MainController mainController;
     private SessionManager sessionManager;
     private int imgIndex = 0;
+    private Valutazione valutazione;
 
 
     @FXML AnchorPane rootPane;
@@ -111,11 +112,15 @@ public class CarEvaluationView {
     protected void onConfirmDiscount() {
         SessionManager.getInstance().setOldCarEvaluated(true);
         String discount = discountAmount.getText();
+        valutazione = new Valutazione(SessionManager.getInstance().getOpenQuotation().getUserID(),
+                SessionManager.getInstance().getOpenQuotation().getOrderID());
+
+        SessionManager.getInstance().setValutazione(valutazione);
 
         if (discount.matches("[0-9]+")) {
             double finalPrice = SessionManager.getInstance().getOpenQuotation().getConfiguredCar().getPrice() - Double.parseDouble(discount);
             SessionManager.getInstance().getOpenQuotation().getConfiguredCar().setPrice(finalPrice);
-            SessionManager.getInstance().setDiscountAmount(Double.parseDouble(discount));
+            SessionManager.getInstance().getOpenQuotation().setOldCarValue(Double.parseDouble(discount));
             updateQuotationCsv(SessionManager.getInstance().getOpenQuotation().getOrderID(), finalPrice, Double.parseDouble(discount));
             mainController.loadVendorView();
         } else {

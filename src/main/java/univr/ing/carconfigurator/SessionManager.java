@@ -14,6 +14,7 @@ public class SessionManager {
     private Preventivo openOrder;
     private double discountAmount;
     private boolean oldCarEvaluated = false;
+    private Valutazione valutazione;
 
     private SessionManager() {
         // Costruttore della classe privato per prevenire l'istanziazione
@@ -121,5 +122,13 @@ public class SessionManager {
 
     public boolean getOldCarEvaluated() {
         return this.oldCarEvaluated;
+    }
+
+    public void setValutazione(Valutazione valutazione) {
+        this.valutazione = valutazione;
+    }
+
+    public Valutazione getValutazione() {
+        return this.valutazione;
     }
 }

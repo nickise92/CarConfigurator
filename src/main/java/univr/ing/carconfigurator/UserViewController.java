@@ -67,13 +67,17 @@ public class UserViewController {
         // quelli fatti negli ultimi 20 giorni, e che non presentano
         // una richiesta di valutazione usato.
         try {
+            Scanner quotationSc = new Scanner(new File("database/preventivi.csv"));
 
-            Scanner sc = new Scanner(new File("database/preventivi.csv"));
-
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
+            while (quotationSc.hasNextLine()) {
+                String line = quotationSc.nextLine();
                 preventivo = new Preventivo(line);
+
                 if (!preventivo.getOldCarDiscount() && Preventivo.checkQuotationValidity(preventivo)) {
+                    String message = preventivo.checkEvaluation();
+                    if (message != null) {
+                        mainController.showAlert("Valutazione usato", message);
+                    }
                     listaPreventivi.add(preventivo);
                 }
                 // Altrimenti lo ignoro
@@ -112,9 +116,9 @@ public class UserViewController {
 
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                String[] content = line.split(",");
+                preventivo = new Preventivo(line);
 
-                if (content[0].equals(orderListChoice.getValue().getOrderID())) {
+                if (preventivo.getOrderID().equals(orderListChoice.getValue().getOrderID())) {
                     if (mainController.showConfirmationAlert("Apertura ordine",
                             "Stai aprendo l'ordine #" + preventivo.getOrderID(),
                             "Continuare?")) {
@@ -153,5 +157,6 @@ public class UserViewController {
     protected void onExitButtonClick() {
         Platform.exit();
     }
+
 
 }

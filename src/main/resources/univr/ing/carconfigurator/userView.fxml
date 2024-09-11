@@ -42,7 +42,9 @@
             <Font name="System Bold" size="12.0" />
          </font>
       </Label>
-      <Button id="exit-button" layoutX="856.0" layoutY="681.0" maxHeight="25.0" maxWidth="70.0" minHeight="25.0" minWidth="70.0" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="25.0" prefWidth="70.0" styleClass="button" text="Esci" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Button id="exit-button" layoutX="856.0" layoutY="681.0" maxHeight="25.0" maxWidth="70.0" minHeight="25.0" minWidth="70.0"
+              mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="25.0" prefWidth="70.0" styleClass="exitButton"
+              text="Esci" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
       <Button fx:id="logoutButton" layoutX="283.0" layoutY="346.0" maxHeight="25.0" maxWidth="70.0" minHeight="25.0" minWidth="70.0" mnemonicParsing="false" onAction="#onLogout" prefHeight="25.0" prefWidth="70.0" styleClass="button" text="Logout" AnchorPane.bottomAnchor="15.0" />
    </children>
 </AnchorPane>

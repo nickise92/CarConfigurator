@@ -1,9 +1,10 @@
 package univr.ing.carconfigurator;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ordine {
 
@@ -13,7 +14,9 @@ public class Ordine {
     private Auto configuredCar; // contiene prezzo, motore, optional...private String optionals; // Formato: "optional1,optional2,optional3,...
     private LocalDate orderDate; // data di creazione
     private boolean oldCarDiscount; //
+    private double oldCarValue; // valore sconto legato all'eventuale macchina usata
     private LocalDate deliveryDate; // data di consegna
+
 
     public Ordine(String csvQuotation) {
 
@@ -29,8 +32,9 @@ public class Ordine {
         this.configuredCar.setInterior(new Optional(content[9], OptTypes.INTERNI));
         this.configuredCar.setPrice(Double.parseDouble(content[10]));
         this.oldCarDiscount = Boolean.parseBoolean(content[11]);
-        this.shopLocation = content[12];
-        this.deliveryDate = LocalDate.parse(content[13]);
+        this.oldCarValue = Double.parseDouble(content[12]);
+        this.shopLocation = content[13];
+        this.deliveryDate = LocalDate.parse(content[14]);
     }
 
     // GETTER & SETTER
@@ -85,6 +89,14 @@ public class Ordine {
         this.oldCarDiscount = oldCarDiscount;
     }
 
+    public double getOldCarValue() {
+        return oldCarValue;
+    }
+
+    public void setOldCarValue(double oldCarValue) {
+        this.oldCarValue = oldCarValue;
+    }
+
     public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
@@ -100,8 +112,8 @@ public class Ordine {
 
     public String orderToCsv() {
         return this.orderID + "," + this.userID + "," + this.orderDate + "," +
-                this.configuredCar.toCSV() + "," + this.oldCarDiscount + "," + this.shopLocation +
-                "," + this.deliveryDate + ",\n";
+                this.configuredCar.toCSV() + "," + this.oldCarDiscount + "," + this.oldCarValue + "," +
+                this.shopLocation + "," + this.deliveryDate + ",\n";
     }
 
     public void writeToDb() {
@@ -118,11 +130,34 @@ public class Ordine {
 
     public void moveToReady() {
         try {
+            // Rimuove l'ordine dai ritiri
+            List<String> ordiniStr = new ArrayList<>();
+            BufferedReader reader = new BufferedReader(new FileReader("database/ritiri.csv"));
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                if (currentLine.split(",")[0].equals(orderID) &&
+                        currentLine.split(",")[1].equals(userID)) {
+                    // non aggiungo la riga corrispondente all'ordine corrente nella lista
+                } else {
+                    ordiniStr.add(currentLine);
+                }
+            }
+            reader.close();
+
+            // Scrivo la riga nel file dei ritiri, per notificare il cliente.
             FileWriter fw = new FileWriter("database/ritiri.csv", true);
-            String orderStr = orderToCsv();
-            fw.append(orderStr);
-            System.out.println(orderStr);
+            fw.append(orderToCsv());
+            System.out.println(orderToCsv());
             fw.close();
+
+            // Aggiorno il file degli ordini, rimuovendo l'ordine notificato
+            BufferedWriter writer = new BufferedWriter(new FileWriter("database/ordini.csv"));
+            for (String row : ordiniStr) {
+                writer.write(row);
+                writer.newLine();
+            }
+            writer.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

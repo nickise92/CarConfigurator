@@ -31,6 +31,8 @@ public class VendorViewController {
     private MainController mainController;
     private Venditore vendor;
 
+    private Valutazione valutazione;
+
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane orderPane;
     @FXML private AnchorPane descriptionPane;
@@ -53,6 +55,7 @@ public class VendorViewController {
     @FXML private Label carName;
     @FXML private Label clientName;
     @FXML private Label carPrice;
+    @FXML private Label discountValue;
 
     @FXML private Label dimensionTitle;
     @FXML private Label quotationLabel;
@@ -125,6 +128,7 @@ public class VendorViewController {
         AnchorPane.setLeftAnchor(carName, (descriptionPane.getWidth() - carName.getWidth()) / 4);
         AnchorPane.setLeftAnchor(clientName, (descriptionPane.getWidth() - clientName.getWidth()) / 4);
         AnchorPane.setLeftAnchor(carPrice, (descriptionPane.getWidth() - carPrice.getWidth()) / 4);
+        AnchorPane.setLeftAnchor(discountValue, (descriptionPane.getWidth() - discountValue.getWidth()) / 4);
         // Posizionamento del pannello dimensioni all'interno del riepilogo
         //AnchorPane.setLeftAnchor(dimensionPane, (descriptionPane.getWidth() - dimensionPane.getWidth()) / 4);
         AnchorPane.setTopAnchor(dimensionPane, (descriptionPane.getHeight() - dimensionPane.getHeight()) / 3);
@@ -192,7 +196,7 @@ public class VendorViewController {
     private void restoreQuotation() {
         if (SessionManager.getInstance().getOpenQuotation() != null) {
             quotationChoiceBox.setValue(SessionManager.getInstance().getOpenQuotation());
-
+            valutazione = SessionManager.getInstance().getValutazione();
             // Se la valutazione e' stata effettuata disabilito il pulsante e abilito quello di conferma
             oldCarEvaluation.setDisable(SessionManager.getInstance().getOldCarEvaluated());
             confirmEvaluated.setDisable(!SessionManager.getInstance().getOldCarEvaluated());
@@ -230,6 +234,9 @@ public class VendorViewController {
         carWeight.setText("Peso: " + String.valueOf(quotation.getConfiguredCar().getWeight()));
         carName.setText("Automobile: " + quotation.getConfiguredCar().getBrand() + " " + quotation.getConfiguredCar().getModel());
         carPrice.setText("Prezzo: " + formatter.format(quotation.getConfiguredCar().getPrice()) + "€");
+        if (quotation.getOldCarValue() > 0.0) {
+            discountValue.setText("Sconto: " + formatter.format(quotation.getOldCarValue()));
+        }
 
 
 
@@ -290,6 +297,10 @@ public class VendorViewController {
         carTrunkVolume.setText("Volume bagagliaio: " + String.valueOf(order.getConfiguredCar().getTrunkVol()));
         carWeight.setText("Peso: " + String.valueOf(order.getConfiguredCar().getWeight()));
         carName.setText("Automobile: " + order.getConfiguredCar().getBrand() + " " + order.getConfiguredCar().getModel());
+        carPrice.setText("Prezzo: " + String.format("%.2f", order.getConfiguredCar().getPrice()));
+        if (order.getOldCarValue() > 0.0) {
+            discountValue.setText("Sconto: " + formatter.format(order.getOldCarValue()));
+        }
 
         // DETTAGLI TECNICI MOTORE
         engineName.setText("Motore: " + order.getConfiguredCar().getEngine().getName());
@@ -321,7 +332,11 @@ public class VendorViewController {
         // Notify customer his car is ready and move the order
         // to new database entry "ritiri.csv"
         Ordine order = orderChoiceBox.getValue();
+        mainController.showConfirmationAlert("Notifica di ritiro al cliente.",
+                "Proseguendo, l'ordine selezionato verrà notificato come pronto per il ritiro al cliente.",
+                "Proseguire?");
         order.moveToReady();
+
     }
 
     // Visualizza l'auto usata da valutare e aggiorna il prezzo con lo sconto
@@ -334,6 +349,7 @@ public class VendorViewController {
 
     @FXML
     protected void onConfirmEvaluated() {
+        valutazione.save();
 
     }
 
