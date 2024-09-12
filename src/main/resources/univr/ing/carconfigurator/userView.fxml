@@ -29,7 +29,7 @@
         </rowConstraints>
          <children>
             <Label prefHeight="17.0" prefWidth="206.0" text="Preventivi in attesa di conferma" />
-            <ChoiceBox fx:id="orderListChoice" prefHeight="25.0" prefWidth="203.0" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="quotationChoiceBox" prefHeight="25.0" prefWidth="203.0" GridPane.rowIndex="1" />
             <AnchorPane prefHeight="25.0" prefWidth="200.0" GridPane.rowIndex="2">
                <children>
                   <Button mnemonicParsing="false" onAction="#openSelectedOrder" text="Apri" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />

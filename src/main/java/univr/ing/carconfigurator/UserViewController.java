@@ -25,17 +25,15 @@ public class UserViewController {
 
     private MainController mainController;
     private Utente user;
-    //private ObservableList<String> orderList = FXCollections.observableArrayList(); // -- Deprecated --
     private ObservableList<Preventivo> listaPreventivi = FXCollections.observableArrayList();
-    private final String orderPath = "database/";
-    private Preventivo preventivo;
+    private Preventivo quotation;
 
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane readyBox;
     @FXML private TabPane readyRecap;
     @FXML private Button configureCar;
     @FXML private Button logoutButton;
-    @FXML private ChoiceBox<Preventivo> orderListChoice;
+    @FXML private ChoiceBox<Preventivo> quotationChoiceBox;
     @FXML private GridPane orderBox;
     @FXML private Label userLogged;
     @FXML private Label title;
@@ -75,17 +73,17 @@ public class UserViewController {
             Scanner quotationSc = new Scanner(new File("database/preventivi.csv"));
             while (quotationSc.hasNextLine()) {
                 String line = quotationSc.nextLine();
-                preventivo = new Preventivo(line);
-                if (!preventivo.getOldCarDiscount() && Preventivo.checkQuotationValidity(preventivo)) {
-                    String message = preventivo.checkEvaluation();
+                quotation = new Preventivo(line);
+                if (!quotation.getOldCarDiscount() && Preventivo.checkQuotationValidity(quotation)) {
+                    String message = quotation.checkEvaluation();
                     if (message != null) {
                         mainController.showAlert("Valutazione usato", message);
                     }
-                    listaPreventivi.add(preventivo);
+                    listaPreventivi.add(quotation);
                 }
                 // Altrimenti lo ignoro
             }
-            orderListChoice.setItems(listaPreventivi);
+            quotationChoiceBox.setItems(listaPreventivi);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -162,24 +160,20 @@ public class UserViewController {
         AnchorPane.setLeftAnchor(readyBox, (width - readyBox.getWidth()) / 2);
         // Logout button
         AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);
-
-
     }
 
     @FXML
     protected void openSelectedOrder() {
         try {
             Scanner sc = new Scanner (new File("database/preventivi.csv"));
-
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                preventivo = new Preventivo(line);
-
-                if (preventivo.getOrderID().equals(orderListChoice.getValue().getOrderID())) {
+                quotation = new Preventivo(line);
+                if (quotation.getOrderID().equals(quotationChoiceBox.getValue().getOrderID())) {
                     if (mainController.showConfirmationAlert("Apertura ordine",
-                            "Stai aprendo l'ordine #" + preventivo.getOrderID(),
+                            "Stai aprendo l'ordine #" + quotation.getOrderID(),
                             "Continuare?")) {
-                        SessionManager.getInstance().setOpenQuotation(orderListChoice.getValue());
+                        SessionManager.getInstance().setOpenQuotation(quotationChoiceBox.getValue());
                         mainController.loadUserOrderConfirmationView();
                     }
                 }
@@ -197,7 +191,16 @@ public class UserViewController {
 
     @FXML
     protected void onSaveToPDF() {
-        // TODO: Metodo che salva il preventivo in un file pdf.
+        // Recupero il preventivo selezionato
+        
+        if ((quotation = quotationChoiceBox.getValue()) != null) {
+            PDFConverter pdfConverter = new PDFConverter("pdf/" + quotation.getOrderID() + ".pdf",
+                    quotation);
+            pdfConverter.printPdf();
+            mainController.showAlert("Pdf creato!", "Il PDF e' stato generato con successo.");
+        } else {
+            mainController.showError("Errore!", "Nessun preventivo selezionato.");
+        }
     }
 
     @FXML

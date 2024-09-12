@@ -121,7 +121,6 @@ public class Ordine {
             FileWriter fw = new FileWriter( "database/ordini.csv", true);
             String orderStr = orderToCsv();
             fw.append(orderStr);
-            System.out.println(orderStr);
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
