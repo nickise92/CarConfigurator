@@ -46,7 +46,8 @@
             <PasswordField fx:id="userPsw1" layoutX="80.0" layoutY="217.0" prefHeight="25.0" prefWidth="219.0" />
             <PasswordField fx:id="userPsw2" layoutX="80.0" layoutY="252.0" prefHeight="25.0" prefWidth="219.0" />
             <Button fx:id="registrationButton" layoutX="113.0" layoutY="309.0" mnemonicParsing="false" onAction="#onConfirmButton" prefHeight="25.0" prefWidth="70.0" text="Conferma" />
-            <Button layoutX="196.0" layoutY="309.0" mnemonicParsing="false" onAction="#onCancelButton" prefHeight="25.0" prefWidth="70.0" text="Annulla" />
+            <Button layoutX="196.0" layoutY="309.0" mnemonicParsing="false" onAction="#onCancelButton" prefHeight="25.0"
+                    prefWidth="70.0" text="Annulla" styleClass="cancelButton"/>
             <Label layoutX="27.0" layoutY="23.0" prefHeight="35.0" prefWidth="300.0" text="Registrazione nuovo cliente">
                 <font>
                     <Font size="24.0" />
@@ -57,4 +58,5 @@
     <padding>
         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
     </padding>
+    <Button styleClass="exitButton" AnchorPane.rightAnchor="25.0" AnchorPane.bottomAnchor="25.0" text="Esci" onAction="#onExitButton"/>
 </AnchorPane>

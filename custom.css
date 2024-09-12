@@ -46,6 +46,59 @@
     -fx-background-color: red;
 }
 
+.cancelButton {
+    -fx-text-fill: orangered;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.cancelButton:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: orangered;
+}
+
+.registrationButton {
+    -fx-text-fill: #003399;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.registrationButton:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: #003399;
+}
+
+.startConfigButton {
+    -fx-text-fill: #003399;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.startConfigButton:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: #003399;
+}
+
+.loginButton {
+    -fx-text-fill: #003399;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+
+}
+
+.loginButton:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: #003399;
+}
+
 .registrationForm {
     -fx-background-color: #378aad;
     -fx-background-radius: 15px;
