@@ -104,7 +104,6 @@ public class Preventivo {
     }
 
     public static boolean checkQuotationValidity(Preventivo preventivo) {
-        LocalDate currentDay = LocalDate.now();
         return ChronoUnit.DAYS.between(preventivo.orderDate, LocalDate.now()) < 20;
     }
 

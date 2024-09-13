@@ -76,7 +76,8 @@ public class UserViewController {
             while (quotationSc.hasNextLine()) {
                 String line = quotationSc.nextLine();
                 quotation = new Preventivo(line);
-                if (!quotation.getOldCarDiscount() && Preventivo.checkQuotationValidity(quotation)) {
+                if (!quotation.getOldCarDiscount() && Preventivo.checkQuotationValidity(quotation) &&
+                user.getUserID().equals(quotation.getUserID())) {
                     String message = quotation.checkEvaluation();
                     if (message != null) {
                         mainController.showAlert("Valutazione usato", message);
@@ -110,11 +111,12 @@ public class UserViewController {
         // Ora creo una tab per ogni riga della lista di automobili pronte per il ritiro
         for (String item : readyCarList) {
             Ordine order = new Ordine(item);
-
-            Tab tab = new Tab(order.getConfiguredCar().getName());
-            tab.setContent(readyCarInfo(order));
-
-            readyRecap.getTabs().add(tab);
+            if (order.getUserID().equals(user.getUserID())) {
+                Tab tab = new Tab(order.getConfiguredCar().getName());
+                tab.setContent(readyCarInfo(order));
+    
+                readyRecap.getTabs().add(tab);
+            }
         }
     }
 
