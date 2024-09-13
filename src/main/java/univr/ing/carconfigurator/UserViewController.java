@@ -6,6 +6,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
@@ -119,7 +121,6 @@ public class UserViewController {
     private Node readyCarInfo(Ordine order) {
 
         AnchorPane tmp = new AnchorPane();
-        tmp.getStyleClass().add("readyCarRecap");
         tmp.setMinSize(500.0, 200.0);
         Label engine = new Label("Motore: " + order.getConfiguredCar().getEngine().getName());
         Label colour = new Label("Colore: " + order.getConfiguredCar().getColor());
@@ -128,8 +129,15 @@ public class UserViewController {
         Label interior = new Label("Interni: " + (order.getConfiguredCar().getInterior().equals("null") ? order.getConfiguredCar().getInterior() : "di serie"));
         Label price = new Label("Prezzo: " + order.getConfiguredCar().getPrice());
 
+        ImageView portrait = new ImageView();
+        Image img = new Image(new File(order.getConfiguredCar().getImgPath(0)).toURI().toString());
+        portrait.setImage(img);
+        portrait.setFitHeight(200.0);
+        portrait.setFitWidth(200.0);
+        portrait.setPreserveRatio(true);
+        
         tmp.getChildren().clear();
-        tmp.getChildren().setAll(engine, colour, tyre, sensor, interior, price);
+        tmp.getChildren().setAll(engine, colour, tyre, sensor, interior, price, portrait);
 
         AnchorPane.setTopAnchor(engine, 10.0);
         AnchorPane.setTopAnchor(colour, 30.0);
@@ -137,6 +145,8 @@ public class UserViewController {
         AnchorPane.setTopAnchor(sensor, 70.0);
         AnchorPane.setTopAnchor(interior, 90.0);
         AnchorPane.setTopAnchor(price, 110.0 );
+        AnchorPane.setTopAnchor(portrait, 0.0);
+        AnchorPane.setRightAnchor(portrait, 0.0);
         return tmp;
     }
 

@@ -109,7 +109,6 @@ public class Preventivo {
     }
 
     public String checkEvaluation() {
-
         try {
             Scanner evaluationSc = new Scanner(new File("database/valutazioni.csv"));
             while (evaluationSc.hasNextLine()) {
@@ -125,7 +124,6 @@ public class Preventivo {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
