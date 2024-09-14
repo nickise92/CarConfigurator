@@ -82,28 +82,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
-    public void loadGestioneOrdini() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("gestioneOrdiniView.fxml"));
-            Parent orderPage = loader.load();
-            GestioneOrdiniController controller = loader.getController();
-            controller.setMainController(this);
-            if (SessionManager.getInstance().isUserAuthenticated()) {
-                controller.setVendor(SessionManager.getInstance().getAuthenticatedVendor());
-            }
-            AnchorPane.setTopAnchor(orderPage, 0.0);
-            AnchorPane.setRightAnchor(orderPage, 0.0);
-            AnchorPane.setBottomAnchor(orderPage, 0.0);
-            AnchorPane.setLeftAnchor(orderPage, 0.0);
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(orderPage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
+    
     public void loadFirstView() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("configuratorFirstView.fxml"));

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane fx:controller="univr.ing.carconfigurator.GestioneOrdiniController" maxHeight="-Infinity" maxWidth="-Infinity"
+      minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0"
+      prefWidth="738.0" xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1" >
+    <children>
+        <Label layoutX="240.0" layoutY="14.0" text="GESTIONE ORDINI">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
+        <Pagination fx:id="Paginazione" layoutX="28.0" layoutY="90.0" prefHeight="387.0" prefWidth="686.0" />
+        <Label layoutX="80.0" layoutY="100.0" text="Utente:" />
+        <Label fx:id="Utente" layoutX="130.0" layoutY="100.0" prefHeight="17.0" prefWidth="58.0" />
+        <Label layoutX="422.0" layoutY="120.0" prefHeight="17.0" prefWidth="83.0" text="Auto Comprata" />
+        <Label layoutX="80.0" layoutY="180.0" text="Data consegna stimata:" />
+        <Label fx:id="DCS" layoutX="216.0" layoutY="180.0" prefHeight="17.0" prefWidth="58.0" />
+        <Label layoutX="80.0" layoutY="220.0" text="Concessionario di consegna:" />
+        <Label fx:id="CDS" layoutX="244.0" layoutY="220.0" prefHeight="17.0" prefWidth="58.0" />
+        <TextArea fx:id="DescrizioneAuto" layoutX="422.0" layoutY="154.0" prefHeight="200.0" prefWidth="200.0" />
+        <Label layoutX="80.0" layoutY="260.0" text="Proposta auto usata: " />
+        <Label fx:id="PAU" layoutX="203.0" layoutY="260.0" prefHeight="17.0" prefWidth="58.0" />
+        <Label layoutX="80.0" layoutY="140.0" text="Prezzo:" />
+        <Label fx:id="Prezzo" layoutX="128.0" layoutY="140.0" prefHeight="17.0" prefWidth="58.0" />
+        <Label layoutX="80.0" layoutY="340.0" text="Ordine Confermato:" />
+        <Label fx:id="OC" layoutX="200.0" layoutY="340.0" prefHeight="17.0" prefWidth="58.0" />
+        <Label layoutX="80.0" layoutY="300.0" text="Valutazione auto usata" />
+        <Label fx:id="VAU" layoutX="203.0" layoutY="300.0" prefHeight="17.0" prefWidth="58.0" />
+        <Button fx:id="VU" layoutX="98.0" layoutY="376.0" mnemonicParsing="false" text="Valuta Usato" />
+        <Button fx:id="CO" layoutX="219.0" layoutY="376.0" mnemonicParsing="false" text="Conferma Ordine" />
+        <Button  fx:id="LO" layoutX="340.0" layoutY="488.0" mnemonicParsing="false" onAction="#LOClick" text="Log-out" />
+    </children>
+</Pane>
