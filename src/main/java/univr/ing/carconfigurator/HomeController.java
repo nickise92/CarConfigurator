@@ -45,7 +45,7 @@ public class HomeController {
         }
 
         if (userLabel.getText().equals("Accesso non eseguito")) {
-            userLabel.setStyle("-fx-text-fill: #990000;");
+            userLabel.setStyle("-fx-text-fill: #FF0000;");
         } else {
             userLabel.setStyle("-fx-text-fill: #009900;");
         }

@@ -55,7 +55,8 @@ public class LoginController {
                 SessionManager.getInstance().setAuthenticatedUser(username);
                 mainController.loadUserView();
             } else if (utente instanceof Impiegato) {
-                //TODO: vista impiegato e logica conseguente
+                SessionManager.getInstance().setAuthenticatedVendor(username);
+                mainController.loadAdministratorview();
             } else if (utente instanceof Venditore) {
                 // Se l'utente e' un venditore, imposto il venditore autenticato nella
                 // sessione corrente e carico la pagina venditore

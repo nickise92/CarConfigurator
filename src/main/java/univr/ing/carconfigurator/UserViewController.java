@@ -4,16 +4,15 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -27,15 +26,15 @@ public class UserViewController {
 
     private MainController mainController;
     private Utente user;
+    //private ObservableList<String> orderList = FXCollections.observableArrayList(); // -- Deprecated --
     private ObservableList<Preventivo> listaPreventivi = FXCollections.observableArrayList();
-    private Preventivo quotation;
+    private final String orderPath = "database/";
+    private Preventivo preventivo;
 
     @FXML private AnchorPane rootPane;
-    @FXML private AnchorPane readyBox;
-    @FXML private TabPane readyRecap;
     @FXML private Button configureCar;
     @FXML private Button logoutButton;
-    @FXML private ChoiceBox<Preventivo> quotationChoiceBox;
+    @FXML private ChoiceBox<Preventivo> orderListChoice;
     @FXML private GridPane orderBox;
     @FXML private Label userLogged;
     @FXML private Label title;
@@ -58,7 +57,6 @@ public class UserViewController {
         Platform.runLater(this::updateUserAccessStatus);
         Platform.runLater(this::centerContent);
         Platform.runLater(this::getOrderList);
-        Platform.runLater(this::getReadyList);
     }
 
     private void updateUserAccessStatus() {
@@ -69,87 +67,39 @@ public class UserViewController {
 
     private void getOrderList() {
         // Vogliamo inserire nella lista dei preventivi confermabili solo
-        // quelli fatti negli ultimi 20 giorni, e che non presentano
-        // una richiesta di valutazione usato.
+        // quelli fatti negli ultimi 20 giorni.
+
         try {
-            Scanner quotationSc = new Scanner(new File("database/preventivi.csv"));
-            while (quotationSc.hasNextLine()) {
-                String line = quotationSc.nextLine();
-                quotation = new Preventivo(line);
-                if (!quotation.getOldCarDiscount() && Preventivo.checkQuotationValidity(quotation) &&
-                user.getUserID().equals(quotation.getUserID())) {
-                    String message = quotation.checkEvaluation();
-                    if (message != null) {
-                        mainController.showAlert("Valutazione usato", message);
-                    }
-                    listaPreventivi.add(quotation);
+
+            Scanner sc = new Scanner(new File("database/preventivi.csv"));
+
+            while (sc.hasNextLine()) {
+                String[] line = sc.nextLine().split(",");
+                Auto tmp = new Auto(line[3], line[4]); // Creo l'auto di serie passando brand e modello
+                tmp.setColor(line[5]);
+                tmp.setEngine(new Engine(line[6]));
+                tmp.setCircle(new Optional(line[7], OptTypes.CERCHI));
+                tmp.setSensor(new Optional(line[8], OptTypes.SENSORI));
+                tmp.setInterior(new Optional(line[9], OptTypes.INTERNI));
+                tmp.setPrice(Double.parseDouble(line[10]));
+                preventivo = new Preventivo(line[0], line[1], LocalDate.parse(line[2]), tmp, line[12]);
+                if (Preventivo.checkOrderValidity(preventivo)) {
+                    listaPreventivi.add(preventivo);
                 }
                 // Altrimenti lo ignoro
             }
-            quotationChoiceBox.setItems(listaPreventivi);
+            orderListChoice.setItems(listaPreventivi);
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void getReadyList() {
-        // Apro il database degli ordini pronti per il ritiro
-        // e creo la tab corrispondente.
-        List<String> readyCarList = new ArrayList<>();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("database/ritiri.csv"));
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                readyCarList.add(currentLine);
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Ora creo una tab per ogni riga della lista di automobili pronte per il ritiro
-        for (String item : readyCarList) {
-            Ordine order = new Ordine(item);
-            if (order.getUserID().equals(user.getUserID())) {
-                Tab tab = new Tab(order.getConfiguredCar().getName());
-                tab.setContent(readyCarInfo(order));
-    
-                readyRecap.getTabs().add(tab);
-            }
-        }
-    }
-
-    private Node readyCarInfo(Ordine order) {
-
-        AnchorPane tmp = new AnchorPane();
-        tmp.setMinSize(500.0, 200.0);
-        Label engine = new Label("Motore: " + order.getConfiguredCar().getEngine().getName());
-        Label colour = new Label("Colore: " + order.getConfiguredCar().getColor());
-        Label tyre = new Label("Cerchi: " + (order.getConfiguredCar().getCircle().equals("null") ? order.getConfiguredCar().getCircle() : "di serie" ));
-        Label sensor = new Label("Sensori: " + (order.getConfiguredCar().getSensor().equals("null") ? order.getConfiguredCar().getSensor() : "nessun optional"));
-        Label interior = new Label("Interni: " + (order.getConfiguredCar().getInterior().equals("null") ? order.getConfiguredCar().getInterior() : "di serie"));
-        Label price = new Label("Prezzo: " + order.getConfiguredCar().getPrice());
-
-        ImageView portrait = new ImageView();
-        Image img = new Image(new File(order.getConfiguredCar().getImgPath(0)).toURI().toString());
-        portrait.setImage(img);
-        portrait.setFitHeight(200.0);
-        portrait.setFitWidth(200.0);
-        portrait.setPreserveRatio(true);
-        
-        tmp.getChildren().clear();
-        tmp.getChildren().setAll(engine, colour, tyre, sensor, interior, price, portrait);
-
-        AnchorPane.setTopAnchor(engine, 10.0);
-        AnchorPane.setTopAnchor(colour, 30.0);
-        AnchorPane.setTopAnchor(tyre, 50.0);
-        AnchorPane.setTopAnchor(sensor, 70.0);
-        AnchorPane.setTopAnchor(interior, 90.0);
-        AnchorPane.setTopAnchor(price, 110.0 );
-        AnchorPane.setTopAnchor(portrait, 0.0);
-        AnchorPane.setRightAnchor(portrait, 0.0);
-        return tmp;
+    // Verifica della data
+    private boolean orderValidityCheck(LocalDate orderDate){
+        LocalDate currentDate = LocalDate.now();
+        return ChronoUnit.DAYS.between(orderDate, currentDate) <= 20;
     }
 
     private void centerContent() {
@@ -162,14 +112,11 @@ public class UserViewController {
         AnchorPane.setLeftAnchor(userLogged, (width - userLogged.getWidth()) / 2);
         AnchorPane.setTopAnchor(userLogged, 90.0);
         // Configure Car button pos
-        AnchorPane.setTopAnchor(configureCar, (height - configureCar.getHeight()) / 3);
+        AnchorPane.setTopAnchor(configureCar, (height - configureCar.getHeight()) / 2);
         AnchorPane.setLeftAnchor(configureCar, (width/2 - configureCar.getWidth()) / 2);
         // Order grid position
-        AnchorPane.setTopAnchor(orderBox, (height - orderBox.getHeight()) / 3);
+        AnchorPane.setTopAnchor(orderBox, (height - orderBox.getHeight()) / 2);
         AnchorPane.setRightAnchor(orderBox, (width/2 - orderBox.getWidth()) / 2);
-        // Ready box position
-        AnchorPane.setBottomAnchor(readyBox, (height - readyBox.getHeight()) / 3);
-        AnchorPane.setLeftAnchor(readyBox, (width - readyBox.getWidth()) / 2);
         // Logout button
         AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);
     }
@@ -178,14 +125,16 @@ public class UserViewController {
     protected void openSelectedOrder() {
         try {
             Scanner sc = new Scanner (new File("database/preventivi.csv"));
+
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                quotation = new Preventivo(line);
-                if (quotation.getOrderID().equals(quotationChoiceBox.getValue().getOrderID())) {
+                String[] content = line.split(",");
+
+                if (content[0].equals(orderListChoice.getValue().getOrderID())) {
                     if (mainController.showConfirmationAlert("Apertura ordine",
-                            "Stai aprendo l'ordine #" + quotation.getOrderID(),
+                            "Stai aprendo l'ordine #" + preventivo.getOrderID(),
                             "Continuare?")) {
-                        SessionManager.getInstance().setOpenQuotation(quotationChoiceBox.getValue());
+                        SessionManager.getInstance().setOpenOrder(orderListChoice.getValue());
                         mainController.loadUserOrderConfirmationView();
                     }
                 }
@@ -202,20 +151,6 @@ public class UserViewController {
     }
 
     @FXML
-    protected void onSaveToPDF() {
-        // Recupero il preventivo selezionato
-        
-        if ((quotation = quotationChoiceBox.getValue()) != null) {
-            PDFConverter pdfConverter = new PDFConverter("pdf/" + quotation.getOrderID() + ".pdf",
-                    quotation);
-            pdfConverter.printPdf();
-            mainController.showAlert("Pdf creato!", "Il PDF e' stato generato con successo.");
-        } else {
-            mainController.showError("Errore!", "Nessun preventivo selezionato.");
-        }
-    }
-
-    @FXML
     protected void onLogout() {
         if (mainController.showConfirmationAlert("Attenzione",
                 "Stai uscendo dalla tua area riservata, le configurazioni non completate verranno perse",
@@ -229,6 +164,5 @@ public class UserViewController {
     protected void onExitButtonClick() {
         Platform.exit();
     }
-
 
 }

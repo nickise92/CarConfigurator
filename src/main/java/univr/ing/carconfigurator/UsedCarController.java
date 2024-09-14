@@ -147,6 +147,16 @@ public class UsedCarController {
         mainController.loadThirdView();
     }
 
+    @FXML
+    protected void showMessage(String title, String msg) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+
     // Torna indietro alla vista di riepilogo
     @FXML
     protected void onCancelButton() {

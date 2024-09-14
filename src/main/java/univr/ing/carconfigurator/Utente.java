@@ -39,7 +39,7 @@ public class Utente {
     }
 
     // Costruttore che permette di recuperare le informazioni di un utente esistente
-    public Utente(String user) {
+   public Utente(String user) {
         getUserInfo(user);
     }
 
@@ -81,6 +81,10 @@ public class Utente {
             fwr.append(tmp);
             fwr.close();
 
+            /*String path = "database/" + userID + ".csv";
+            File orderList = new File(path);
+            orderList.createNewFile();*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -89,6 +93,8 @@ public class Utente {
     }
 
     private void getUserInfo(String id) {
+        System.out.println("Recupero informazioni utente " + id + "...");
+
         try {
             // Apertura del 'database' degli impiegati
             File usersData = new File(usersPath);
@@ -116,6 +122,8 @@ public class Utente {
 
     public boolean authenticator(String user, String password) {
         if (user.equals(this.userID) && password.equals(this.userPsw)) {
+            /*System.out.println("L'utente " + userName + " " + userLastName +
+                    " si è autenticato con successo.");*/
             return true;
         }
         return false;
@@ -124,14 +132,17 @@ public class Utente {
     public static Utente checkID(String ID) {
         Pattern namePattern = Pattern.compile(PATTERN);
         Matcher nameMatcher = namePattern.matcher(ID);
+
         try {
             Scanner sc = new Scanner(new File("database/users.csv"));
 
             while (sc.hasNextLine()) {
                 String tmp = sc.nextLine().split(",")[0];
+
                 // Se l'ID corrisponde al pattern, verifichiamo se l'utente e' un
                 // Venditore o un Impiegato.
                 if (nameMatcher.matches()) {
+
                     if (tmp.equals(ID)) {
                         if (tmp.charAt(5) == 'V') {
                             return new Venditore(ID);
@@ -149,7 +160,9 @@ public class Utente {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         // L'utente non e' stato trovato, ritorna null.
         return null;
     }
+
 }

@@ -23,6 +23,7 @@ public class Optional {
                 String[] line = sc.nextLine().split(",");
                 if (line[1].equals(this.name)) {
                     this.price = Double.parseDouble(line[2]);
+                    System.out.println(price);
                 }
             }
         } catch (FileNotFoundException e) {

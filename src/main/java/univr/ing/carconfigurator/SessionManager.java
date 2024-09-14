@@ -7,14 +7,13 @@ public class SessionManager {
 
     private Utente authenticatedUser;
     private Utente authenticatedVendor;
+    private Utente authenticatedAdmin;
     private Auto configuredAuto;
     private boolean backFlag;
     private String riepilogo;
     private boolean usedEvaluationRequested = false;
     private Preventivo openOrder;
-    private double discountAmount;
-    private boolean oldCarEvaluated = false;
-    private Valutazione valutazione;
+    private String AutoCSV;
 
     private SessionManager() {
         // Costruttore della classe privato per prevenire l'istanziazione
@@ -44,12 +43,7 @@ public class SessionManager {
     public void clearSession() {
         authenticatedUser = null;
         authenticatedVendor = null;
-        configuredAuto = null;
-        riepilogo = null;
-        openOrder = null;
-        oldCarEvaluated = false;
-        usedEvaluationRequested = false;
-        discountAmount = 0;
+        authenticatedAdmin = null;
     }
 
     public boolean isUserAuthenticated() {
@@ -59,7 +53,9 @@ public class SessionManager {
     public boolean isVendorAuthenticated() {
         return authenticatedVendor != null;
     }
-
+    public boolean isAdminAuthenticated(){
+        return authenticatedAdmin != null;
+    }
     public Auto getConfiguredAuto() {
         return configuredAuto;
     }
@@ -100,35 +96,17 @@ public class SessionManager {
         return (Venditore) this.authenticatedVendor;
     }
 
-    public void setOpenQuotation(Preventivo prv) {
+    public void setOpenOrder(Preventivo prv) {
         this.openOrder = prv;
     }
 
-    public Preventivo getOpenQuotation() {
+    public Preventivo getOpenOrder() {
         return this.openOrder;
     }
+    public Impiegato getAuthenticatedAdmin(){ return (Impiegato) this.authenticatedAdmin;}
 
-    public void setDiscountAmount(double amount) {
-        this.discountAmount = amount;
+    public void setCarCsv(String AutoCSV) {
+        this.AutoCSV = AutoCSV;
     }
-
-    public double getDiscountAmount() {
-        return this.discountAmount;
-    }
-
-    public void setOldCarEvaluated(boolean flag) {
-        this.oldCarEvaluated = flag;
-    }
-
-    public boolean getOldCarEvaluated() {
-        return this.oldCarEvaluated;
-    }
-
-    public void setValutazione(Valutazione valutazione) {
-        this.valutazione = valutazione;
-    }
-
-    public Valutazione getValutazione() {
-        return this.valutazione;
-    }
+    public String getCarCsv() {return AutoCSV;}
 }

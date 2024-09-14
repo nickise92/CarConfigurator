@@ -54,11 +54,11 @@ public class RegistrationController {
 
         if (userPsw1.getText().equals(userPsw2.getText())) {
             Utente user = new Utente(userID.getText(), userName.getText(), userLastName.getText(), userPsw1.getText());
-            mainController.showAlert("Registrazione confermata!", "Il cliente " + user.getUserName() + " " +
-                    user.getUserLastName() + " è stato registrato con successo.");
+            showAlert("Registrazione confermata!", "Il cliente " + user.getUserName() + " " + user.getUserLastName() + " è stato registrato " +
+                    "con successo.", 1);
             mainController.loadHomePage();
         } else {
-            mainController.showError("Attenzione!", "Le password non corrispondono, si prega di reinserirle.");
+            showAlert("Attenzione!", "Le password non corrispondono, si prega di reinserirle.", 2);
         }
     }
 
@@ -67,9 +67,22 @@ public class RegistrationController {
         mainController.loadHomePage();
     }
 
-    @FXML
-    protected void onExitButton() {
-        Platform.exit();
+    public void showAlert(String title, String message, int type) {
+        if (type == 1) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        } else if (type == 2) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        }
+
+
     }
 
 }

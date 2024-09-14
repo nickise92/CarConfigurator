@@ -15,10 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class VendorViewController {
@@ -28,10 +24,10 @@ public class VendorViewController {
     private ObservableList<Ordine> orderList = FXCollections.observableArrayList();
     private final String orderPath = "database/ordini.csv";
 
+
+
     private MainController mainController;
     private Venditore vendor;
-
-    private Valutazione valutazione;
 
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane orderPane;
@@ -48,19 +44,14 @@ public class VendorViewController {
     @FXML private Button exitButton;
     @FXML private Button notifyReadyCar;
     @FXML private Button oldCarEvaluation;
-    @FXML private Button confirmEvaluated;
 
     @FXML private Label vendorLogged;
     @FXML private Label shopLocation;
     @FXML private Label carName;
     @FXML private Label clientName;
-    @FXML private Label carPrice;
-    @FXML private Label discountValue;
 
     @FXML private Label dimensionTitle;
-    @FXML private Label quotationLabel;
     @FXML private Label orderLabel;
-    @FXML private Label deliveryDateLabel;
     @FXML private Label panelTitle;
     @FXML private Label carLength;
     @FXML private Label carWidth;
@@ -81,8 +72,6 @@ public class VendorViewController {
     @FXML private ImageView portraitCar;
 
 
-    NumberFormat formatter = new DecimalFormat("#0.00");
-
     public VendorViewController() {
 
     }
@@ -99,12 +88,10 @@ public class VendorViewController {
 
         notifyReadyCar.setDisable(true);
         oldCarEvaluation.setDisable(true);
-        confirmEvaluated.setDisable(true);
         Platform.runLater(this::updateVendorAccessStatus);
         Platform.runLater(this::centerContent);
         Platform.runLater(this::getQuotationList);
         Platform.runLater(this::getOrderList);
-        Platform.runLater(this::restoreQuotation);
     }
 
     private void updateVendorAccessStatus() {
@@ -127,8 +114,6 @@ public class VendorViewController {
         AnchorPane.setLeftAnchor(panelTitle, (descriptionPane.getWidth() - panelTitle.getWidth()) / 2);
         AnchorPane.setLeftAnchor(carName, (descriptionPane.getWidth() - carName.getWidth()) / 4);
         AnchorPane.setLeftAnchor(clientName, (descriptionPane.getWidth() - clientName.getWidth()) / 4);
-        AnchorPane.setLeftAnchor(carPrice, (descriptionPane.getWidth() - carPrice.getWidth()) / 4);
-        AnchorPane.setLeftAnchor(discountValue, (descriptionPane.getWidth() - discountValue.getWidth()) / 4);
         // Posizionamento del pannello dimensioni all'interno del riepilogo
         //AnchorPane.setLeftAnchor(dimensionPane, (descriptionPane.getWidth() - dimensionPane.getWidth()) / 4);
         AnchorPane.setTopAnchor(dimensionPane, (descriptionPane.getHeight() - dimensionPane.getHeight()) / 3);
@@ -143,7 +128,6 @@ public class VendorViewController {
         // Posizionamento dei bottoni
         AnchorPane.setLeftAnchor(notifyReadyCar, (descriptionPane.getWidth() - notifyReadyCar.getWidth() - oldCarEvaluation.getWidth() - 15) / 2);
         AnchorPane.setRightAnchor(oldCarEvaluation, (descriptionPane.getWidth() - oldCarEvaluation.getWidth() - notifyReadyCar.getWidth() - 15) / 2);
-        AnchorPane.setLeftAnchor(confirmEvaluated, (descriptionPane.getWidth() - confirmEvaluated.getWidth()) / 2);
 
     }
 
@@ -158,9 +142,9 @@ public class VendorViewController {
                 Preventivo quotation = new Preventivo(sc.nextLine());
                 // Aggiungiamo alla lista solo i preventivi fatti entro 20 giorni dal giorno corrente e
                 // appartenenti al negozio del venditore loggato
-                if (Preventivo.checkQuotationValidity(quotation) &&
+                if (Preventivo.checkOrderValidity(quotation) &&
                         quotation.getShopLocation().equals(vendor.getShop()) &&
-                        quotation.getOldCarDiscount()) {
+                        quotation.isOldCarDiscount()) {
                     quotationList.add(quotation);
                 }
             }
@@ -174,12 +158,11 @@ public class VendorViewController {
     // Crea la lista degli ordini in attesa di notifica al cliente
     private void getOrderList() {
 
-        deliveryDateLabel.setText("");
-
         try {
             Scanner sc = new Scanner(new File(orderPath));
             while (sc.hasNextLine()) {
                 Ordine order = new Ordine(sc.nextLine());
+
                 // Se l'ordine aperto e' del negozio corrente, viene aggiunto alla lista
                 if (order.getShopLocation().equals(vendor.getShop())) {
                     orderList.add(order);
@@ -191,16 +174,6 @@ public class VendorViewController {
             e.printStackTrace();
         }
 
-    }
-
-    private void restoreQuotation() {
-        if (SessionManager.getInstance().getOpenQuotation() != null) {
-            quotationChoiceBox.setValue(SessionManager.getInstance().getOpenQuotation());
-            valutazione = SessionManager.getInstance().getValutazione();
-            // Se la valutazione e' stata effettuata disabilito il pulsante e abilito quello di conferma
-            oldCarEvaluation.setDisable(SessionManager.getInstance().getOldCarEvaluated());
-            confirmEvaluated.setDisable(!SessionManager.getInstance().getOldCarEvaluated());
-        }
     }
 
     /**
@@ -218,7 +191,6 @@ public class VendorViewController {
     protected void onQuotationSelection() {
 
         Preventivo quotation = quotationChoiceBox.getValue();
-        SessionManager.getInstance().setOpenQuotation(quotation);
 
         // Estrapola il nome del cliente
         Cliente user = new Cliente(quotation.getUserID());
@@ -233,12 +205,6 @@ public class VendorViewController {
         carTrunkVolume.setText("Volume bagagliaio: " + String.valueOf(quotation.getConfiguredCar().getTrunkVol()));
         carWeight.setText("Peso: " + String.valueOf(quotation.getConfiguredCar().getWeight()));
         carName.setText("Automobile: " + quotation.getConfiguredCar().getBrand() + " " + quotation.getConfiguredCar().getModel());
-        carPrice.setText("Prezzo: " + formatter.format(quotation.getConfiguredCar().getPrice()) + "€");
-        if (quotation.getOldCarValue() > 0.0) {
-            discountValue.setText("Sconto: " + formatter.format(quotation.getOldCarValue()));
-        }
-
-
 
         // DETTAGLI TECNICI MOTORE
         engineName.setText("Motore: " + quotation.getConfiguredCar().getEngine().getName());
@@ -259,11 +225,12 @@ public class VendorViewController {
         portraitCar.setImage(new Image( new File(quotation.getConfiguredCar().getImgPath(0)).toURI().toString()));
 
         // disabilita il tasto conferma ordine, in quanto si tratta di un preventivo
-        notifyReadyCar.setDisable(quotation.getOldCarDiscount());
+        notifyReadyCar.setDisable(quotation.isOldCarDiscount());
         // e abilita il tasto di valutazione dell'usato.
-        oldCarEvaluation.setDisable(!quotation.getOldCarDiscount());
+        oldCarEvaluation.setDisable(!quotation.isOldCarDiscount());
 
     }
+
 
     /**
      * Quando viene selezionato un ordine dal venditore vengono caricati tutti i
@@ -275,14 +242,6 @@ public class VendorViewController {
     protected void onOrderSelection() {
 
         Ordine order = orderChoiceBox.getValue();
-        if (order.getDeliveryDate().isAfter(LocalDate.now())) {
-            deliveryDateLabel.setStyle("-fx-text-fill: #990000");
-            notifyReadyCar.setDisable(true);
-        } else {
-            deliveryDateLabel.setStyle("-fx-text-fill: #009900");
-            notifyReadyCar.setDisable(false);
-        }
-        deliveryDateLabel.setText("Consegna prevista: " + order.getDeliveryDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
         // Estrapola il nome del cliente
         Cliente user = new Cliente(order.getUserID());
@@ -297,10 +256,6 @@ public class VendorViewController {
         carTrunkVolume.setText("Volume bagagliaio: " + String.valueOf(order.getConfiguredCar().getTrunkVol()));
         carWeight.setText("Peso: " + String.valueOf(order.getConfiguredCar().getWeight()));
         carName.setText("Automobile: " + order.getConfiguredCar().getBrand() + " " + order.getConfiguredCar().getModel());
-        carPrice.setText("Prezzo: " + String.format("%.2f", order.getConfiguredCar().getPrice()));
-        if (order.getOldCarValue() > 0.0) {
-            discountValue.setText("Sconto: " + formatter.format(order.getOldCarValue()));
-        }
 
         // DETTAGLI TECNICI MOTORE
         engineName.setText("Motore: " + order.getConfiguredCar().getEngine().getName());
@@ -320,33 +275,24 @@ public class VendorViewController {
         // Setting the car image
         portraitCar.setImage(new Image( new File(order.getConfiguredCar().getImgPath(0)).toURI().toString()));
 
+        // disabilita il tasto conferma ordine, in quanto si tratta di un preventivo
+        notifyReadyCar.setDisable(order.isOldCarDiscount());
+        // e abilita il tasto di valutazione dell'usato.
+        oldCarEvaluation.setDisable(!order.isOldCarDiscount());
+        
     }
 
-    // Conferma & Notifica
-    @FXML
-    protected void onOrderConfirmation() {
-        // Notify customer his car is ready and move the order
-        // to new database entry "ritiri.csv"
-        Ordine order = orderChoiceBox.getValue();
-        mainController.showConfirmationAlert("Notifica di ritiro al cliente.",
-                "Proseguendo, l'ordine selezionato verrà notificato come pronto per il ritiro al cliente.",
-                "Proseguire?");
-        order.moveToReady();
+    // TODO: On order confirmation
+    @FXML protected void onOrderConfirmation() {
+        // TODO: Notify customer his car is ready and move the order
+        //  to new database entry "ritiri.csv"
     }
 
-    // Visualizza l'auto usata da valutare e aggiorna il prezzo con lo sconto
-    @FXML
-    protected void onOldCarEvaluation() {
-        SessionManager.getInstance().setAuthenticatedVendor(vendor);
-        SessionManager.getInstance().setOpenQuotation(quotationChoiceBox.getValue());
-        mainController.loadCarEvaluationView();
+    // TODO: On old car evaluation
+    @FXML protected void onOldCarEvaluation() {
+        // TODO: open evaluation view, insert price discount and confirm
+        //  then return to previous view
     }
-
-    @FXML
-    protected void onConfirmEvaluated() {
-        valutazione.save();
-    }
-
 
     @FXML
     protected void onLogoutButton() {

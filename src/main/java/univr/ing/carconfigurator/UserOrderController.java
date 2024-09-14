@@ -39,9 +39,7 @@ public class UserOrderController {
     @FXML private Label carTrunkVolume;
     @FXML private Label carWeight;
     @FXML private Label carName;
-    @FXML private Label shopLocation;
-    @FXML private Label carPrice;
-    @FXML private Label discountValue;
+    @FXML private Label shopLocation;;
     @FXML private Label engineName;
     @FXML private Label engineFuel;
     @FXML private Label engineSpeed;
@@ -115,16 +113,11 @@ public class UserOrderController {
 
     private void getPreventivoData() {
         // Recupero il preventivo scelto
-        Preventivo preventivo = SessionManager.getInstance().getOpenQuotation();
+        Preventivo preventivo = SessionManager.getInstance().getOpenOrder();
 
         // Popolo i campi del riepilogo
         carName.setText("Automobile: " + preventivo.getConfiguredCar().getName());
         shopLocation.setText("Sede: " + preventivo.getShopLocation());
-        carPrice.setText("Prezzo: " + String.format("%.2f", preventivo.getConfiguredCar().getPrice()) + "€");
-        if (preventivo.getOldCarValue() > 0.0) {
-            discountValue.setText("Sconto: " + String.format("%.2f", preventivo.getOldCarValue()));
-
-        }
 
         // Dimension panel
         carLength.setText("Lunghezza: " + String.valueOf(preventivo.getConfiguredCar().getLength()));
@@ -164,11 +157,13 @@ public class UserOrderController {
         engineDisplacement.setText("Cilindrata: " + preventivo.getConfiguredCar().getEngine().getDisplacement());
         enginePower.setText("Potenza: " + preventivo.getConfiguredCar().getEngine().getPower());
 
+
         // Se il preventivo ha una richiesta di valutazione correlata
         // il tasto conferma e paga e' disabilitato, in quanto e' necessario
         // l'intervento di un impiegato del negozio per la valutazione.
-        confirmAndPay.setDisable(preventivo.getOldCarDiscount());
+        confirmAndPay.setDisable(preventivo.isOldCarDiscount());
     }
+
 
     /**
      * Questo metodo copia il preventivo correntemente aperto e lo copia nel
@@ -180,34 +175,28 @@ public class UserOrderController {
      */
     @FXML
     protected void onConfirmAndPay() {
-        // Calcolo della data di consegna dell'auto
-        // 30gg + 10 per ogni optional
-        LocalDate current = LocalDate.now();
-        int dayToAdd = 30;
-        Auto orderedCar = SessionManager.getInstance().getOpenQuotation().getConfiguredCar();
-        dayToAdd += orderedCar.getOptionalCount();
-        LocalDate deliveryDate = current.plusDays(dayToAdd);
-
         try {
             // Apro il file dei preventivi in lettura
             Scanner quotationReader = new Scanner(new File(preventiviPath));
+            // Apro il file ordini in scrittura
+            FileWriter orderWriter = new FileWriter(oriniPath, true);
+            // Stringa di salvataggio linee del preventivo da mantenere
             String quotationToPreserve = "";
 
             while(quotationReader.hasNextLine()) {
                 String line = quotationReader.nextLine();
                 String quotationID = line.split(",")[0];
 
-                if (quotationID.equals(SessionManager.getInstance().getOpenQuotation().getOrderID())) {
-                    String tmp = line + deliveryDate + ",";
-                    Ordine order = new Ordine(tmp);
-                    order.setDeliveryDate(deliveryDate);
-                    order.writeToDb();
+                if (quotationID.equals(SessionManager.getInstance().getOpenOrder().getOrderID())) {
+                    System.out.println("Linea trovata: \n" + line);
+                    orderWriter.append("\n" + line);
                 } else {
                     quotationToPreserve += line + "\n";
                 }
             }
             // Chiudo lo Scanner e il Writer
             quotationReader.close();
+            orderWriter.close();
 
             // Elimino dal file preventivi.csv la riga corrispondente all'ordine
             // confermato dal cliente
@@ -217,8 +206,15 @@ public class UserOrderController {
             e.printStackTrace();
         }
 
+        // Calcolo della data di consegna dell'auto
+        // 30gg + 10 per ogni optional
+        LocalDate current = LocalDate.now();
+        int dayToAdd = 30;
+        Auto orderedCar = SessionManager.getInstance().getOpenOrder().getConfiguredCar();
+        dayToAdd += orderedCar.getOptionalCount();
+        LocalDate deliveryDate = current.plusDays(dayToAdd);
         String message = "La sua auto sara' disponibile per il ritiro dal " + deliveryDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                + "\nPresso la sede di " + SessionManager.getInstance().getOpenQuotation().getShopLocation();
+                + "\nPresso la sede di " + SessionManager.getInstance().getOpenOrder().getShopLocation();
 
         mainController.showAlert("Consegna veicolo", message);
     }
@@ -228,6 +224,7 @@ public class UserOrderController {
         wc.write(quotation);
         wc.close();
     }
+
 
     @FXML
     protected void onLogoutButton() {
