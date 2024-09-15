@@ -8,8 +8,9 @@ public class Venditore extends Utente {
 
     private String shop;
 
-    public Venditore(String userID, String userName, String userLastName, String userPsw) {
+    public Venditore(String userID, String userName, String userLastName, String userPsw, String shop) {
         super(userID, userName, userLastName, userPsw);
+        this.shop = shop;
     }
 
     public Venditore(String userID) {
@@ -33,6 +34,7 @@ public class Venditore extends Utente {
     public void setShop(String shop) {
         this.shop = shop;
     }
+    
     public String getShop() {
         return shop;
     }
