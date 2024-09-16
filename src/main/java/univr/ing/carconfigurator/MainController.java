@@ -263,7 +263,131 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    public void loadAdministratorview(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorView.fxml"));
+            Parent AdminPage = loader.load();
+            AdministratorViewController controller = loader.getController();
+            if (SessionManager.getInstance().isAdminAuthenticated()) {
+                controller.setImpiegato(SessionManager.getInstance().getAuthenticatedAdmin());
+            }
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(AdminPage, 0.0);
+            AnchorPane.setRightAnchor(AdminPage, 0.0);
+            AnchorPane.setBottomAnchor(AdminPage, 0.0);
+            AnchorPane.setLeftAnchor(AdminPage, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(AdminPage);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorAddCarFirstView(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddCarFirstView.fxml"));
+            Parent addCarFirstView = loader.load();
+            AdministratorAddCarFirstViewController controller = loader.getController();
 
+            controller.setMainController(this);
+
+            AnchorPane.setTopAnchor(addCarFirstView, 0.0);
+            AnchorPane.setRightAnchor(addCarFirstView, 0.0);
+            AnchorPane.setBottomAnchor(addCarFirstView, 0.0);
+            AnchorPane.setLeftAnchor(addCarFirstView, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(addCarFirstView);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorAddCarSecondView(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddCarSecondView.fxml"));
+            Parent addCarsecondView = loader.load();
+            AdministratorAddCarSecondViewController controller = loader.getController();
+            controller.setMainController(this);
+
+            AnchorPane.setTopAnchor(addCarsecondView, 0.0);
+            AnchorPane.setRightAnchor(addCarsecondView, 0.0);
+            AnchorPane.setBottomAnchor(addCarsecondView, 0.0);
+            AnchorPane.setLeftAnchor(addCarsecondView, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(addCarsecondView);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorAddCarthirdView(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddCarThirdView.fxml"));
+            Parent addCarThirdView = loader.load();
+            AdministratorAddCarThirdViewController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(addCarThirdView, 0.0);
+            AnchorPane.setRightAnchor(addCarThirdView, 0.0);
+            AnchorPane.setBottomAnchor(addCarThirdView, 0.0);
+            AnchorPane.setLeftAnchor(addCarThirdView, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(addCarThirdView);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorAddOptionalView(){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddOptionalView.fxml"));
+            Parent AdministratoraddOptional = loader.load();
+            AdministratorAddOptionalViewController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(AdministratoraddOptional, 0.0);
+            AnchorPane.setRightAnchor(AdministratoraddOptional, 0.0);
+            AnchorPane.setBottomAnchor(AdministratoraddOptional, 0.0);
+            AnchorPane.setLeftAnchor(AdministratoraddOptional, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(AdministratoraddOptional);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorAddEngine() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddEngine.fxml"));
+            Parent AdministratoraddEngine = loader.load();
+            AdministratorAddEngineViewController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(AdministratoraddEngine, 0.0);
+            AnchorPane.setRightAnchor(AdministratoraddEngine, 0.0);
+            AnchorPane.setBottomAnchor(AdministratoraddEngine, 0.0);
+            AnchorPane.setLeftAnchor(AdministratoraddEngine, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(AdministratoraddEngine);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    public void loadAdministratorEstimatesViewController() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorEstimatesView.fxml"));
+            Parent AdministratorEstimatesView = loader.load();
+            AdministratorEstimatesViewController controller = loader.getController();
+            controller.setMainController(this);
+            AnchorPane.setTopAnchor(AdministratorEstimatesView, 0.0);
+            AnchorPane.setRightAnchor(AdministratorEstimatesView, 0.0);
+            AnchorPane.setBottomAnchor(AdministratorEstimatesView, 0.0);
+            AnchorPane.setLeftAnchor(AdministratorEstimatesView, 0.0);
+            mainPane.getChildren().clear();
+            mainPane.getChildren().add(AdministratorEstimatesView);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
     /** ========================== ALERT ========================== **/
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
