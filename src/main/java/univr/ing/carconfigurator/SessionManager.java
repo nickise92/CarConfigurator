@@ -7,6 +7,7 @@ public class SessionManager {
 
     private Utente authenticatedUser;
     private Utente authenticatedVendor;
+    private Utente authenticatedAdmin;
     private Auto configuredAuto;
     private boolean backFlag;
     private String riepilogo;
@@ -15,6 +16,7 @@ public class SessionManager {
     private double discountAmount;
     private boolean oldCarEvaluated = false;
     private Valutazione valutazione;
+    private String AutoCSV;
 
     private SessionManager() {
         // Costruttore della classe privato per prevenire l'istanziazione
@@ -41,6 +43,12 @@ public class SessionManager {
         this.authenticatedVendor = Utente.checkID(userID);
     }
 
+    public Impiegato getAuthenticatedAdmin() { return (Impiegato) authenticatedAdmin;}
+
+    public void setAuthenticatedAdmin(String userID) {
+        this.authenticatedAdmin = Utente.checkID(userID);
+    }
+
     public void clearSession() {
         authenticatedUser = null;
         authenticatedVendor = null;
@@ -59,6 +67,8 @@ public class SessionManager {
     public boolean isVendorAuthenticated() {
         return authenticatedVendor != null;
     }
+
+    public boolean isAdminAuthenticated(){ return authenticatedAdmin != null;}
 
     public Auto getConfiguredAuto() {
         return configuredAuto;
@@ -131,4 +141,8 @@ public class SessionManager {
     public Valutazione getValutazione() {
         return this.valutazione;
     }
+    public void setCarCsv(String AutoCSV) {
+        this.AutoCSV = AutoCSV;
+    }
+    public String getCarCsv() {return AutoCSV;}
 }
