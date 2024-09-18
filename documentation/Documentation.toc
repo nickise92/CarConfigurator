@@ -1,0 +1,22 @@
+\babel@toc {italian}{}\relax 
+\babel@toc {italian}{}\relax 
+\contentsline {chapter}{\numberline {1}Analisi dei requisiti }{2}{}%
+\contentsline {section}{\numberline {1.1}Introduzione}{2}{}%
+\contentsline {section}{\numberline {1.2}Casi d'uso}{3}{}%
+\contentsline {subsection}{\numberline {1.2.1}Casi d'uso relativi ai clienti}{3}{}%
+\contentsline {subsubsection}{Configurare un'automobile}{3}{}%
+\contentsline {subsection}{\numberline {1.2.2}Conferma dell'ordine}{4}{}%
+\contentsline {subsection}{\numberline {1.2.3}Casi d'uso relativi ai Venditori}{5}{}%
+\contentsline {subsubsection}{Valutazione dell'usato}{5}{}%
+\contentsline {subsubsection}{Gestione degli ordini}{5}{}%
+\contentsline {subsection}{\numberline {1.2.4}Casi d'uso relativi all'Amministrazione}{6}{}%
+\contentsline {subsubsection}{Inserire un modello d'auto}{6}{}%
+\contentsline {subsubsection}{Inserire nuovi optional}{6}{}%
+\contentsline {subsubsection}{Visualizzazione dei preventivi}{6}{}%
+\contentsline {section}{\numberline {1.3}Diagrammi delle attivit\`a}{7}{}%
+\contentsline {chapter}{\numberline {2}Progettazione e implementazione}{8}{}%
+\contentsline {section}{\numberline {2.1}Note sul processo di sviluppo}{8}{}%
+\contentsline {section}{\numberline {2.2}Architettura del progetto}{8}{}%
+\contentsline {section}{\numberline {2.3}Desing Pattern}{8}{}%
+\contentsline {subsection}{\numberline {2.3.1}Note introduttive}{8}{}%
+\contentsline {subsection}{\numberline {2.3.2}Decorator}{9}{}%

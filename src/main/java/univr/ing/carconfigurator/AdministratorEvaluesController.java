@@ -35,8 +35,8 @@ public class AdministratorEvaluesController {
     @FXML private Label sedeRitiro;
     @FXML private Label prezzo;
     @FXML private ChoiceBox<String> viewChoiceBox = new ChoiceBox<String>();;
-    @FXML private Button Next;
-    @FXML private Button Back;
+    @FXML private Button nextButton;
+    @FXML private Button backButton;
     @FXML private Button exitButton;
     
    
