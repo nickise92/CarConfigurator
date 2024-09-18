@@ -42,7 +42,8 @@ public class AdministratorViewController {
     }
 
     private void updateAdminLogged() {
-        adminLogged.setText("Amministratore: " + SessionManager.getInstance().getAuthenticatedAdmin());
+        adminLogged.setText("Amministratore: " + SessionManager.getInstance().getAuthenticatedAdmin().getUserName() +
+                " " + SessionManager.getInstance().getAuthenticatedAdmin().getUserLastName());
     }
 
     public void setMainController(MainController mainController) {

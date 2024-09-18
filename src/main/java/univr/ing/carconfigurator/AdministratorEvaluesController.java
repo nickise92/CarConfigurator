@@ -38,6 +38,7 @@ public class AdministratorEvaluesController {
     @FXML private Button nextButton;
     @FXML private Button backButton;
     @FXML private Button exitButton;
+    @FXML private Button returnHome;
     
    
     
@@ -61,11 +62,13 @@ public class AdministratorEvaluesController {
         AnchorPane.setLeftAnchor(titleLabel, (rootPane.getWidth() - titleLabel.getWidth()) / 2);
         AnchorPane.setLeftAnchor(contentPane, (rootPane.getWidth() - contentPane.getWidth()) / 2);
         AnchorPane.setTopAnchor(contentPane, (rootPane.getHeight() - contentPane.getHeight()) / 2);
+        AnchorPane.setRightAnchor(nextButton, ((rootPane.getWidth() - nextButton.getWidth() ) / 2) - backButton.getWidth());
+        AnchorPane.setLeftAnchor(backButton, ((rootPane.getWidth() - backButton.getWidth()) / 2) - nextButton.getWidth());
 
     }
     
     @FXML
-    public void OnNextButton(ActionEvent actionEvent) {
+    protected void onNextButton() {
         index = (index+1) % csvData.size();
         loadData(index);
     }
@@ -81,9 +84,9 @@ public class AdministratorEvaluesController {
         cerchi.setText("Cerchi: "+ firstRow[7]);
         sensori.setText("Sensori: " +firstRow[8]);
         interni.setText("Interni: " +firstRow[9]);
-        prezzo.setText("Prezzo: " + String.format("%.2f", firstRow[10]) + "€");
+        prezzo.setText("Prezzo: " + String.format("%.2f", Double.parseDouble(firstRow[10])) + "€");
         if (Double.parseDouble(firstRow[12]) > 0) {
-            sconto.setText("Sconto: " + String.format("%.2f", firstRow[12]) + "€");
+            sconto.setText("Sconto: " + String.format("%.2f", Double.parseDouble(firstRow[12])) + "€");
         } else {
             sconto.setText("");
         }
@@ -92,7 +95,7 @@ public class AdministratorEvaluesController {
     }
 
     @FXML
-    public void OnBackButton(ActionEvent actionEvent) {
+    protected void onBackButton() {
         index--;
         if(index <0)
             index = csvData.size() - 1;
@@ -100,7 +103,7 @@ public class AdministratorEvaluesController {
     }
     
     @FXML
-    public void OnChoiceAction(ActionEvent actionEvent) {
+    protected void OnChoiceAction(ActionEvent actionEvent) {
         try {
             // Carica il file CSV in un ArrayList
             csvData = loadCsvToArrayList("database/preventivi.csv");
@@ -134,6 +137,12 @@ public class AdministratorEvaluesController {
             data.addAll(br.lines().map(line -> line.split(",")).collect(Collectors.toList()));
         }
         return data;
+    }
+    
+    
+    @FXML
+    protected void onReturnHome() {
+        mainController.loadAdministratorView();
     }
     
     @FXML

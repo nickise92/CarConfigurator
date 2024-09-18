@@ -33,9 +33,7 @@ public class FirstViewController {
 
 
     private ObservableList<String> brandList = FXCollections.observableArrayList();
-    private ObservableList<String> colorsList = FXCollections.observableArrayList(
-            "Bianco", "Rosso", "Blu", "Nero", "Grigio"
-    );
+    private ObservableList<String> colorsList = FXCollections.observableArrayList("Bianco", "Rosso", "Blu" );
 
     @FXML private AnchorPane rootPane;
     @FXML private AnchorPane imageAnchor;
@@ -274,6 +272,7 @@ public class FirstViewController {
         configCar.setColor(color);
         colorPrice = configCar.getColorPrice();
         updateRiepilogo();
+        setCarImg(configCar.getImgPath(0));
         goForwardButton.setDisable(false);
     }
 

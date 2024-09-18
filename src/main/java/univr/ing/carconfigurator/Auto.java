@@ -62,7 +62,7 @@ public class Auto {
     }
 
     public String getImgPath(int index) {
-        return imgPath + this.brand + "/" + this.model + "/"
+        return imgPath + this.brand + "/" + this.model + "/" + this.color + "/"
                 + index +".jpg";
     }
 
@@ -100,7 +100,9 @@ public class Auto {
                     this.length = Double.parseDouble(car[6]);
                     this.trunkVolume = Double.parseDouble(car[7]);
                     this.defaultEngine = new Engine(car[8]);
+                    this.engine = new Engine(car[8]);
                     this.defaultColor = "Bianco";
+                    this.color = "Bianco";
                 }
             }
         } catch (FileNotFoundException e) {

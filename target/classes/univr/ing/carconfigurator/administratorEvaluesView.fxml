@@ -5,30 +5,34 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" styleClass="root-pane"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="univr.ing.carconfigurator.AdministratorEvaluesController">
-   <Label fx:id="titleLabel" styleClass="titleLabel" layoutX="136.0" layoutY="27.0" text="Riepilogo preventivi" />
-   <ChoiceBox fx:id="viewChoiceBox" layoutX="136.0" layoutY="76.0" onAction="#OnChoiceAction" prefWidth="150.0"/>
-   <Label layoutX="14.0" layoutY="80.0" text="Visualizzazione per:"/>
-   <AnchorPane fx:id="contentPane" layoutX="14.0" layoutY="117.0" prefHeight="210.0" prefWidth="577.0">
-      <Label fx:id="utente" layoutX="20.0" layoutY="30.0" text="Utente:"/>
-      <Label fx:id="date" layoutX="20.0" layoutY="60.0" text="Data:"/>
-      <Label fx:id="idPrev" layoutX="20.0" layoutY="90.0" text="ID preventivo:"/>
-      <Label fx:id="auto" layoutX="20.0" layoutY="120.0" text="Auto:"/>
-      <Label fx:id="colore" layoutX="250.0" layoutY="30.0" text="Colore:"/>
-      <Label fx:id="motore" layoutX="250.0" layoutY="60.0" text="Motore:"/>
-      <Label fx:id="interni" layoutX="250.0" layoutY="90.0" text="Interni:"/>
-      <Label fx:id="sensori" layoutX="250.0" layoutY="120.0" text="Sensori:"/>
-      <Label fx:id="cerchi" layoutX="480.0" layoutY="30.0" text="Cerchi:"/>
-      <Label fx:id="sconto" layoutX="480.0" layoutY="90.0" text="Sconto:"/>
-      <Label fx:id="sedeRitiro" layoutX="480.0" layoutY="60.0" text="Sede di ritiro:"/>
-      <Label fx:id="prezzo" layoutX="480.0" layoutY="120.0" text="Prezzo:"/>
+<AnchorPane fx:id="rootPane" prefHeight="577.0" prefWidth="838.0" styleClass="root-pane" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="univr.ing.carconfigurator.AdministratorEvaluesController">
+   <Label fx:id="titleLabel" layoutX="136.0" layoutY="27.0" styleClass="titleLabel" text="Riepilogo preventivi"
+          AnchorPane.topAnchor="30.0" />
+   <ChoiceBox fx:id="viewChoiceBox" layoutX="136.0" layoutY="76.0" onAction="#OnChoiceAction" prefWidth="150.0"
+              AnchorPane.leftAnchor="130.0" AnchorPane.topAnchor="75.0" />
+   <Label layoutX="14.0" layoutY="79.0" text="Visualizzazione per:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="79.0" />
+   <AnchorPane fx:id="contentPane" layoutX="131.0" layoutY="184.0" prefHeight="210.0" prefWidth="577.0">
+      <Label fx:id="utente" layoutX="20.0" layoutY="30.0" text="Utente:" />
+      <Label fx:id="date" layoutX="20.0" layoutY="60.0" text="Data:" />
+      <Label fx:id="idPrev" layoutX="20.0" layoutY="90.0" text="ID preventivo:" />
+      <Label fx:id="auto" layoutX="20.0" layoutY="120.0" text="Auto:" />
+      <Label fx:id="colore" layoutX="250.0" layoutY="30.0" text="Colore:" />
+      <Label fx:id="motore" layoutX="250.0" layoutY="60.0" text="Motore:" />
+      <Label fx:id="interni" layoutX="250.0" layoutY="90.0" text="Interni:" />
+      <Label fx:id="sensori" layoutX="250.0" layoutY="120.0" text="Sensori:" />
+      <Label fx:id="cerchi" layoutX="480.0" layoutY="30.0" text="Cerchi:" />
+      <Label fx:id="sconto" layoutX="480.0" layoutY="90.0" text="Sconto:" />
+      <Label fx:id="sedeRitiro" layoutX="480.0" layoutY="60.0" text="Sede di ritiro:" />
+      <Label fx:id="prezzo" layoutX="480.0" layoutY="120.0" text="Prezzo:" />
    </AnchorPane>
-   <Button fx:id="Next" layoutX="205.0" layoutY="293.0" mnemonicParsing="false" onAction="#OnNextButton" text="Avanti"/>
-   <Button fx:id="Back" layoutX="296.0" layoutY="293.0" mnemonicParsing="false" onAction="#OnBackButton"
-           text="Indietro"/>
-   <Button fx:id="exitButton" styleClass="exitButton" onAction="#onExitButton" layoutX="269.0" layoutY="355.0"
-           mnemonicParsing="false" text="Esci"/>
+   <Button fx:id="nextButton" layoutX="437.0" layoutY="442.0" mnemonicParsing="false" onAction="#onNextButton"
+           AnchorPane.bottomAnchor="100.0" styleClass="rightButton" prefWidth="70.0"/>
+   <Button fx:id="backButton" layoutX="345.0" layoutY="442.0" mnemonicParsing="false" onAction="#onBackButton"
+           AnchorPane.bottomAnchor="100.0" styleClass="leftButton" prefWidth="70.0"/>
+   <Button fx:id="returnToHome" layoutX="345.0" layoutY="442.0" mnemonicParsing="false" onAction="#onReturnHome"
+           AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="120.0" styleClass="cancelButton"
+           prefWidth="70.0" text="Ritorna alla homepage"/>
+   <Button fx:id="exitButton" layoutX="788.0" layoutY="538.0" mnemonicParsing="false" onAction="#onExitButton"
+           styleClass="exitButton" text="Esci" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="35.0" />
 </AnchorPane>

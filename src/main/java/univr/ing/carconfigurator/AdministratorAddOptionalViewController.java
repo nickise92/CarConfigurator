@@ -1,12 +1,15 @@
 package univr.ing.carconfigurator;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,32 +19,50 @@ import java.util.Scanner;
 
 
 public class AdministratorAddOptionalViewController {
+    
+    
     private final String carsPath = "database/car.csv";
     private final String brandsPath = "database/brand.csv";
     private final String interiorsPath = "database/interior.csv";
     private final String tiresPath = "database/tire.csv";
     private final String sensorsPath = "database/sensor.csv";
     private final String enginePath = "database/engine.csv";
-    public Button EngineButton;
-    public Button ExitButton;
-    public Button AddButton;
-    @FXML
-    public TextField Name;
-    @FXML
-    public TextField price;
+    
+    
+    @FXML private AnchorPane rootPane;
+    @FXML private AnchorPane contentPane;
+    
+    @FXML Label titleLabel;
+    
+    @FXML private Button engineButton;
+    @FXML private Button exitButton;
+    @FXML private Button addButton;
+    
+    @FXML private TextField name;
+    @FXML private TextField price;
+    
+    @FXML private ChoiceBox<OptTypes> Type = new ChoiceBox<>();
+    @FXML private ChoiceBox modelChoiceBox;
+    @FXML private ChoiceBox brandChoiceBox;
+    @FXML  private ObservableList<String> MarcaLista = FXCollections.observableArrayList();
+    
+    private MainController mainController;
     private String prezzo;
     private String nome;
-    public ChoiceBox<OptTypes> Type = new ChoiceBox<>();
-    public ChoiceBox Model;
-    public ChoiceBox Marca;
-    @FXML
-    public ObservableList<String> MarcaLista = FXCollections.observableArrayList();
-    private MainController mainController;
-
-    public AdministratorAddOptionalViewController() {}
-    public void setMainController(MainController mainController) {this.mainController = mainController; }
+    
+    public AdministratorAddOptionalViewController() {
+    
+    }
+    
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+    
     @FXML
     public void initialize(){
+        
+        Platform.runLater(this::centerContent);
+        
         try {
             Scanner sc = new Scanner(new File(brandsPath));
             for (String car : sc.nextLine().split(",")) {
@@ -54,11 +75,21 @@ public class AdministratorAddOptionalViewController {
             System.out.println("Impossibile inizializzare le marche di auto.");
         }
         Type.getItems().addAll(OptTypes.values());
-        Marca.setItems(MarcaLista);
+        brandChoiceBox.setItems(MarcaLista);
     }
 
-    public void MarcaChoiceBox(ActionEvent actionEvent) {
-        String Brand = (String) Marca.getValue();
+    private void centerContent() {
+        double width = rootPane.getWidth();
+        double height = rootPane.getHeight();
+        
+        AnchorPane.setLeftAnchor(titleLabel, (width - titleLabel.getWidth()) / 2);
+        AnchorPane.setLeftAnchor(contentPane, (width - contentPane.getWidth()) / 2);
+        AnchorPane.setTopAnchor(contentPane, (height - contentPane.getHeight()) / 2);
+    }
+    
+    @FXML
+    protected void MarcaChoiceBox() {
+        String Brand = (String) brandChoiceBox.getValue();
         ObservableList<String> ModelloLista = FXCollections.observableArrayList();
         File db = new File(carsPath);
         try {
@@ -69,7 +100,7 @@ public class AdministratorAddOptionalViewController {
                     ModelloLista.add(tmp[1]);
                 }
             }
-            Model.setItems(ModelloLista);
+            modelChoiceBox.setItems(ModelloLista);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,10 +108,10 @@ public class AdministratorAddOptionalViewController {
     }
 
     @FXML
-    public void addOptOnAction() {
+    protected void addOptOnAction() {
         String tipo = String.valueOf(Type.getValue());
-        String marca = (String) Marca.getValue();
-        nome = Name.getText();
+        String marca = (String) brandChoiceBox.getValue();
+        nome = name.getText();
         prezzo = price.getText();
         if(tipo.equals("CERCHI")){
             try{
@@ -123,11 +154,17 @@ public class AdministratorAddOptionalViewController {
     }
 
     @FXML
-    protected void AddEngine(ActionEvent actionEvent) {
+    protected void AddEngine() {
         mainController.loadAdministratorAddEngine();
     }
 
-    public void onExitButton(ActionEvent actionEvent) {
+    @FXML
+    protected void onCancelButton() {
         mainController.loadAdministratorView();
+    }
+    
+    @FXML
+    protected void onExitButton() {
+        Platform.exit();
     }
 }

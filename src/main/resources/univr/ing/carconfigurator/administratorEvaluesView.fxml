@@ -26,10 +26,13 @@
       <Label fx:id="sedeRitiro" layoutX="480.0" layoutY="60.0" text="Sede di ritiro:" />
       <Label fx:id="prezzo" layoutX="480.0" layoutY="120.0" text="Prezzo:" />
    </AnchorPane>
-   <Button fx:id="nextButton" layoutX="437.0" layoutY="442.0" mnemonicParsing="false" onAction="#OnNextButton" text="Avanti"
-           AnchorPane.bottomAnchor="100.0" styleClass="leftButton"/>
-   <Button fx:id="backButton" layoutX="345.0" layoutY="442.0" mnemonicParsing="false" onAction="#OnBackButton" text="Indietro"
-           AnchorPane.bottomAnchor="100.0" styleClass="rightButton"/>
+   <Button fx:id="nextButton" layoutX="437.0" layoutY="442.0" mnemonicParsing="false" onAction="#onNextButton"
+           AnchorPane.bottomAnchor="100.0" styleClass="rightButton" prefWidth="70.0"/>
+   <Button fx:id="backButton" layoutX="345.0" layoutY="442.0" mnemonicParsing="false" onAction="#onBackButton"
+           AnchorPane.bottomAnchor="100.0" styleClass="leftButton" prefWidth="70.0"/>
+   <Button fx:id="returnToHome" layoutX="345.0" layoutY="442.0" mnemonicParsing="false" onAction="#onReturnHome"
+           AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="120.0" styleClass="cancelButton"
+           prefWidth="70.0" text="Ritorna alla homepage"/>
    <Button fx:id="exitButton" layoutX="788.0" layoutY="538.0" mnemonicParsing="false" onAction="#onExitButton"
            styleClass="exitButton" text="Esci" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="35.0" />
 </AnchorPane>
