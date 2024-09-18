@@ -168,7 +168,7 @@ public class UserViewController {
         AnchorPane.setTopAnchor(orderBox, (height - orderBox.getHeight()) / 3);
         AnchorPane.setRightAnchor(orderBox, (width/2 - orderBox.getWidth()) / 2);
         // Ready box position
-        AnchorPane.setBottomAnchor(readyBox, (height - readyBox.getHeight()) / 3);
+        AnchorPane.setBottomAnchor(readyBox, (height - readyBox.getHeight()) / 4);
         AnchorPane.setLeftAnchor(readyBox, (width - readyBox.getWidth()) / 2);
         // Logout button
         AnchorPane.setLeftAnchor(logoutButton, (width - logoutButton.getWidth()) / 2);

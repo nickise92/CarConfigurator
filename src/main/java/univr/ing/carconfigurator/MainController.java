@@ -263,7 +263,7 @@ public class MainController {
             e.printStackTrace();
         }
     }
-    public void loadAdministratorview(){
+    public void loadAdministratorView(){
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorView.fxml"));
             Parent AdminPage = loader.load();
@@ -283,9 +283,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
     public void loadAdministratorAddCarFirstView(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddCarFirstView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddCarFirstView.fxml"));
             Parent addCarFirstView = loader.load();
             AdministratorAddCarFirstViewController controller = loader.getController();
 
@@ -302,9 +303,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
     public void loadAdministratorAddCarSecondView(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddCarSecondView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddCarSecondView.fxml"));
             Parent addCarsecondView = loader.load();
             AdministratorAddCarSecondViewController controller = loader.getController();
             controller.setMainController(this);
@@ -320,26 +322,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
-    public void loadAdministratorAddCarthirdView(){
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddCarThirdView.fxml"));
-            Parent addCarThirdView = loader.load();
-            AdministratorAddCarThirdViewController controller = loader.getController();
-            controller.setMainController(this);
-            AnchorPane.setTopAnchor(addCarThirdView, 0.0);
-            AnchorPane.setRightAnchor(addCarThirdView, 0.0);
-            AnchorPane.setBottomAnchor(addCarThirdView, 0.0);
-            AnchorPane.setLeftAnchor(addCarThirdView, 0.0);
-            mainPane.getChildren().clear();
-            mainPane.getChildren().add(addCarThirdView);
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
+    
     public void loadAdministratorAddOptionalView(){
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddOptionalView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddOptionalView.fxml"));
             Parent AdministratoraddOptional = loader.load();
             AdministratorAddOptionalViewController controller = loader.getController();
             controller.setMainController(this);
@@ -354,9 +340,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
     public void loadAdministratorAddEngine() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorAddEngine.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorAddEngine.fxml"));
             Parent AdministratoraddEngine = loader.load();
             AdministratorAddEngineViewController controller = loader.getController();
             controller.setMainController(this);
@@ -371,18 +358,19 @@ public class MainController {
             e.printStackTrace();
         }
     }
-    public void loadAdministratorEstimatesViewController() {
+
+    public void loadAdministratorEvaluesViewController() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AdministratorEstimatesView.fxml"));
-            Parent AdministratorEstimatesView = loader.load();
-            AdministratorEstimatesViewController controller = loader.getController();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administratorEvaluesView.fxml"));
+            Parent evalueView = loader.load();
+            AdministratorEvaluesController controller = loader.getController();
             controller.setMainController(this);
-            AnchorPane.setTopAnchor(AdministratorEstimatesView, 0.0);
-            AnchorPane.setRightAnchor(AdministratorEstimatesView, 0.0);
-            AnchorPane.setBottomAnchor(AdministratorEstimatesView, 0.0);
-            AnchorPane.setLeftAnchor(AdministratorEstimatesView, 0.0);
+            AnchorPane.setTopAnchor(evalueView, 0.0);
+            AnchorPane.setRightAnchor(evalueView, 0.0);
+            AnchorPane.setBottomAnchor(evalueView, 0.0);
+            AnchorPane.setLeftAnchor(evalueView, 0.0);
             mainPane.getChildren().clear();
-            mainPane.getChildren().add(AdministratorEstimatesView);
+            mainPane.getChildren().add(evalueView);
         }
         catch (IOException e){
             e.printStackTrace();

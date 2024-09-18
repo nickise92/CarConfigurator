@@ -1,88 +1,115 @@
 package univr.ing.carconfigurator;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class AdministratorAddEngineViewController {
+    
     private MainController mainController;
-    public AdministratorAddEngineViewController () {}
-    public void setMainController(MainController mainController) {this.mainController = mainController; }
-
-    private final String enginePath = "database/engine.csv";
-    private final String brandsPath = "database/brand.csv";
-    @FXML public TextField enginePrezzo;
-    String price;
-    String Model;
-    @FXML public TextField engineName;
-    String nome;
-    @FXML public TextField enginePower;
-    String potenza;
-    @FXML public TextField engineEmission;
-    String emissione;
-    @FXML public TextField engineConsuption;
-    String Consumi;
-    @FXML public TextField accelleration;
-    String Accelerazione;
-    @FXML public TextField engineDisplacement;
-    String Cilindrata;
-    @FXML public TextField engineFuel;
-    String Tipologia_Carburante;
-    public ChoiceBox MarcaChoiceBox;
-    public ObservableList<String> MarcaLista = FXCollections.observableArrayList();
-    @FXML public Button AddButton;
-    @FXML public Button ExitButton;
-
-    public void initialize() {
-        try {
-            Scanner sc = new Scanner(new File(brandsPath));
-            for (String car : sc.nextLine().split(",")) {
-                if (!car.equals("")) {
-                    MarcaLista.add(car);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Impossibile inizializzare le marche di auto.");
-        }
-        MarcaChoiceBox.setItems(MarcaLista);
+    private SessionManager sessionManager;
+    private Engine engine;
+    
+    
+    @FXML private AnchorPane rootPane;
+    @FXML private AnchorPane contentPane;
+    
+    @FXML private Label titleLabel;
+    
+    @FXML private ChoiceBox<String> brandChoiceBox;
+    
+    @FXML private TextField engineName;
+    @FXML private TextField enginePower;
+    @FXML private TextField engineEmission;
+    @FXML private TextField engineConsumption;
+    @FXML private TextField engineAcceleration;
+    @FXML private TextField engineDisplacement;
+    @FXML private TextField engineFuel;
+    @FXML private TextField enginePrice;
+    
+    @FXML private Button addEngineButton;
+    @FXML private Button confirmButton;
+    @FXML private Button exitButton;
+    
+    public AdministratorAddEngineViewController () {
+    
     }
-
-    public void OnAddButton(ActionEvent actionEvent) {
-        nome = engineName.getText();
-        potenza = enginePower.getText();
-        emissione = engineEmission.getText();
-        Accelerazione = accelleration.getText();
-        Tipologia_Carburante = engineFuel.getText();
-        Cilindrata = engineDisplacement.getText();
-        Consumi = engineConsuption.getText();
-        Model = (String) MarcaChoiceBox.getValue();
-        price = enginePrezzo.getText();
-        String stringa = Model + "," + nome + ","
-                + Tipologia_Carburante + "," + Accelerazione + "s" +","
-                + emissione + "g/km" +"," + Consumi + "l/100km" +"," + Cilindrata +"," + potenza + "kw"+"," + price +",";
-        try{
-            FileWriter fwr = new FileWriter(enginePath,true );
-            System.out.println(stringa);
-            fwr.append(stringa + "\n");
-            fwr.close();
-
+    
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+    
+    
+    @FXML
+    public void initialize() {
+        
+        Platform.runLater(this::centerContent);
+        Platform.runLater(this::loadBrandList);
+    }
+    
+    private void centerContent() {
+        double width = rootPane.getWidth();
+        
+        AnchorPane.setLeftAnchor(titleLabel, (width - titleLabel.getWidth()) / 2);
+    }
+    
+    private void loadBrandList() {
+        try {
+            String brandpath = "database/brand.csv";
+            BufferedReader reader = new BufferedReader(new FileReader(brandpath));
+            List<String> brandList = new ArrayList<>();
+            String tmp;
+            while ((tmp = reader.readLine()) != null) {
+                brandList.addAll(Arrays.stream(tmp.split(",")).toList());
+            }
+        
+            brandChoiceBox.getItems().setAll(brandList);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void OnExitButton(ActionEvent actionEvent) {
-        mainController.loadAdministratorAddOptionalView();
+    @FXML
+    protected void onAddNewEngine() {
+            String regex = "[0-9]+";
+    
+       /* if (engineAcceleration.getText().matches(regex) && engineEmission.getText().matches(regex) &&
+                engineConsumption.getText().matches(regex) && engineDisplacement.getText().matches(regex) &&
+                enginePower.getText().matches(regex) && enginePrice.getText().matches(regex)) {
+    */
+            engine = new Engine(brandChoiceBox.getValue(), engineName.getText(), engineFuel.getText(),
+                    engineAcceleration.getText(), engineEmission.getText(), engineConsumption.getText(),
+                    engineDisplacement.getText(), enginePower.getText(), Double.parseDouble(enginePrice.getText()));
+        /*} else {
+            mainController.showError("Errore", "Attenzione, sono stati inseriti caratteri non numerici " +
+                    "in campi che richiedono delle cifre. Si prega di verificare i dati.");
+        }*/
+
+        engine.saveNewEngineToDb();
+    }
+    
+    @FXML
+    protected void onConfirm() {
+        engine.saveNewEngineToDb();
+        mainController.showAlert("Termine procedura","Procedura di inserimento di un motore completata.");
+        mainController.loadAdministratorView();
+    }
+    
+    @FXML
+    protected void OnExitButton() {
+        Platform.exit();
     }
 }

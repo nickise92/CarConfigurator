@@ -1,7 +1,6 @@
 package univr.ing.carconfigurator;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -27,16 +26,30 @@ public class Auto {
     private Optional circle;
     private Optional interior;
     private Optional sensor;
-
-    public List<String> getAuto() {
-        return auto;
-    }
-
+    
+    // Costruttore vuoto
     public Auto() {
-
+    
     }
 
-    public Auto(String brand, String model, Engine engine, String color, Optional tyre, Optional sensor, Optional interior, double price) {
+    // Costruttore che permette la generazione di una nuova auto
+    public Auto(String brand, String model, double length, double width, double height,
+                double weight, String defaultColor, double trunkVolume, Engine defaultEngine,
+                double price) {
+        this.brand = brand;
+        this.model = model;
+        this.length = length;
+        this.width = width;
+        this.height = height;
+        this.weight = weight;
+        this.defaultColor = defaultColor;
+        this.trunkVolume = trunkVolume;
+        this.defaultEngine = defaultEngine;
+        this.price = price;
+    }
+
+    public Auto(String brand, String model, Engine engine, String color, Optional tyre,
+                Optional sensor, Optional interior, double price) {
         // generazione dell'auto con gli optional gia' impostati dal preventivo.
         this.brand = brand;
         this.model = model;
@@ -49,7 +62,7 @@ public class Auto {
     }
 
     public String getImgPath(int index) {
-        return imgPath + auto.get(0) + "/" + auto.get(1) + "/"
+        return imgPath + this.brand + "/" + this.model + "/"
                 + index +".jpg";
     }
 
@@ -79,9 +92,7 @@ public class Auto {
             while (sc.hasNextLine()) {
                 String[] car = sc.nextLine().split(",");
                 if (brand.equals(car[0]) && model.equals(car[1])) {
-                    /*for (int i = 2; i < car.length; i++) {
-                        this.auto.add(car[i]);
-                    }*/
+                    
                     this.price = Double.parseDouble(car[2]);
                     this.weight = Double.parseDouble(car[3]);
                     this.height = Double.parseDouble(car[4]);
@@ -112,6 +123,10 @@ public class Auto {
     public void setModel(String model) {
         this.model = model;
     }
+    
+    public void setDefaultColor(String defaultColor) {
+        this.defaultColor = defaultColor;
+    }
 
     public String getName() {
         return this.brand + " " + this.model;
@@ -120,18 +135,42 @@ public class Auto {
     public double getHeight() {
         return this.height;
     }
+    
+    public void setHeight(double height) {
+        this.height = height;
+    }
     public double getWidth() {
         return this.width;
     }
+    
+    public void setWidth(double width) {
+        this.width = width;
+    }
+    
     public double getLength() {
         return this.length;
     }
+    
+    public void setLength(double length) {
+        this.length = length;
+    }
+    
     public double getWeight() {
         return this.weight;
     }
+    
+    public void setWeight(double wieght) {
+        this.weight = weight;
+    }
+    
     public double getTrunkVol() {
         return this.trunkVolume;
     }
+    
+    public void setTrunkVolume(double trunkVolume) {
+        this.trunkVolume = trunkVolume;
+    }
+    
     // Questo metodo ritorna il valore del prezzo dell'auto
     // senza considerare il motore!
     public double getPrice() {
@@ -205,13 +244,6 @@ public class Auto {
         return sensor;
     }
 
-    // Modifica del contenuto dell'auto
-    public void editCarInfo(String modification, int index) {
-        // rimozione dell'informazione obsoleta e aggiornamento
-        // con la nuova informazione
-        auto.set(index, modification);
-    }
-
     public String toString() {
         return "" + this.brand + " " + this.model + " " + this.price;
     }
@@ -222,7 +254,20 @@ public class Auto {
                 this.interior + "," + this.price;
     }
 
-
+    public void saveNewAutoToDb() {
+        String csvData = this.brand + "," + this.model + "," + this.price + "," +
+                this.weight + "," + this.height + "," + this.width + "," +
+                this.length + "," + this.trunkVolume + "," + this.defaultEngine + ",\n";
+        
+        try {
+            FileWriter writer = new FileWriter("database/car.csv", true);
+            writer.append(csvData);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public int getOptionalCount() {
         int count = 0;
 

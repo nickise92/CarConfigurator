@@ -128,6 +128,6 @@ public class AdministratorAddOptionalViewController {
     }
 
     public void onExitButton(ActionEvent actionEvent) {
-        mainController.loadAdministratorview();
+        mainController.loadAdministratorView();
     }
 }

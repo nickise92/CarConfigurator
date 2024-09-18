@@ -41,7 +41,7 @@ public class LoginController {
     }
 
     @FXML
-    private void handleLoginButtonAction(ActionEvent event) {
+    protected void handleLoginButtonAction() {
         String username = usernameField.getText();
         String password = passwordField.getText();
         Utente utente = Utente.checkID(username);
@@ -55,7 +55,8 @@ public class LoginController {
                 SessionManager.getInstance().setAuthenticatedUser(username);
                 mainController.loadUserView();
             } else if (utente instanceof Impiegato) {
-                //TODO: vista impiegato e logica conseguente
+                SessionManager.getInstance().setAuthenticatedAdmin(username);
+                mainController.loadAdministratorView();
             } else if (utente instanceof Venditore) {
                 // Se l'utente e' un venditore, imposto il venditore autenticato nella
                 // sessione corrente e carico la pagina venditore
@@ -76,7 +77,8 @@ public class LoginController {
         alert.showAndWait();
     }
 
-    public void cancelLoginAction() {
+    @FXML 
+    protected void cancelLoginAction() {
         mainController.loadHomePage();
     }
 }

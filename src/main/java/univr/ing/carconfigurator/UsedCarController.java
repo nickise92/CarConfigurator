@@ -78,7 +78,7 @@ public class UsedCarController {
 
     /**
      * Apre la finestra di dialogo per inserire le immagini dell'auto usata
-     * che si vuol far valutare. L'utente può inserire fino a 6 immagini.
+     * che si vuol far valutare. L'utente deve inserire 6 immagini.
      * Il programma crea una cartella con nome = IDUtente+DDHHmmss e all'interno
      * salva (copia) le immagini inserite dall'utente.
      */

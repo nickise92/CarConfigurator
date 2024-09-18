@@ -2,8 +2,23 @@
     -fx-background-color: #accbe3;
 }
 
+.titleLabel {
+    -fx-font-weight: bold;
+    -fx-font-size: 30.0;
+}
+
 .button {
-    -fx-background-radius: 3px;
+    -fx-text-fill: #003399;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+}
+
+.button:hover {
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-content-display: center;
+    -fx-background-color: #003399;
+
 }
 
 .leftButton {

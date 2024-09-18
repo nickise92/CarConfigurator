@@ -2,11 +2,13 @@ package univr.ing.carconfigurator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Engine {
 
-    String enginePath = "database/engine.csv";
+    private final String enginePath = "database/engine.csv";
 
     private String brand;
     private String name;
@@ -46,9 +48,17 @@ public class Engine {
     }
 
     // Costruttore che permette di aggiungere un nuovo motore alla lista di motori
-    public Engine(String brand, String name, String fuelType, String accelerationTime, String consumption, String displacement,
+    public Engine(String brand, String name, String fuelType, String accelerationTime, String emission, String consumption, String displacement,
                   String power, double price) {
-        // TODO: aggiunta di un motore alla lista dei motori
+        this.brand = brand;
+        this.name = name;
+        this.fuelType = fuelType;
+        this.accelerationTime = accelerationTime;
+        this.gramsCO2perKm = emission;
+        this.consumption = consumption;
+        this.displacement = displacement;
+        this.power = power;
+        this.price = price;
     }
 
     // Getter dei parametri della classe Engine.
@@ -89,5 +99,20 @@ public class Engine {
     @Override
     public String toString() {
         return getName();
+    }
+    
+    public void saveNewEngineToDb() {
+        String csvData = this.brand + "," + this.name + "," + this.fuelType + "," +
+                this.accelerationTime + "s," + this.gramsCO2perKm + " g/km," +
+                this.consumption + " l/100km," + this.displacement + "," +
+                this.power + "," + this.price + ",\n";
+
+        try {
+            FileWriter writer = new FileWriter(enginePath, true);
+            writer.append(csvData);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
